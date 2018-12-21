@@ -28,6 +28,7 @@ dev_dependencies:
   flutter_launcher_icons: "^0.7.0"
   shared_preferences: ^0.4.3
   pin_code_text_field: ^1.1.2
+  flutter_webview_plugin: ^0.3.0+2
 
 
 # For information on the generic Dart part of this file, see the

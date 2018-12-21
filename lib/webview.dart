@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:namma_chennai/loader/color_loader.dart';
+import 'package:namma_chennai/loader/dot_type.dart';
 
 class WebViewScreen extends StatefulWidget {
   @override
@@ -6,14 +9,28 @@ class WebViewScreen extends StatefulWidget {
 }
 
 class _WebViewScreenState extends State<WebViewScreen> {
-  
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Third Party App View'),
+    return WebviewScaffold(
+      url: "https://www.swiggy.com",
+      appBar: AppBar(
+        title: const Text('Third party web view'),
       ),
-      // body: _children[_currentIndex], // new
+      withZoom: false,
+      clearCache: false,
+      withJavascript: true,
+      withLocalStorage: true,
+      appCacheEnabled: true,
+      hidden: false,
+      initialChild: Container(
+        child: ColorLoader(
+          dotOneColor: Colors.pink,
+          dotTwoColor: Colors.amber,
+          dotThreeColor: Colors.deepOrange,
+          dotType: DotType.circle,
+          duration: Duration(milliseconds: 1200),
+        ),
+      ),
     );
   }
 }
