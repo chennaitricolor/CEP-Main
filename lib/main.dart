@@ -4,6 +4,8 @@ import 'package:namma_chennai/user.dart';
 import 'package:namma_chennai/home.dart';
 import 'package:namma_chennai/otp.dart';
 import 'package:namma_chennai/language.dart';
+import 'package:namma_chennai/userform.dart';
+import 'package:namma_chennai/webview.dart';
 // import 'package:namma_chennai/splash.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:namma_chennai/locale/allTranslations.dart';
@@ -62,8 +64,10 @@ class _NammaAppState extends State<NammaApp> {
         '/start': (BuildContext context) => new WalkThrough(),
         '/language': (BuildContext context) => new LanguagePreferences(),
         '/otp': (BuildContext context) => new OTP(),
+        '/form': (BuildContext context) => new UserForm(),
         '/user': (BuildContext context) => new User(),
         '/dashboard': (BuildContext context) => new HomeScreen(),
+        '/wview': (BuildContext context) => new WebViewScreen(),
       },
     );
   }

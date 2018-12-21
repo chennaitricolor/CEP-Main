@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:namma_chennai/locale/allTranslations.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
+// import 'package:geolocator/geolocator.dart';
 
-class OTP extends StatefulWidget {
+class UserForm extends StatefulWidget {
   @override
-  _OTPState createState() => new _OTPState();
+  _UserFormState createState() => new _UserFormState();
 }
 
-class _OTPState extends State<OTP> {
+class _UserFormState extends State<UserForm> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           // Box decoration takes a gradient
           gradient: LinearGradient(
@@ -34,23 +34,23 @@ class _OTPState extends State<OTP> {
               height: 100,
             ),
             new Text(
-              'Mobile Verfication',
+              'Hi, Welcome to Namma Chennai',
               style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 30.0,
-                  color: Colors.white),
+                  fontSize: 25.0,
+                  color: Colors.yellow),
             ),
             SizedBox(
               height: 10,
             ),
             new Text(
-              'OTP Authentication',
+              'Provide additional information to understand you better',
               style: TextStyle(fontSize: 15.0, color: Colors.white),
             ),
             SizedBox(
               height: 100,
             ),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new Container(
@@ -60,71 +60,55 @@ class _OTPState extends State<OTP> {
                       maxLength: 10,
                       textInputAction: TextInputAction.send,
                       decoration: InputDecoration(
-                        labelText: "Mobile Number",
+                        labelText: "Name",
                         hasFloatingPlaceholder: true,
-                        prefixText: "+91-",
-                        suffixStyle: TextStyle(color: Colors.green),
-                        suffixIcon: Icon(
-                          Icons.verified_user,
-                          color: Colors.green,
-                        ),
                         border: new OutlineInputBorder(
                             borderSide: new BorderSide(color: Colors.teal)),
                       ),
                       autofocus: true),
                 ),
                 SizedBox(
-                  width: 10,
+                  height: 10,
+                ),
+                new Container(
+                  width: 300.0,
+                  child: new TextField(
+                      keyboardType: TextInputType.number,
+                      maxLength: 10,
+                      textInputAction: TextInputAction.send,
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        hasFloatingPlaceholder: true,
+                        border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.teal)),
+                      ),
+                      autofocus: true),
+                ),
+                SizedBox(
+                  height: 10,
                 ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            new Text("Provide OTP sent via SMS"),
-            SizedBox(
-              height: 10,
-            ),
-            PinCodeTextField(
-              hideCharacter: false,
-              highlight: true,
-              highlightColor: Colors.orange,
-              defaultBorderColor: Colors.grey,
-              hasTextBorderColor: Colors.grey,
-              maxLength: 4,
-              pinBoxHeight: 50.0,
-              pinBoxWidth: 50.0,
-              pinTextStyle: TextStyle(fontSize: 30.0),
-              pinTextAnimatedSwitcherDuration: Duration(milliseconds: 500),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            new Icon(Icons.check_circle, color: Colors.green,size: 50.0,),
-            SizedBox(
-              height: 10,
-            ),
-            new Text("Mobile number verfied", style: TextStyle(
-              color: Colors.green,
-              fontWeight: FontWeight.w900
-            ),),
+            
             SizedBox(
               height: 50,
             ),
             FlatButton(
               color: Colors.red,
-              onPressed: () {
-                Navigator.pushNamed(context, "/form");
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, '/dashboard', (_) => false);
+              onPressed: () async {
+                // Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                // print(position.latitude);
+                // print(position.longitude);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/dashboard', (_) => false);
               },
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(30.0)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    vertical: 18.0, horizontal: 98.0),
+                    vertical: 18.0, horizontal: 58.0),
                 child: Text(
-                  'Signup',
+                  'Proceed to dashboard',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
