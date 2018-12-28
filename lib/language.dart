@@ -13,7 +13,9 @@ class _LangPrefState extends State<LanguagePreferences> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: Container(
+        body: SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           // Box decoration takes a gradient
           gradient: LinearGradient(
@@ -195,6 +197,6 @@ class _LangPrefState extends State<LanguagePreferences> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

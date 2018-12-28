@@ -10,7 +10,9 @@ class _UserFormState extends State<UserForm> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: Container(
+        body: SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           // Box decoration takes a gradient
@@ -56,8 +58,7 @@ class _UserFormState extends State<UserForm> {
                 new Container(
                   width: 300.0,
                   child: new TextField(
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
+                      keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.send,
                       decoration: InputDecoration(
                         labelText: "Name",
@@ -73,8 +74,7 @@ class _UserFormState extends State<UserForm> {
                 new Container(
                   width: 300.0,
                   child: new TextField(
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
+                      keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.send,
                       decoration: InputDecoration(
                         labelText: "Email",
@@ -89,7 +89,6 @@ class _UserFormState extends State<UserForm> {
                 ),
               ],
             ),
-            
             SizedBox(
               height: 50,
             ),
@@ -136,6 +135,6 @@ class _UserFormState extends State<UserForm> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
