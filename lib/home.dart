@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/loader/color_loader.dart';
 import 'package:namma_chennai/loader/dot_type.dart';
+import 'package:namma_chennai/webview.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Search'),
           ),
           new BottomNavigationBarItem(
-            icon: Icon(Icons.navigation),
+            icon: Icon(Icons.apps),
             title: Text('All Apps'),
           ),
           new BottomNavigationBarItem(
@@ -58,25 +59,58 @@ class _HomeScreenState extends State<HomeScreen> {
 class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var icons = {
+      1: {
+        "title": "Ola",
+        "iconUrl": "https://www.olacabs.com/webstatic/img/favicon.ico",
+        "url": "https://www.olacabs.com/"
+      },
+      2: {
+        "title": "Swiggy",
+        "iconUrl": "https://www.swiggy.com/favicon.ico",
+        "url": "https://www.swiggy.com"
+      },
+      3: {
+        "title": "Amazon",
+        "iconUrl": "https://www.amazon.com/favicon.ico",
+        "url": "https://www.amazon.com"
+      },
+      4: {
+        "title": "Tamilnadu",
+        "iconUrl":
+            "http://www.tn.gov.in/sites/all/themes/bootstrap/favicon.ico",
+        "url": "http://www.tn.gov.in/"
+      },
+      5: {
+        "title": "Google",
+        "iconUrl": "https://www.google.com/favicon.ico",
+        "url": "https://www.google.com"
+      },
+    };
     List<Widget> listW = new List<Widget>();
     for (var x in [1, 2, 3, 4, 5]) {
       listW.add(FlatButton(
         onPressed: () {
-          Navigator.pushNamed(context, "/wview");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WebViewScreen(url: icons[x]["url"]),
+            ),
+          );
         },
         color: Colors.white,
         padding: EdgeInsets.all(10.0),
         child: Column(
           // Replace with a Row for horizontal icon + text
           children: <Widget>[
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.blueGrey,
+            Image.network(
+              icons[x]["iconUrl"],
+              width: 50,
             ),
             SizedBox(
               height: 10,
             ),
-            Text("Swiggy")
+            Text(icons[x]["title"])
           ],
         ),
       ));
@@ -103,14 +137,17 @@ class HomeWidget extends StatelessWidget {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: 50,
+              height: 70,
             ),
             new Text(
-              'Namma Chennai',
+              'Hi, ithu Namma Chennai',
               style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 25.0,
+                  fontSize: 30.0,
                   color: Colors.yellow),
+            ),
+            SizedBox(
+              height: 10,
             ),
             Card(
               elevation: 5,
@@ -126,9 +163,7 @@ class HomeWidget extends StatelessWidget {
                     height: 120,
                     width: MediaQuery.of(context).size.width,
                     child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: listW
-                    ),
+                        scrollDirection: Axis.horizontal, children: listW),
                   ),
                 ],
               ),
@@ -147,9 +182,7 @@ class HomeWidget extends StatelessWidget {
                     height: 120,
                     width: MediaQuery.of(context).size.width,
                     child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: listW
-                    ),
+                        scrollDirection: Axis.horizontal, children: listW),
                   ),
                 ],
               ),
@@ -168,14 +201,11 @@ class HomeWidget extends StatelessWidget {
                     height: 120,
                     width: MediaQuery.of(context).size.width,
                     child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: listW
-                    ),
+                        scrollDirection: Axis.horizontal, children: listW),
                   ),
                 ],
               ),
             ),
-            
           ],
         ));
   }
@@ -230,18 +260,18 @@ class PlaceholderWidget1 extends StatelessWidget {
     );
   }
 }
-  // ButtonTheme.bar(
-                  //   // make buttons use the appropriate styles for cards
-                  //   child: ButtonBar(
-                  //     children: <Widget>[
-                  //       FlatButton(
-                  //         child: const Text('UNINSTALL'),
-                  //         onPressed: () {/* ... */},
-                  //       ),
-                  //       FlatButton(
-                  //         child: const Text('INSTALL'),
-                  //         onPressed: () {/* ... */},
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+// ButtonTheme.bar(
+//   // make buttons use the appropriate styles for cards
+//   child: ButtonBar(
+//     children: <Widget>[
+//       FlatButton(
+//         child: const Text('UNINSTALL'),
+//         onPressed: () {/* ... */},
+//       ),
+//       FlatButton(
+//         child: const Text('INSTALL'),
+//         onPressed: () {/* ... */},
+//       ),
+//     ],
+//   ),
+// ),

@@ -11,7 +11,9 @@ class _OTPState extends State<OTP> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: Container(
+        body: SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           // Box decoration takes a gradient
           gradient: LinearGradient(
@@ -100,14 +102,19 @@ class _OTPState extends State<OTP> {
             SizedBox(
               height: 50,
             ),
-            new Icon(Icons.check_circle, color: Colors.green,size: 50.0,),
+            new Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: 50.0,
+            ),
             SizedBox(
               height: 10,
             ),
-            new Text("Mobile number verfied", style: TextStyle(
-              color: Colors.green,
-              fontWeight: FontWeight.w900
-            ),),
+            new Text(
+              "Mobile number verfied",
+              style:
+                  TextStyle(color: Colors.green, fontWeight: FontWeight.w900),
+            ),
             SizedBox(
               height: 50,
             ),
@@ -152,6 +159,6 @@ class _OTPState extends State<OTP> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
