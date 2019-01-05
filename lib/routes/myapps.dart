@@ -12,7 +12,8 @@ class MyAppScreen extends StatelessWidget {
       },
       2: {
         "title": "Flipkart",
-        "iconUrl": "https://img1a.flixcart.com/www/promos/new/20150528-140547-favicon-retina.ico",
+        "iconUrl":
+            "https://img1a.flixcart.com/www/promos/new/20150528-140547-favicon-retina.ico",
         "url": "https://www.flipkart.com"
       },
       3: {
@@ -60,137 +61,147 @@ class MyAppScreen extends StatelessWidget {
         ),
       ));
     }
-    return SingleChildScrollView(
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              // Box decoration takes a gradient
-              gradient: LinearGradient(
-                // Where the linear gradient begins and ends
-                begin: Alignment.topCenter,
-                end: Alignment.center,
-                // Add one stop for each color. Stops should increase from 0 to 1
-                stops: [0.2, 0.35, 0.6],
-                tileMode: TileMode.clamp,
-                colors: [
-                  // Colors are easy thanks to Flutter's Colors class.
-                  Colors.redAccent,
-                  Colors.orange,
-                  Color(0xFFEEEEEE),
-                ],
-              ),
-            ),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 70,
-                ),
-                new Text(
-                  'Hi, ithu Namma Chennai',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 30.0,
-                      color: Colors.yellow),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10.0),
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text('Recent apps'),
-                      ),
-                      SizedBox(
-                        height: 120,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView(
-                            scrollDirection: Axis.horizontal, children: listW),
-                      ),
+    EdgeInsets edgeInsets =
+        EdgeInsets.only(bottom: 2, left: 8, right: 8, top: 5);
+    return Scaffold(
+        backgroundColor: Colors.redAccent,
+        resizeToAvoidBottomPadding: false,
+        body: SingleChildScrollView(
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  // Box decoration takes a gradient
+                  gradient: LinearGradient(
+                    // Where the linear gradient begins and ends
+                    begin: Alignment.topCenter,
+                    end: Alignment.center,
+                    // Add one stop for each color. Stops should increase from 0 to 1
+                    stops: [0.2, 0.35, 0.6],
+                    tileMode: TileMode.clamp,
+                    colors: [
+                      // Colors are easy thanks to Flutter's Colors class.
+                      Colors.redAccent,
+                      Colors.orange,
+                      Color(0xFFEEEEEE),
                     ],
                   ),
                 ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10.0),
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text('Recommended apps'),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 70,
+                    ),
+                    new Text(
+                      'Hi, ithu Namma Chennai',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 30.0,
+                          color: Colors.yellow),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Card(
+                      elevation: 5,
+                      margin: edgeInsets,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            title: Text('Recent apps'),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: listW),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 120,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView(
-                            scrollDirection: Axis.horizontal, children: listW),
+                    ),
+                    Card(
+                      elevation: 5,
+                      margin: edgeInsets,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            title: Text('Recommended apps'),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: listW),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10.0),
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text('Future apps'),
+                    ),
+                    Card(
+                      elevation: 5,
+                      margin: edgeInsets,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            title: Text('Future apps'),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: listW),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 120,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView(
-                            scrollDirection: Axis.horizontal, children: listW),
+                    ),
+                    Card(
+                      elevation: 5,
+                      margin: edgeInsets,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            title: Text('Future apps'),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: listW),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10.0),
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text('Future apps'),
+                    ),
+                    Card(
+                      elevation: 5,
+                      margin: edgeInsets,
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          const ListTile(
+                            title: Text('Future apps'),
+                          ),
+                          SizedBox(
+                            height: 120,
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: listW),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 120,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView(
-                            scrollDirection: Axis.horizontal, children: listW),
-                      ),
-                    ],
-                  ),
-                ),
-                Card(
-                  elevation: 5,
-                  margin: EdgeInsets.all(10.0),
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text('Future apps'),
-                      ),
-                      SizedBox(
-                        height: 120,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView(
-                            scrollDirection: Axis.horizontal, children: listW),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )));
+                    ),
+                  ],
+                ))));
   }
 }
