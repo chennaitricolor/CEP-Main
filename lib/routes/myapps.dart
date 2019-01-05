@@ -11,9 +11,9 @@ class MyAppScreen extends StatelessWidget {
         "url": "https://www.olacabs.com/"
       },
       2: {
-        "title": "Swiggy",
-        "iconUrl": "https://www.swiggy.com/favicon.ico",
-        "url": "https://www.swiggy.com"
+        "title": "Flipkart",
+        "iconUrl": "https://img1a.flixcart.com/www/promos/new/20150528-140547-favicon-retina.ico",
+        "url": "https://www.flipkart.com"
       },
       3: {
         "title": "Amazon",
