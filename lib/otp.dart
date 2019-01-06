@@ -61,6 +61,9 @@ class _OTPState extends State<OTP> {
                       keyboardType: TextInputType.number,
                       maxLength: 10,
                       textInputAction: TextInputAction.send,
+                      onSubmitted: (String no){
+                        print(no);
+                      },
                       decoration: InputDecoration(
                         labelText: "Mobile Number",
                         hasFloatingPlaceholder: true,
