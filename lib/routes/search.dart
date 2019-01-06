@@ -48,6 +48,27 @@ class _SearchScreenState extends State<SearchScreen> {
               title: Text('Sarkar'),
             ),
           ),
+          InkWell(
+            onTap: () {},
+            child: ListTile(
+              leading: Icon(Icons.trending_up),
+              title: Text('Mersal'),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: ListTile(
+              leading: Icon(Icons.trending_up),
+              title: Text('Theri'),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: ListTile(
+              leading: Icon(Icons.trending_up),
+              title: Text('Thalapathy'),
+            ),
+          ),
         ],
       ))
     ];
