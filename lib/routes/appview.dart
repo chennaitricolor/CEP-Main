@@ -88,6 +88,7 @@ class _AppViewScreenState extends State<AppViewScreen> {
                       FlatButton(
                         color: Colors.orangeAccent,
                         onPressed: () {
+                          Navigator.pop(context);
                           // Navigator.pushNamedAndRemoveUntil(
                           //     context, '/dashboard', (_) => false);
                         },

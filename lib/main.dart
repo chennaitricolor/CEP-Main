@@ -10,6 +10,7 @@ import 'package:namma_chennai/webview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:namma_chennai/locale/allTranslations.dart';
 import 'package:namma_chennai/routes/appview.dart';
+import 'package:namma_chennai/routes/ngo.dart';
 
 void main() async {
   // Initializes the translation module
@@ -70,6 +71,7 @@ class _NammaAppState extends State<NammaApp> {
         '/dashboard': (BuildContext context) => new HomeScreen(),
         '/wview': (BuildContext context) => new WebViewScreen(),
         '/appview': (BuildContext context) => new AppViewScreen(),
+        '/ngo': (BuildContext context) => new NGOScreen(),
       },
     );
   }

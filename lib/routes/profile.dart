@@ -10,89 +10,11 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     showNGOForm() {
-      showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return new Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                new ListTile(
-                  title: Text("NGO Registration"),
-                ),
-                Container(
-                  // margin: EdgeInsets.only(left: 10),
-                  child: Column(
-                    children: <Widget>[
-                      new Container(
-                        width: MediaQuery.of(context).size.width - 50,
-                        child: new TextField(
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.send,
-                            decoration: InputDecoration(
-                              labelText: "Name",
-                              hasFloatingPlaceholder: true,
-                              border: new OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Colors.teal)),
-                            ),
-                            autofocus: true),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      new Container(
-                        width: MediaQuery.of(context).size.width - 50,
-                        child: new TextField(
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.send,
-                            decoration: InputDecoration(
-                              labelText: "Email",
-                              hasFloatingPlaceholder: true,
-                              border: new OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Colors.teal)),
-                            ),
-                            autofocus: true),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 50,
-                  margin: EdgeInsets.only(left: 10),
-                  child: FlatButton(
-                    color: Colors.red,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(10.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 18.0, horizontal: 58.0),
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            );
-          });
+      Navigator.pushNamed(context, "/ngo");
     }
 
     return new Scaffold(
+        resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.black12,
         appBar: new AppBar(
           backgroundColor: Colors.redAccent,
@@ -195,12 +117,12 @@ class ProfileScreen extends StatelessWidget {
                             borderRadius: new BorderRadius.circular(5.0)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 15.0, horizontal: 150.0),
+                              vertical: 20.0, horizontal: 150.0),
                           child: Text(
                             'Logout',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18.0,
+                                fontSize: 15.0,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
