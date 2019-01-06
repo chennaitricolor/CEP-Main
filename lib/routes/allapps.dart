@@ -46,7 +46,9 @@ class AllAppsScreen extends StatelessWidget {
       listW.add(Card(
         margin: EdgeInsets.all(5),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, "/appview");
+          },
           child: ListTile(
             leading: Image.network(
               icons[x]["iconUrl"],
