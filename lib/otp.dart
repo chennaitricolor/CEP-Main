@@ -8,6 +8,47 @@ class OTP extends StatefulWidget {
 }
 
 class _OTPState extends State<OTP> {
+  Map<String, bool> _fieldIndicator = {
+    "showMobileNo": true,
+    "showOTP": false,
+    "showVerified": false,
+    "showNotVerified": false
+  };
+  var mobileNo = "";
+  void submit() {
+    print(mobileNo);
+
+    if (_fieldIndicator["showMobileNo"]) {
+      print("here");
+      setState(() {
+        _fieldIndicator["showMobileNo"] = false;
+        _fieldIndicator["showOTP"] = true;
+      });
+    } else if (_fieldIndicator["showOTP"]) {
+      setState(() {
+        _fieldIndicator["showOTP"] = false;
+        if (true) {
+          _fieldIndicator["showVerified"] = true;
+          _fieldIndicator["showNotVerified"] = false;
+        } else {
+          _fieldIndicator["showNotVerified"] = true;
+          _fieldIndicator["showVerified"] = false;
+        }
+      });
+    } else if (_fieldIndicator["showVerified"]) {
+      setState(() {
+        _fieldIndicator["showVerified"] = false;
+      });
+      Navigator.pushNamed(context, "/form");
+    } else if (_fieldIndicator["showNotVerified"]) {
+      setState(() {
+        _fieldIndicator["showNotVerified"] = false;
+      });
+      
+    }
+    // Navigator.pushNamed(context, "/form");
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -55,76 +96,119 @@ class _OTPState extends State<OTP> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new Container(
-                  width: 300.0,
-                  child: new TextField(
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: (String no){
-                        print(no);
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Mobile Number",
-                        hasFloatingPlaceholder: true,
-                        prefixText: "+91-",
-                        suffixStyle: TextStyle(color: Colors.green),
-                        suffixIcon: Icon(
-                          Icons.verified_user,
-                          color: Colors.green,
-                        ),
-                        border: new OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.teal)),
-                      ),
-                      autofocus: true),
-                ),
+                _fieldIndicator["showMobileNo"]
+                    ? new Container(
+                        width: 300.0,
+                        child: new TextField(
+                            keyboardType: TextInputType.number,
+                            maxLength: 10,
+                            textInputAction: TextInputAction.send,
+                            onSubmitted: (String no) {
+                              print(no);
+                            },
+                            onChanged: (String no) {
+                              setState(() {
+                                mobileNo = no;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Mobile Number",
+                              hasFloatingPlaceholder: true,
+                              prefixText: "+91-",
+                              suffixStyle: TextStyle(color: Colors.green),
+                              suffixIcon: Icon(
+                                Icons.verified_user,
+                                color: Colors.green,
+                              ),
+                              border: new OutlineInputBorder(
+                                  borderSide:
+                                      new BorderSide(color: Colors.teal)),
+                            ),
+                            autofocus: true),
+                      )
+                    : new Container(),
                 SizedBox(
                   width: 10,
                 ),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ),
-            SizedBox(
-              height: 20,
-            ),
-            new Text("Provide OTP sent via SMS"),
-            SizedBox(
-              height: 10,
-            ),
-            PinCodeTextField(
-              hideCharacter: false,
-              highlight: true,
-              highlightColor: Colors.orange,
-              defaultBorderColor: Colors.grey,
-              hasTextBorderColor: Colors.grey,
-              maxLength: 4,
-              pinBoxHeight: 50.0,
-              pinBoxWidth: 50.0,
-              pinTextStyle: TextStyle(fontSize: 30.0),
-              pinTextAnimatedSwitcherDuration: Duration(milliseconds: 500),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            new Icon(
-              Icons.check_circle,
-              color: Colors.green,
-              size: 50.0,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            new Text(
-              "Mobile number verfied",
-              style:
-                  TextStyle(color: Colors.green, fontWeight: FontWeight.w900),
-            ),
-            SizedBox(
-              height: 50,
-            ),
+            _fieldIndicator["showOTP"]
+                ? Column(
+                    children: <Widget>[
+                      new Text("Provide OTP sent via SMS"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      PinCodeTextField(
+                        hideCharacter: false,
+                        highlight: true,
+                        highlightColor: Colors.orange,
+                        defaultBorderColor: Colors.grey,
+                        hasTextBorderColor: Colors.grey,
+                        maxLength: 4,
+                        pinBoxHeight: 50.0,
+                        pinBoxWidth: 50.0,
+                        pinTextStyle: TextStyle(fontSize: 30.0),
+                        pinTextAnimatedSwitcherDuration:
+                            Duration(milliseconds: 500),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                    ],
+                  )
+                : new Column(),
+            _fieldIndicator["showVerified"]
+                ? Column(
+                    children: <Widget>[
+                      new Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 50.0,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      new Text(
+                        "Mobile number verfied",
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.w900),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                    ],
+                  )
+                : new Column(),
+            _fieldIndicator["showNotVerified"]
+                ? Column(
+                    children: <Widget>[
+                      new Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 50.0,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      new Text(
+                        "Invalid OTP! Try again! ${_fieldIndicator['showVerified']}",
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.w900),
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                    ],
+                  )
+                : new Column(),
             FlatButton(
               color: Colors.red,
               onPressed: () {
-                Navigator.pushNamed(context, "/form");
+                submit();
                 // Navigator.pushNamedAndRemoveUntil(
                 //     context, '/dashboard', (_) => false);
               },
@@ -134,7 +218,7 @@ class _OTPState extends State<OTP> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 18.0, horizontal: 98.0),
                 child: Text(
-                  'Signup',
+                  'Verify',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
