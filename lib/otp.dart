@@ -1,6 +1,11 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/locale/allTranslations.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class OTP extends StatefulWidget {
   @override
@@ -15,6 +20,37 @@ class _OTPState extends State<OTP> {
     "showNotVerified": false
   };
   var mobileNo = "";
+
+  // Firebase Verification
+  String smsCode;
+  String verificationId;
+  Future<void> _testVerifyPhoneNumber() async {
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      this.verificationId = verId;
+    };
+
+    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
+      print('Signed in');
+    };
+
+    final PhoneVerificationCompleted verifiedSuccess = (FirebaseUser user) {
+      print('verified');
+    };
+
+    final PhoneVerificationFailed veriFailed = (AuthException exception) {
+      print('${exception.message}');
+    };
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: mobileNo,
+        codeAutoRetrievalTimeout: autoRetrieve,
+        codeSent: smsCodeSent,
+        timeout: const Duration(seconds: 5),
+        verificationCompleted: verifiedSuccess,
+        verificationFailed: veriFailed);
+  }
+
   void submit() {
     print(mobileNo);
 
@@ -24,6 +60,7 @@ class _OTPState extends State<OTP> {
         _fieldIndicator["showMobileNo"] = false;
         _fieldIndicator["showOTP"] = true;
       });
+      _testVerifyPhoneNumber();
     } else if (_fieldIndicator["showOTP"]) {
       setState(() {
         _fieldIndicator["showOTP"] = false;
@@ -44,7 +81,6 @@ class _OTPState extends State<OTP> {
       setState(() {
         _fieldIndicator["showNotVerified"] = false;
       });
-      
     }
     // Navigator.pushNamed(context, "/form");
   }
