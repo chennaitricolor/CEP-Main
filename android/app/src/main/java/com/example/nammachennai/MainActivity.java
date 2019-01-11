@@ -1,4 +1,4 @@
-package com.example.nammachennai;
+package com.smartcep.nammachennai;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
