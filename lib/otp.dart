@@ -21,6 +21,7 @@ class _OTPState extends State<OTP> {
   };
 
   String statusMessage = "====";
+  String verCode = "AutoCode";
   var mobileNo = "";
 
   // Firebase Verification
@@ -29,10 +30,12 @@ class _OTPState extends State<OTP> {
   Future<void> _testVerifyPhoneNumber() async {
     final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
       setState(() {
-        statusMessage = verId;
+        verCode = verId;
       });
       this.verificationId = verId;
     };
+
+    FirebaseAuth.instance.signOut();
 
     final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
@@ -74,7 +77,14 @@ class _OTPState extends State<OTP> {
         _fieldIndicator["showMobileNo"] = false;
         _fieldIndicator["showOTP"] = true;
       });
-      _testVerifyPhoneNumber();
+      FirebaseAuth.instance.currentUser().then((user) {
+        if (user == null) {
+          _testVerifyPhoneNumber();
+        } else {
+          FirebaseAuth.instance.signOut();
+          _testVerifyPhoneNumber();
+        }
+      });
     } else if (_fieldIndicator["showOTP"]) {
       setState(() {
         _fieldIndicator["showOTP"] = false;
@@ -144,6 +154,7 @@ class _OTPState extends State<OTP> {
               height: 100,
             ),
             new Text("$statusMessage"),
+            new Text("$verCode"),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
