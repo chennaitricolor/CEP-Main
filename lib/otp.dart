@@ -19,6 +19,8 @@ class _OTPState extends State<OTP> {
     "showVerified": false,
     "showNotVerified": false
   };
+
+  String statusMessage = "====";
   var mobileNo = "";
 
   // Firebase Verification
@@ -26,24 +28,36 @@ class _OTPState extends State<OTP> {
   String verificationId;
   Future<void> _testVerifyPhoneNumber() async {
     final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      setState(() {
+        statusMessage = verId;
+      });
       this.verificationId = verId;
     };
 
     final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
       this.verificationId = verId;
+      setState(() {
+        statusMessage = "Signed in";
+      });
       print('Signed in');
     };
 
     final PhoneVerificationCompleted verifiedSuccess = (FirebaseUser user) {
+      setState(() {
+        statusMessage = "verified";
+      });
       print('verified');
     };
 
     final PhoneVerificationFailed veriFailed = (AuthException exception) {
+      setState(() {
+        statusMessage = '${exception.message}';
+      });
       print('${exception.message}');
     };
 
     await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: mobileNo,
+        phoneNumber: "+91 " + mobileNo,
         codeAutoRetrievalTimeout: autoRetrieve,
         codeSent: smsCodeSent,
         timeout: const Duration(seconds: 5),
@@ -129,6 +143,7 @@ class _OTPState extends State<OTP> {
             SizedBox(
               height: 100,
             ),
+            new Text("$statusMessage"),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

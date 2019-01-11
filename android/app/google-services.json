@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "188239670513",
+    "firebase_url": "https://tech-for-cities.firebaseio.com",
+    "project_id": "tech-for-cities",
+    "storage_bucket": "tech-for-cities.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188239670513:android:bc3f4359088330d2",
+        "android_client_info": {
+          "package_name": "com.smartcep.nammachennai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188239670513-Tmtpkhbjbrj6ab56l085cqe3g7nfavukn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6ZBOVDk5bxt44GE-xuJpJ8Gb6fxWtTCE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
