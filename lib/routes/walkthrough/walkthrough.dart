@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import './page_view_indicator.dart';
-import 'package:namma_chennai/get_started/page_model.dart';
+import 'package:namma_chennai/routes/walkthrough/page_view_indicator.dart';
+import 'package:namma_chennai/routes/walkthrough/page_model.dart';
 
 class WalkThrough extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.red,
       body: Container(
         // Add box decoration
         decoration: BoxDecoration(
@@ -78,29 +78,26 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
           itemCount: pages.length,
           itemBuilder: (BuildContext context, int index) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(height: 100.0),
-                new Container(
-                    child: new Image(
+                Container(
+                    child: Image(
                       image: AssetImage(pages[index].assetImagePath),
-                      width: 300,
+                      width: 300.0,
                     ),
-                    // new CircleAvatar(
-                    //   backgroundColor: Color(0xFFf7fbff),
-                    //   backgroundImage: AssetImage(pages[index].assetImagePath),
-                    //   radius: 150.0,
-                    // ),
-                    height: 300,
-                    padding: const EdgeInsets.all(0.0), // borde width
-                    decoration: new BoxDecoration(
-                      color: Colors.white, // border color
-                      // shape: BoxShape.circle,
-                      borderRadius: new BorderRadius.only(
-                            topLeft:  const  Radius.circular(40.0),
-                            topRight: const  Radius.circular(40.0),
-                            bottomLeft:  const  Radius.circular(40.0),
-                            bottomRight: const  Radius.circular(40.0),),
+                    height: 300.0,
+                    // Border width
+                    padding: const EdgeInsets.all(0.0),
+                    decoration: BoxDecoration(
+                      // Border color
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: const Radius.circular(40.0),
+                        topRight: const Radius.circular(40.0),
+                        bottomLeft: const Radius.circular(40.0),
+                        bottomRight: const Radius.circular(40.0),
+                      ),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
                           color: Colors.black,
@@ -111,7 +108,7 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
                     )),
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 100.0, left: 60.0, right: 40.0, bottom: 100.0),
+                      top: 60.0, left: 60.0, right: 40.0, bottom: 100.0),
                   child: Text(
                     pages[index].text,
                     textAlign: TextAlign.center,
@@ -128,7 +125,7 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: 96.0,
+            height: 100.0,
             alignment: Alignment.center,
             child: AnimatedCrossFade(
               crossFadeState: _bottomState,
@@ -137,20 +134,21 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
                 pageController: _pageController,
               ),
               secondChild: FlatButton(
-                color: Colors.white,
+                color: Colors.redAccent,
                 onPressed: () {
                   if (_pageController.page >= 2.5) {
-                    Navigator.pushNamed(context, "/language");
+                    Navigator.pushNamed(context, "/auth");
                   }
                 },
-                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0)),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 18.0, horizontal: 98.0),
                   child: Text(
                     'Get Started',
                     style: TextStyle(
-                        color: Colors.redAccent,
+                        color: Colors.white,
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold),
                   ),
@@ -176,7 +174,7 @@ class PageIndicators extends StatelessWidget {
             alignment: Alignment.center,
             child: PageViewIndicator(
               controller: pageController,
-              pageCount: 4,
+              pageCount: pages.length,
               color: Colors.blueGrey,
             )),
         Align(
@@ -194,8 +192,8 @@ class PageIndicators extends StatelessWidget {
                 'Skip',
                 textAlign: TextAlign.end,
                 style: TextStyle(
-                    color: Color(0xFF475d9a),
-                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
                     fontSize: 19.0),
               ),
             ),

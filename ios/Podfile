@@ -67,7 +67,3 @@ post_install do |installer|
     end
   end
 end
-
-pod 'Firebase/Core'
-pod 'Firebase/Auth'
-pod 'Firebase/Database'

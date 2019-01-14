@@ -1,4 +1,4 @@
-package com.smartcep.nammachennai;
+package com.techforcities.nammaChennai;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

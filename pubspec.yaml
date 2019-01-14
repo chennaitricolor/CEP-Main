@@ -1,5 +1,5 @@
 name: namma_chennai
-description: an app for cities
+description: A new Flutter project.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -15,9 +15,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
   firebase_auth:
+  pin_code_text_field:
+  firebase_database:
+  cloud_firestore:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -26,10 +27,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.7.0"
-  shared_preferences: ^0.4.3
-  pin_code_text_field: ^1.1.2
-  flutter_webview_plugin: ^0.3.0+2
 
 
 # For information on the generic Dart part of this file, see the
@@ -45,23 +42,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/images/csklogo.png
-   - assets/images/tfclogo.png
-   - assets/images/yelogo.png
-   - assets/locale/lang_en.json
-   - assets/locale/lang_ta.json
-   - assets/locale/lang_te.json
-
-  fonts:
-    - family: Varela Round
-      fonts:
-        - asset: assets/fonts/VarelaRound-Regular.ttf
-    - family: Raleway
-      fonts:
-        - asset: assets/fonts/Raleway-SemiBold.ttf
-    - family: TSCu_SaiIndira
-      fonts:
-        - asset: assets/fonts/TSCu_SaiIndira.ttf
+   - assets/images/logo/techforcities.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -88,7 +69,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/images/tfclogo.png"

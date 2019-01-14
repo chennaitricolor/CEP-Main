@@ -1,13 +1,16 @@
-# SmartCityCEP
+# namma_chennai
 
-An app for the cities
+A new Flutter project.
 
 ## Getting Started
 
-1. Clone the Repository
-2. Configure flutter in local computer
-3. Run the emulator
-4. From terminal, Move to the project directory and execute the following commands: <br/>
-    flutter packages get <br/>
-    flutter create . <br/>
-    flutter run <br/>
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+
+For help getting started with Flutter, view our 
+[online documentation](https://flutter.io/docs), which offers tutorials, 
+samples, guidance on mobile development, and a full API reference.
