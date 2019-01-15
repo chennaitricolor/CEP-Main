@@ -73,7 +73,7 @@ class AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
+      body: Container(
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
