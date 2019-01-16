@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
 import 'package:namma_chennai/routes/auth/auth.dart';
-// import 'package:namma_chennai/routes/form/userform.dart';
+import 'package:namma_chennai/routes/form/userform.dart';
+import 'package:namma_chennai/routes/dashboard/home.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/start': (BuildContext context) => new WalkThrough(),
         '/auth': (BuildContext context) => new Auth(),
-        // '/form': (BuildContext context) => new UserForm()
+        '/form': (BuildContext context) => new UserForm(),
+        '/home': (BuildContext context) => new Home(),
       },
     );
   }

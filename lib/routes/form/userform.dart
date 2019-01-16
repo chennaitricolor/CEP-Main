@@ -45,6 +45,8 @@ class UserFormState extends State<UserForm> {
         print(e);
       });
     }
+    print("test");
+    Navigator.pushNamed(context, "/home");
   }
 
   @override
