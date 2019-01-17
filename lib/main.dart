@@ -3,6 +3,7 @@ import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
 import 'package:namma_chennai/routes/auth/auth.dart';
 import 'package:namma_chennai/routes/form/userform.dart';
 import 'package:namma_chennai/routes/dashboard/home.dart';
+import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/auth': (BuildContext context) => new Auth(),
         '/form': (BuildContext context) => new UserForm(),
         '/home': (BuildContext context) => new Home(),
+        '/appdetail': (BuildContext context) => new AppDetailScreen(),
       },
     );
   }

@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 
-// Access a Cloud Firestore instance from your Activity
 Firestore db = Firestore.instance;
-
-// Reference to a Collection
 CollectionReference collectionRef = db.collection('users');
 
 class UserForm extends StatefulWidget {
@@ -38,6 +35,7 @@ class UserFormState extends State<UserForm> {
         print(e);
       });
     } else {
+      updatedUser.id = (DateTime.now().toUtc().millisecondsSinceEpoch).toString();
       collectionRef
           .document()
           .setData(updatedUser.toJson())
@@ -45,7 +43,6 @@ class UserFormState extends State<UserForm> {
         print(e);
       });
     }
-    print("test");
     Navigator.pushNamed(context, "/home");
   }
 

@@ -1,64 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:namma_chennai/model/apps.dart';
+import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 
-class AllApps extends StatelessWidget {
+Firestore db = Firestore.instance;
+CollectionReference collectionRef = db.collection('allapps');
+
+class AllApps extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    var icons = [
-      {
-        "title": "Ola",
-        "iconUrl": "https://www.olacabs.com/webstatic/img/favicon.ico",
-        "url": "https://www.olacabs.com/"
-      },
-      {
-        "title": "Flipkart",
-        "iconUrl":
-            "https://img1a.flixcart.com/www/promos/new/20150528-140547-favicon-retina.ico",
-        "url": "https://www.flipkart.com"
-      },
-      {
-        "title": "Amazon",
-        "iconUrl": "https://www.amazon.com/favicon.ico",
-        "url": "https://www.amazon.com"
-      },
-      {
-        "title": "TamilNadu Government",
-        "iconUrl":
-            "http://www.tn.gov.in/sites/all/themes/bootstrap/favicon.ico",
-        "url": "http://www.tn.gov.in/"
-      },
-      {
-        "title": "Google",
-        "iconUrl": "https://www.google.com/favicon.ico",
-        "url": "https://www.google.com"
-      },
-    ];
+  AllAppsState createState() => new AllAppsState();
+}
 
-    List<Widget> listW = new List<Widget>();
+class AllAppsState extends State<AllApps> {
+  List<Widget> listW = new List<Widget>();
+  List<Apps> apps = new List();
+
+  getAllApps() {
+    collectionRef.snapshots().listen((QuerySnapshot snapshot) {
+      List<DocumentSnapshot> docs = snapshot.documents;
+      for (DocumentSnapshot doc in docs) {
+        Apps app = new Apps.fromSnapShot(doc);
+        apps.add(app);
+      }
+      renderObjects();
+    });
+  }
+
+  renderObjects() {
     listW.add(ListTile(
       title: Text("Top Apps"),
     ));
 
-    for (var icon in icons) {
-      print(icon);
+    for (Apps app in apps) {
       listW.add(Card(
         margin: EdgeInsets.all(5),
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, "/appview");
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AppDetailScreen(app: app)));
           },
           child: ListTile(
             leading: Image.network(
-              icon["iconUrl"],
+              app.iconUrl,
               width: 50,
             ),
-            title: Text(icon["title"]),
-            subtitle: Text(icon["url"]),
+            title: Text(app.name),
+            subtitle: Text(app.link),
             trailing: Icon(Icons.keyboard_arrow_right),
           ),
         ),
       ));
     }
 
+    setState(() {
+      this.listW = listW;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllApps();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -68,15 +73,7 @@ class AllApps extends StatelessWidget {
           title: Text('Namma App Kadai'),
         ),
         body: Column(
-          children: <Widget>[
-            Container(
-              child: Card(
-                child: ListView(
-                  children: listW,
-                ),
-              )
-            ),
-          ],
+          children: listW,
         ));
   }
 }
