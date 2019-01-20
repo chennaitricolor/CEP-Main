@@ -137,7 +137,7 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
                 color: Colors.redAccent,
                 onPressed: () {
                   if (_pageController.page >= 2.5) {
-                    Navigator.pushNamed(context, "/auth");
+                    Navigator.pushNamed(context, "/language");
                   }
                 },
                 shape: RoundedRectangleBorder(

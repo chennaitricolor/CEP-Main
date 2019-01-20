@@ -6,7 +6,7 @@ Firestore db = Firestore.instance;
 CollectionReference collectionRef = db.collection('users');
 
 class UserForm extends StatefulWidget {
-  String phonenumber;
+  final String phonenumber;
 
   UserForm({this.phonenumber});
 
@@ -22,12 +22,11 @@ class UserFormState extends State<UserForm> {
     collectionRef
         .where("phonenumber", isEqualTo: "+91" + widget.phonenumber)
         .snapshots()
-        .listen((data) =>
-            data.documents.forEach((doc) => user = doc));
+        .listen((data) => data.documents.forEach((doc) => user = doc));
   }
 
   saveOrUpdateUser() {
-    if(user != null){
+    if (user != null) {
       collectionRef
           .document(user.documentID)
           .updateData(updatedUser.toJson())
@@ -35,11 +34,9 @@ class UserFormState extends State<UserForm> {
         print(e);
       });
     } else {
-      updatedUser.id = (DateTime.now().toUtc().millisecondsSinceEpoch).toString();
-      collectionRef
-          .document()
-          .setData(updatedUser.toJson())
-          .catchError((e) {
+      updatedUser.id =
+          (DateTime.now().toUtc().millisecondsSinceEpoch).toString();
+      collectionRef.document().setData(updatedUser.toJson()).catchError((e) {
         print(e);
       });
     }
@@ -49,44 +46,48 @@ class UserFormState extends State<UserForm> {
   @override
   void initState() {
     super.initState();
-    getUser();
+    // getUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return new Scaffold(
+        body: SingleChildScrollView(
       child: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
+          // Box decoration takes a gradient
           gradient: LinearGradient(
+            // Where the linear gradient begins and ends
             begin: Alignment.topCenter,
             end: Alignment.center,
+            // Add one stop for each color. Stops should increase from 0 to 1
             stops: [0.5, 0.5],
             tileMode: TileMode.clamp,
             colors: [
+              // Colors are easy thanks to Flutter's Colors class.
               Colors.redAccent,
               Color(0xFFEEEEEE),
             ],
           ),
         ),
-        child: Column(
+        child: new Column(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 40.0),
-            ),
-            Text(
-              'Profile Information',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 30.0,
-                  color: Colors.white),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 50.0),
-              child: new Container(
-                color: Colors.transparent,
-              ),
-            ),
+            Container(
+                margin: EdgeInsets.only(top: 100, bottom: 100),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Profile Information',
+                      style: TextStyle(fontSize: 30.0, color: Colors.white),
+                    ),
+                    Text(
+                      '(More about you)',
+                      style: TextStyle(fontSize: 15.0, color: Colors.white),
+                    ),
+                  ],
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -97,10 +98,10 @@ class UserFormState extends State<UserForm> {
                       maxLength: 30,
                       textInputAction: TextInputAction.next,
                       onChanged: (String name) {
-                          if(updatedUser == null){
-                            updatedUser = new User("+91" + widget.phonenumber);
-                          }
-                          updatedUser.name = name;
+                        if (updatedUser == null) {
+                          updatedUser = new User("+91" + widget.phonenumber);
+                        }
+                        updatedUser.name = name;
                       },
                       decoration: InputDecoration(
                         labelText: "Name",
@@ -127,10 +128,10 @@ class UserFormState extends State<UserForm> {
                       maxLength: 50,
                       textInputAction: TextInputAction.next,
                       onChanged: (String email) {
-                          if(updatedUser == null){
-                            updatedUser = new User("+91" + widget.phonenumber);
-                          }
-                          updatedUser.email = email;
+                        if (updatedUser == null) {
+                          updatedUser = new User("+91" + widget.phonenumber);
+                        }
+                        updatedUser.email = email;
                       },
                       decoration: InputDecoration(
                         labelText: "Email (optional)",
@@ -150,7 +151,8 @@ class UserFormState extends State<UserForm> {
             FlatButton(
               color: Colors.red,
               onPressed: () {
-                saveOrUpdateUser();
+                // saveOrUpdateUser();
+                 Navigator.pushNamed(context, "/home");
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0)),
