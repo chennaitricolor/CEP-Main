@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:namma_chennai/routes/form/userform.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final SharedPrefs _sharedPrefs = new SharedPrefs();
@@ -16,7 +14,6 @@ class Auth extends StatefulWidget {
 
 enum AuthStage {
   INIT,
-  PHONE_ENTERED,
   SMS_SENT,
   SMS_TIMEOUT,
   PHONE_VERIFIED,
@@ -25,54 +22,56 @@ enum AuthStage {
 
 class AuthState extends State<Auth> {
   String verificationId;
-  String testSmsCode;
+  String smsCode;
   String phonenumber;
-  AuthStage status = AuthStage.PHONE_VERIFIED;
+  AuthStage status = AuthStage.INIT;
   String prefLang = "Language";
 
   Future<void> verifyPhoneNumber() async {
-    final PhoneVerificationCompleted verificationCompleted =
-        (FirebaseUser user) {
-      setState(() {
-        status = AuthStage.PHONE_VERIFIED;
-        print(status);
-        Navigator.pushNamed(context, "/form");
-      });
-    };
-
-    final PhoneVerificationFailed verificationFailed =
-        (AuthException authException) {
-      setState(() {
-        status = AuthStage.PHONE_FAILED;
-        print(status);
-      });
-    };
-
-    final PhoneCodeSent codeSent =
-        (String verificationId, [int forceResendingToken]) async {
-      this.verificationId = verificationId;
-      setState(() {
-        status = AuthStage.SMS_SENT;
-        print(status);
-      });
-    };
-
-    final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
-        (String verificationId) {
-      this.verificationId = verificationId;
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      this.verificationId = verId;
       setState(() {
         status = AuthStage.SMS_TIMEOUT;
-        print(status);
+      });
+    };
+
+    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResent]) {
+      this.verificationId = verId;
+      setState(() {
+        status = AuthStage.SMS_SENT;
+      });
+    };
+
+    final PhoneVerificationCompleted verificationCompleted = (FirebaseUser user) {
+      setState(() {
+        status = AuthStage.PHONE_VERIFIED;
+      });
+    };
+
+    final PhoneVerificationFailed verificationFailed = (AuthException exception) {
+      print(exception.message + " " + exception.code);
+      setState(() {
+        status = AuthStage.PHONE_FAILED;
       });
     };
 
     await _auth.verifyPhoneNumber(
-        phoneNumber: "+91" + phonenumber,
-        timeout: const Duration(seconds: 60),
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+      phoneNumber: "+91" + this.phonenumber,
+      codeAutoRetrievalTimeout: autoRetrieve,
+      codeSent: smsCodeSent,
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: verificationCompleted,
+      verificationFailed: verificationFailed
+    );
+  }
+
+  signIn(){
+    _auth.signInWithPhoneNumber(verificationId: this.verificationId, smsCode: this.smsCode)
+    .then((user) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm(phonenumber: phonenumber)));
+    }).catchError((e){
+      print(e);
+    });
   }
 
   @override
@@ -88,7 +87,7 @@ class AuthState extends State<Auth> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height,
@@ -108,14 +107,14 @@ class AuthState extends State<Auth> {
             ],
           ),
         ),
-        child: new Column(
+        child: Column(
           children: <Widget>[
             Container(
-                margin: EdgeInsets.only(top: 100),
+                margin: EdgeInsets.only(top: 80),
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'Mobile Verfication \n' + prefLang + " " + allTranslations.text("app_title"),
+                      'Mobile Verfication',
                       style: TextStyle(fontSize: 30.0, color: Colors.white),
                     ),
                     Text(
@@ -125,34 +124,31 @@ class AuthState extends State<Auth> {
                   ],
                 )),
             Container(
-              margin: EdgeInsets.only(top: 100),
+              margin: EdgeInsets.only(top: 80),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   (status == AuthStage.INIT)
-                      ? new Container(
+                      ? Container(
                           width: 300.0,
-                          child: new TextField(
+                          child: TextField(
                               keyboardType: TextInputType.number,
                               maxLength: 10,
                               textInputAction: TextInputAction.send,
+                              onChanged: (String phone) {
+                                phonenumber = phone;
+                              },
                               onSubmitted: (String phone) {
                                 phonenumber = phone;
-                                status = AuthStage.PHONE_ENTERED;
                                 verifyPhoneNumber();
                               },
                               decoration: InputDecoration(
                                 labelText: "Mobile Number",
                                 hasFloatingPlaceholder: true,
                                 prefixText: "+91-",
-                                suffixStyle: TextStyle(color: Colors.green),
-                                suffixIcon: Icon(
-                                  Icons.verified_user,
-                                  color: Colors.green,
-                                ),
-                                border: new OutlineInputBorder(
+                                border: OutlineInputBorder(
                                     borderSide:
-                                        new BorderSide(color: Colors.teal)),
+                                        BorderSide(color: Colors.teal)),
                               ),
                               autofocus: true),
                         )
@@ -160,12 +156,12 @@ class AuthState extends State<Auth> {
                 ],
               ),
             ),
-            (status == AuthStage.PHONE_ENTERED)
+            (status == AuthStage.SMS_SENT)
                 ? Column(
                     children: <Widget>[
-                      new Text("Provide OTP sent via SMS"),
+                      Text("Provide OTP sent via SMS"),
                       Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 50),
+                        margin: EdgeInsets.only(top: 30, bottom: 20),
                         child: PinCodeTextField(
                           hideCharacter: false,
                           highlight: true,
@@ -178,80 +174,71 @@ class AuthState extends State<Auth> {
                           pinTextStyle: TextStyle(fontSize: 30.0),
                           pinTextAnimatedSwitcherDuration:
                               Duration(milliseconds: 500),
+                          onTextChanged: (String code){
+                            this.smsCode = code;
+                          },
                         ),
                       ),
+                      FlatButton(
+                        color: Colors.red,
+                        onPressed: () {
+                          _auth.currentUser().then((user){
+                            if(user != null){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm(phonenumber: phonenumber)));
+                            } else {
+                              signIn();
+                            }
+                          });
+                        },
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 18.0, horizontal: 98.0),
+                          child: Text(
+                            'Verify',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      )
                     ],
                   )
-                : new Column(),
+                : Column(),
             (status == AuthStage.PHONE_VERIFIED)
                 ? Column(
                     children: <Widget>[
-                      new Icon(
+                      Icon(
                         Icons.check_circle,
                         color: Colors.green,
                         size: 50.0,
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      new Text(
+                      Text(
                         "Mobile number verfied",
                         style: TextStyle(
                             color: Colors.green, fontWeight: FontWeight.w900),
                       ),
-                      SizedBox(
-                        height: 50,
-                      ),
                     ],
                   )
-                : new Column(),
+                : Column(),
             (status == AuthStage.PHONE_FAILED)
                 ? Column(
                     children: <Widget>[
-                      new Icon(
+                      Icon(
                         Icons.error_outline,
                         color: Colors.red,
                         size: 50.0,
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      new Text(
+                      Text(
                         "Invalid OTP! Try again!",
                         style: TextStyle(
                             color: Colors.red, fontWeight: FontWeight.w900),
                       ),
-                      SizedBox(
-                        height: 50,
-                      ),
                     ],
                   )
                 : new Column(),
-            FlatButton(
-              color: Colors.red,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            UserForm(phonenumber: phonenumber)));
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, '/dashboard', (_) => false);
-              },
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 18.0, horizontal: 98.0),
-                child: Text(
-                  'Verify',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
             InkWell(
               onTap: () {
                 Navigator.pop(context);

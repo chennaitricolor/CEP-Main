@@ -59,7 +59,7 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
     if (_pageController.hasClients) {
       double page = _pageController.page ?? _pageController.initialPage;
       setState(() {
-        if (page >= 2.5) {
+        if (page >= 1.5) {
           _bottomState = CrossFadeState.showSecond;
         } else {
           _bottomState = CrossFadeState.showFirst;
@@ -136,7 +136,7 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
               secondChild: FlatButton(
                 color: Colors.redAccent,
                 onPressed: () {
-                  if (_pageController.page >= 2.5) {
+                  if (_pageController.page >= 1.5) {
                     Navigator.pushNamed(context, "/language");
                   }
                 },

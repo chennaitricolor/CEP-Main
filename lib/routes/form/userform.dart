@@ -46,12 +46,12 @@ class UserFormState extends State<UserForm> {
   @override
   void initState() {
     super.initState();
-    // getUser();
+    getUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
       child: Container(
         height: MediaQuery.of(context).size.height,
@@ -72,10 +72,10 @@ class UserFormState extends State<UserForm> {
             ],
           ),
         ),
-        child: new Column(
+        child: Column(
           children: <Widget>[
             Container(
-                margin: EdgeInsets.only(top: 100, bottom: 100),
+                margin: EdgeInsets.only(top: 80),
                 child: Column(
                   children: <Widget>[
                     Text(
@@ -114,7 +114,7 @@ class UserFormState extends State<UserForm> {
             ),
             Padding(
               padding: EdgeInsets.only(top: 10.0),
-              child: new Container(
+              child: Container(
                 color: Colors.transparent,
               ),
             ),

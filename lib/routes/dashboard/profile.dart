@@ -65,7 +65,7 @@ class Profile extends StatelessWidget {
                           child: GridView.builder(
                               itemCount: 6,
                               gridDelegate:
-                                  new SliverGridDelegateWithFixedCrossAxisCount(
+                                  SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 childAspectRatio: MediaQuery.of(context)
                                         .size
@@ -86,9 +86,6 @@ class Profile extends StatelessWidget {
                                         Icons.outlined_flag,
                                         size: 50,
                                       ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
                                       Text("Change $index")
                                     ],
                                   ),
@@ -96,9 +93,6 @@ class Profile extends StatelessWidget {
                               }),
                         ),
                         height: 230,
-                      ),
-                      SizedBox(
-                        height: 5,
                       ),
                       FlatButton(
                         color: Colors.red,
@@ -108,8 +102,8 @@ class Profile extends StatelessWidget {
                           // Navigator.pushNamedAndRemoveUntil(
                           //     context, '/dashboard', (_) => false);
                         },
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(5.0)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 20.0, horizontal: 150.0),
