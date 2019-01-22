@@ -1,13 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:namma_chennai/model/user.dart';
+import 'package:namma_chennai/utils/shared_prefs.dart';
 
-class Profile extends StatelessWidget {
+SharedPrefs _sharedPrefs = new SharedPrefs();
+Firestore db = Firestore.instance;
+CollectionReference collectionRef = db.collection('users');
+
+class Profile extends StatefulWidget {
+  @override
+  ProfileState createState() => new ProfileState();
+}
+
+class ProfileState extends State<Profile> {
+
+  User currentUser;
+  String userId;
+
+  showNGOForm() {
+    print("Go to NGO");
+    // Navigator.pushNamed(context, "/ngo");
+  }
+
+  getMyInfo(){
+    collectionRef
+        .where("user_id", isEqualTo: userId)
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+          List<DocumentSnapshot> docs = snapshot.documents;
+          for (DocumentSnapshot doc in docs) {
+            User user = new User.fromSnapShot(doc);
+            currentUser = user;
+          }
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
+      setState(() {
+        userId = val;
+        getMyInfo();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    showNGOForm() {
-      // Navigator.pushNamed(context, "/ngo");
-    }
-
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.black12,
@@ -15,11 +55,10 @@ class Profile extends StatelessWidget {
           backgroundColor: Colors.redAccent,
           elevation: 0,
           centerTitle: false,
-          title: Text('Profile'),
+          title: Text('My Profile'),
         ),
         body: Stack(
           children: <Widget>[
-            // The containers in the background
             Column(
               children: <Widget>[
                 Container(
@@ -28,9 +67,6 @@ class Profile extends StatelessWidget {
                 ),
               ],
             ),
-            // The card widget with top padding,
-            // incase if you wanted bottom padding to work,
-            // set the `alignment` of container to Alignment.bottomCenter
             Container(
               alignment: Alignment.topCenter,
               padding: EdgeInsets.only(
@@ -47,7 +83,7 @@ class Profile extends StatelessWidget {
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           child: ListTile(
                             title: Text(
-                              "Hi, \nI am TechforCities v1.0",
+                              currentUser.userName,
                               style: TextStyle(fontSize: 20),
                             ),
                             trailing: Icon(
@@ -55,63 +91,31 @@ class Profile extends StatelessWidget {
                               color: Colors.green,
                             ),
                             subtitle:
-                                Text("tfchennai@google.com\nfrom Chennai"),
+                                Text(currentUser.userPhoneNumber),
                           ),
                         ),
                         elevation: 4.0,
                       ),
-                      Container(
-                        child: Card(
-                          child: GridView.builder(
-                              itemCount: 6,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: MediaQuery.of(context)
-                                        .size
-                                        .width /
-                                    (MediaQuery.of(context).size.height / 2.4),
-                              ),
-                              itemBuilder: (BuildContext context, int index) {
-                                return FlatButton(
-                                  onPressed: () {
-                                    showNGOForm();
-                                  },
-                                  color: Colors.white,
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Column(
-                                    // Replace with a Row for horizontal icon + text
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.outlined_flag,
-                                        size: 50,
-                                      ),
-                                      Text("Change $index")
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
-                        height: 230,
+                      SingleChildScrollView(
+                        // child: listNGO,
                       ),
+                      Expanded(child: Container()),
                       FlatButton(
                         color: Colors.red,
                         onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/start', (_) => false);
-                          // Navigator.pushNamedAndRemoveUntil(
-                          //     context, '/dashboard', (_) => false);
+                          _sharedPrefs.removeApplicationSavedInformation("loggedinuser");
+                          Navigator.pushNamed(context, "/start");
                         },
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 150.0),
+                              vertical: 18.0, horizontal: 98.0),
                           child: Text(
-                            'Logout',
+                            'Log Out',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15.0,
+                                fontSize: 18.0,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),

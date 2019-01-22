@@ -58,10 +58,10 @@ class AppDetailState extends State<AppDetailScreen> {
                         color: Colors.white,
                         child: ListTile(
                           leading: Image.network(
-                            app.iconUrl,
+                            app.appIconUrl,
                             width: 50,
                           ),
-                          title: Text(app.name,
+                          title: Text(app.appName,
                               style: TextStyle(
                                   fontSize: 24.0, fontWeight: FontWeight.bold)),
                         ),
@@ -78,10 +78,6 @@ class AppDetailState extends State<AppDetailScreen> {
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold)),
-                                    subtitle: Text("\n\nDeveloper Name: " +
-                                        app.devName +
-                                        "\n\nDeveloper Email: " +
-                                        app.devEmail),
                                   ),
                                 ],
                               ))),

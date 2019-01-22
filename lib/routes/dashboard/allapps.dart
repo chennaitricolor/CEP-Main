@@ -40,11 +40,11 @@ class AllAppsState extends State<AllApps> {
           },
           child: ListTile(
             leading: Image.network(
-              app.iconUrl,
+              app.appIconUrl,
               width: 50,
             ),
-            title: Text(app.name),
-            subtitle: Text(app.link),
+            title: Text(app.appName),
+            subtitle: Text(app.appUrl),
             trailing: Icon(Icons.keyboard_arrow_right),
           ),
         ),

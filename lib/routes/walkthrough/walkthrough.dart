@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/routes/walkthrough/page_view_indicator.dart';
 import 'package:namma_chennai/routes/walkthrough/page_model.dart';
+import 'package:namma_chennai/utils/shared_prefs.dart';
 
+SharedPrefs _sharedPrefs = new SharedPrefs();
 class WalkThrough extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,13 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
   CrossFadeState _bottomState = CrossFadeState.showFirst;
   void initState() {
     super.initState();
+    // _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
+    //   setState(() {
+    //       if(val != null){
+    //         Navigator.pushNamed(context, "/home");
+    //       }        
+    //   });
+    // });
     _pageController = PageController();
     _pageController.addListener(_pageListener);
   }

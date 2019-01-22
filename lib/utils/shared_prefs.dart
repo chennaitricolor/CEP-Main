@@ -21,4 +21,13 @@ class SharedPrefs {
 
     return prefs.setString(_storageKey + name, value);
   }
+
+  /// ----------------------------------------------------------
+  /// Generic routine to remove an application preference
+  /// ----------------------------------------------------------
+  Future<bool> removeApplicationSavedInformation(String name) async {
+    final SharedPreferences prefs = await _prefs;
+
+    return prefs.remove(_storageKey + name);
+  }
 }
