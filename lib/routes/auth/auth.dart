@@ -26,6 +26,7 @@ class AuthState extends State<Auth> {
   String phonenumber;
   AuthStage status = AuthStage.INIT;
   String prefLang = "Language";
+  FirebaseUser currentUser;
 
   Future<void> verifyPhoneNumber() async {
     final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
@@ -43,6 +44,7 @@ class AuthState extends State<Auth> {
     };
 
     final PhoneVerificationCompleted verificationCompleted = (FirebaseUser user) {
+      currentUser = user;
       setState(() {
         status = AuthStage.PHONE_VERIFIED;
       });
@@ -68,7 +70,7 @@ class AuthState extends State<Auth> {
   signIn(){
     _auth.signInWithPhoneNumber(verificationId: this.verificationId, smsCode: this.smsCode)
     .then((user) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm(phonenumber: phonenumber)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm(phonenumber: phonenumber, userid: user.uid)));
     }).catchError((e){
       print(e);
     });
@@ -184,7 +186,10 @@ class AuthState extends State<Auth> {
                         onPressed: () {
                           _auth.currentUser().then((user){
                             if(user != null){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm(phonenumber: phonenumber)));
+                              currentUser = user;
+                              setState(() {
+                                status = AuthStage.PHONE_VERIFIED;
+                              });
                             } else {
                               signIn();
                             }
@@ -221,6 +226,27 @@ class AuthState extends State<Auth> {
                             color: Colors.green, fontWeight: FontWeight.w900),
                       ),
                     ],
+                  )
+                : Column(),
+            (status == AuthStage.PHONE_VERIFIED)
+                ? FlatButton(
+                    color: Colors.red,
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => UserForm(phonenumber: phonenumber, userid: currentUser.uid)));
+                    },
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 18.0, horizontal: 98.0),
+                      child: Text(
+                        'Proceed',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   )
                 : Column(),
             (status == AuthStage.PHONE_FAILED)

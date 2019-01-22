@@ -1,46 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
+import 'package:namma_chennai/utils/shared_prefs.dart';
 
+SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
 CollectionReference collectionRef = db.collection('users');
 
 class UserForm extends StatefulWidget {
   final String phonenumber;
+  final String userid;
 
-  UserForm({this.phonenumber});
+  UserForm({this.phonenumber, this.userid});
 
   @override
   UserFormState createState() => UserFormState();
 }
 
 class UserFormState extends State<UserForm> {
-  DocumentSnapshot user;
-  User updatedUser;
+  User currentUser;
+  String documentId;
 
   getUser() {
     collectionRef
-        .where("phonenumber", isEqualTo: "+91" + widget.phonenumber)
+        .where("user_id", isEqualTo: widget.userid)
         .snapshots()
-        .listen((data) => data.documents.forEach((doc) => user = doc));
+        .listen((QuerySnapshot snapshot) {
+          List<DocumentSnapshot> docs = snapshot.documents;
+          for (DocumentSnapshot doc in docs) {
+            documentId = doc.documentID;
+            User user = new User.fromSnapShot(doc);
+            currentUser = user;
+          }
+        });
   }
 
   saveOrUpdateUser() {
-    if (user != null) {
+    if (documentId != null) {
       collectionRef
-          .document(user.documentID)
-          .updateData(updatedUser.toJson())
+          .document(documentId)
+          .updateData(currentUser.toJson())
           .catchError((e) {
         print(e);
       });
     } else {
-      updatedUser.id =
-          (DateTime.now().toUtc().millisecondsSinceEpoch).toString();
-      collectionRef.document().setData(updatedUser.toJson()).catchError((e) {
+      currentUser.userId = widget.userid;
+      collectionRef.document().setData(currentUser.toJson()).catchError((e) {
         print(e);
       });
     }
+    _sharedPrefs.setApplicationSavedInformation('loggedinuser', currentUser.userId);
     Navigator.pushNamed(context, "/home");
+  }
+
+  genderChange(Gender gender){
+    if(currentUser != null){
+      currentUser.userGender = gender.toString();
+    } else {
+      currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
+      currentUser.userGender = gender.toString();
+    }
+  }
+
+  Future<Null> dateSelector(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900, 1),
+        lastDate: DateTime.now());
+        if (picked != null)
+        setState(() {
+          currentUser.userDob = picked;
+        });
   }
 
   @override
@@ -88,6 +119,12 @@ class UserFormState extends State<UserForm> {
                     ),
                   ],
                 )),
+            Padding(
+              padding: EdgeInsets.only(top: 30.0),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -98,10 +135,10 @@ class UserFormState extends State<UserForm> {
                       maxLength: 30,
                       textInputAction: TextInputAction.next,
                       onChanged: (String name) {
-                        if (updatedUser == null) {
-                          updatedUser = new User("+91" + widget.phonenumber);
+                        if (currentUser == null) {
+                          currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
                         }
-                        updatedUser.name = name;
+                        currentUser.userName = name;
                       },
                       decoration: InputDecoration(
                         labelText: "Name",
@@ -128,22 +165,64 @@ class UserFormState extends State<UserForm> {
                       maxLength: 50,
                       textInputAction: TextInputAction.next,
                       onChanged: (String email) {
-                        if (updatedUser == null) {
-                          updatedUser = new User("+91" + widget.phonenumber);
+                        if (currentUser == null) {
+                          currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
                         }
-                        updatedUser.email = email;
+                        currentUser.userEmail = email;
                       },
                       decoration: InputDecoration(
                         labelText: "Email (optional)",
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal)),
-                      ),
-                      autofocus: true),
+                      )
+                  ),
                 ),
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(top: 30.0),
+              padding: EdgeInsets.only(top: 10.0),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            ),
+            DropdownButton<Gender>(
+              hint: Text("Select Gender"),
+              items: <Gender>[Gender.MALE, Gender.FEMALE, Gender.TRANSGENDER].map((Gender value) {
+                return DropdownMenuItem<Gender>(
+                  value: value,
+                  child: Text(value.toString().substring(7)),
+                );
+              }).toList(),
+              onChanged: (Gender value) {
+                if (currentUser == null) {
+                  currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
+                }
+                currentUser.userGender = value.toString();
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Container(
+                color: Colors.transparent,
+              ),
+            ),
+            Container(
+                  width: 300.0,
+                  child: GestureDetector(
+                          onTap:() => dateSelector(context),
+                          child:AbsorbPointer(
+                            child: TextField(
+                                decoration: InputDecoration(
+                                  labelText: "Date of Birth",
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.teal)),
+                                )
+                            ),
+                          )
+                        ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.0),
               child: Container(
                 color: Colors.transparent,
               ),
@@ -151,8 +230,7 @@ class UserFormState extends State<UserForm> {
             FlatButton(
               color: Colors.red,
               onPressed: () {
-                // saveOrUpdateUser();
-                 Navigator.pushNamed(context, "/home");
+                saveOrUpdateUser();
               },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0)),
@@ -160,7 +238,7 @@ class UserFormState extends State<UserForm> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 18.0, horizontal: 58.0),
                 child: Text(
-                  'Proceed',
+                  'Update',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,

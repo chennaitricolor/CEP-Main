@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/model/apps.dart';
-import 'package:namma_chennai/model/myapps.dart';
+import 'package:namma_chennai/model/userapps.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Firestore db = Firestore.instance;
@@ -21,8 +21,8 @@ class AppDetailState extends State<AppDetailScreen> {
   AppDetailState({this.app});
 
   installApp() {
-    MyApps myApp = new MyApps(app.appId);
-    myApp.isInstalled = true;
+    UserApps myApp = new UserApps(app.appId);
+    // myApp.isInstalled = true;
     // TO DO set user id here
     collectionRef
           .document()
