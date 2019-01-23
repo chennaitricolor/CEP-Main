@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
+import 'package:intl/intl.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
@@ -20,6 +21,8 @@ class UserForm extends StatefulWidget {
 class UserFormState extends State<UserForm> {
   User currentUser;
   String documentId;
+  Gender selectedGender;
+  TextEditingController dobController = new TextEditingController();
 
   getUser() {
     collectionRef
@@ -71,6 +74,8 @@ class UserFormState extends State<UserForm> {
         if (picked != null)
         setState(() {
           currentUser.userDob = picked;
+          var formatter = new DateFormat('yyyy-MM-dd');
+          dobController.text = formatter.format(picked);
         });
   }
 
@@ -188,11 +193,15 @@ class UserFormState extends State<UserForm> {
                   child: Text(value.toString().substring(7)),
                 );
               }).toList(),
+              value: selectedGender,
               onChanged: (Gender value) {
                 if (currentUser == null) {
                   currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
                 }
                 currentUser.userGender = value.toString();
+                setState(() {
+                  selectedGender = value;
+                });
               },
             ),
             Padding(
@@ -207,6 +216,7 @@ class UserFormState extends State<UserForm> {
                           onTap:() => dateSelector(context),
                           child:AbsorbPointer(
                             child: TextField(
+                                controller: dobController,
                                 decoration: InputDecoration(
                                   labelText: "Date of Birth",
                                   border: OutlineInputBorder(

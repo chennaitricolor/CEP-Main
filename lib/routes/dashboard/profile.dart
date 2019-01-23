@@ -65,7 +65,7 @@ class ProfileState extends State<Profile> {
             Column(
               children: <Widget>[
                 Container(
-                  height: MediaQuery.of(context).size.height * .2,
+                  height: MediaQuery.of(context).size.height * .22,
                   color: Colors.redAccent,
                 ),
               ],
@@ -74,7 +74,7 @@ class ProfileState extends State<Profile> {
                 ? Container(
                     alignment: Alignment.topCenter,
                     padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .01,
+                        top: MediaQuery.of(context).size.height * .02,
                         right: 10.0,
                         left: 10.0),
                     child: Container(
@@ -84,17 +84,17 @@ class ProfileState extends State<Profile> {
                             Card(
                               color: Colors.white,
                               child: Padding(
-                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                padding: EdgeInsets.only(top: 15, bottom: 15),
                                 child: ListTile(
                                   title: Text(
                                     currentUser.userName,
-                                    style: TextStyle(fontSize: 20),
+                                    style: TextStyle(fontSize: 22),
                                   ),
                                   trailing: Icon(
                                     Icons.verified_user,
                                     color: Colors.green,
                                   ),
-                                  subtitle: Text(currentUser.userPhoneNumber),
+                                  subtitle: Text(currentUser.userPhoneNumber + "\nMember since: " + currentUser.userCreatedOn.toLocal().toString().substring(0, currentUser.userCreatedOn.toLocal().toString().length - 7)),
                                 ),
                               ),
                               elevation: 4.0,
