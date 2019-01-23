@@ -50,7 +50,7 @@ class UserFormState extends State<UserForm> {
       });
     }
     _sharedPrefs.setApplicationSavedInformation('loggedinuser', currentUser.userId);
-    Navigator.pushNamed(context, "/home");
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
   }
 
   genderChange(Gender gender){
@@ -119,16 +119,11 @@ class UserFormState extends State<UserForm> {
                     ),
                   ],
                 )),
-            Padding(
-              padding: EdgeInsets.only(top: 30.0),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
+                  margin: EdgeInsets.only(top: 80),
                   width: 300.0,
                   child: TextField(
                       keyboardType: TextInputType.text,

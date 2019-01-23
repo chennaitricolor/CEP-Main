@@ -21,8 +21,10 @@ class MyAppsState extends State<MyApps> {
     collectionRef.snapshots().listen((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
-        collectionRef2.where("app_id", isEqualTo: doc["app_id"])
-        .snapshots().listen((QuerySnapshot snapshot2) {
+        collectionRef2
+            .where("app_id", isEqualTo: doc["app_id"])
+            .snapshots()
+            .listen((QuerySnapshot snapshot2) {
           List<DocumentSnapshot> docs2 = snapshot2.documents;
           for (DocumentSnapshot doc2 in docs2) {
             Apps app = new Apps.fromSnapShot(doc2);
@@ -44,7 +46,10 @@ class MyAppsState extends State<MyApps> {
         margin: EdgeInsets.all(5),
         child: InkWell(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AppDetailScreen(app: app)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AppDetailScreen(app: app)));
           },
           child: ListTile(
             leading: Image.network(
@@ -73,15 +78,45 @@ class MyAppsState extends State<MyApps> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.redAccent,
-          elevation: 0,
-          centerTitle: false,
-          title: Text('Namma App Kadai'),
-        ),
-        body: Column(
-          children: listW,
-        ));
+        backgroundColor: Colors.redAccent,
+        resizeToAvoidBottomPadding: false,
+        body: SingleChildScrollView(
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  // Box decoration takes a gradient
+                  gradient: LinearGradient(
+                    // Where the linear gradient begins and ends
+                    begin: Alignment.topCenter,
+                    end: Alignment.center,
+                    // Add one stop for each color. Stops should increase from 0 to 1
+                    stops: [0.2, 0.35, 0.6],
+                    tileMode: TileMode.clamp,
+                    colors: [
+                      // Colors are easy thanks to Flutter's Colors class.
+                      Colors.redAccent,
+                      Colors.orange,
+                      Color(0xFFEEEEEE),
+                    ],
+                  ),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 70,
+                    ),
+                    new Text(
+                      'Hi, ithu Namma Chennai',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 30.0,
+                          color: Colors.yellow),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ]..addAll(listW),
+                ))));
   }
 }

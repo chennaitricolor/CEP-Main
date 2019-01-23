@@ -46,13 +46,6 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
   CrossFadeState _bottomState = CrossFadeState.showFirst;
   void initState() {
     super.initState();
-    // _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
-    //   setState(() {
-    //       if(val != null){
-    //         Navigator.pushNamed(context, "/home");
-    //       }        
-    //   });
-    // });
     _pageController = PageController();
     _pageController.addListener(_pageListener);
   }

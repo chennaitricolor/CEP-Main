@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
+import 'package:namma_chennai/routes/splash/splash.dart';
 import 'package:namma_chennai/routes/auth/auth.dart';
 import 'package:namma_chennai/routes/form/userform.dart';
 import 'package:namma_chennai/routes/dashboard/home.dart';
@@ -59,7 +60,7 @@ class _NammaAppState extends State<NammaApp> {
       initialRoute: '/start',
       home: new WalkThrough(),
       routes: <String, WidgetBuilder>{
-        '/start': (BuildContext context) => new WalkThrough(),
+        '/start': (BuildContext context) => new Splash(),
         '/language': (BuildContext context) => new LanguagePreferences(),
         '/auth': (BuildContext context) => new Auth(),
         '/form': (BuildContext context) => new UserForm(),
