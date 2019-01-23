@@ -1,12 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum OrgType {
+  GOVERNMENT,
+  NGO,
+  PRIVATE,
+  OTHER
+}
+
 class Orgs {
 
-  String orgId;
+  String orgId = new DateTime.now().toUtc().toString();
   String userId;
   String orgName;
   String orgType;
   String orgDocUrl;
+
+  Orgs();
 
   Orgs.fromSnapShot(DocumentSnapshot snapshot){
     this.orgId = snapshot['org_id'];

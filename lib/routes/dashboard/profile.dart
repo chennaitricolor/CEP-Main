@@ -18,11 +18,11 @@ class ProfileState extends State<Profile> {
   User currentUser;
   String userId;
   List<Orgs> currentOrgs = new List();
+  List<Widget> listW = new List();
   bool isLoaded = false;
 
   showNGOForm() {
-    print("Go to NGO");
-    // Navigator.pushNamed(context, "/ngo");
+    Navigator.pushNamed(context, "/ngoform");
   }
 
   getMyInfo() {
@@ -35,14 +35,12 @@ class ProfileState extends State<Profile> {
         User user = new User.fromSnapShot(doc);
         currentUser = user;
       }
-      setState(() {
-        isLoaded = true;
-      });
     });
   }
 
   getOrgInfo() {
-    collectionRef
+    currentOrgs = new List();
+    collectionRef2
         .where("user_id", isEqualTo: userId)
         .snapshots()
         .listen((QuerySnapshot snapshot) {
@@ -51,10 +49,48 @@ class ProfileState extends State<Profile> {
             Orgs org = new Orgs.fromSnapShot(doc);
             currentOrgs.add(org);
           }
-          setState(() {
-            isLoaded = true;
-          });
+          renderObjects();
         });
+  }
+
+  renderObjects() {
+    listW.add(ListTile(
+      title: Text("My Orgs"),
+    ));
+
+    for (Orgs org in currentOrgs) {
+      listW.add(Card(
+        margin: EdgeInsets.all(2),
+        child: InkWell(
+          child: ListTile(
+            title: Text(org.orgName),
+            subtitle: Text(org.orgType.substring(8)),
+            trailing: Icon(
+              Icons.verified_user,
+              color: Colors.green,
+            ),
+          ),
+        ),
+      ));
+    }
+
+    listW.add(Card(
+      margin: EdgeInsets.all(2),
+      child: InkWell(
+        child: ListTile(
+          onTap: () {
+            showNGOForm();
+          },
+          title: Text("Add new Org"),
+          trailing: Icon(Icons.add_box),
+        ),
+      ),
+    ));
+
+    setState(() {
+      this.listW = listW;
+      isLoaded = true;
+    });
   }
 
   @override
@@ -111,7 +147,7 @@ class ProfileState extends State<Profile> {
                                     style: TextStyle(fontSize: 22),
                                   ),
                                   trailing: Icon(
-                                    Icons.verified_user,
+                                    Icons.person_pin_circle,
                                     color: Colors.green,
                                   ),
                                   subtitle: Text(currentUser.userPhoneNumber + "\nMember since: " + currentUser.userCreatedOn.toLocal().toString().substring(0, currentUser.userCreatedOn.toLocal().toString().length - 7)),
@@ -119,9 +155,9 @@ class ProfileState extends State<Profile> {
                               ),
                               elevation: 4.0,
                             ),
-                            SingleChildScrollView(
-                                // child: listNGO,
-                                ),
+                            Column(                              
+                                children: listW,
+                            ),
                             Expanded(child: Container()),
                             FlatButton(
                               color: Colors.red,
