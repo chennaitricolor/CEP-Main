@@ -1,35 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/model/apps.dart';
 
 class UserApps {
-
-  String appId;
   String userId;
-  List<Apps> apps;
-  List<Apps> layout;
+  List<String> apps;
+  List<String> layout;
 
-  UserApps(this.appId);
+  UserApps(this.userId);
 
-  UserApps.fromSnapShot(DocumentSnapshot snapshot){
-    this.appId = snapshot['app_id'];
+  UserApps.fromSnapShot(DocumentSnapshot snapshot) {
     this.userId = snapshot['user_id'];
-    this.apps = snapshot['apps'];
-    this.layout = snapshot['layout'];
+    this.apps = buildAppsList(snapshot['apps']);
+    this.layout = buildAppsList(snapshot['layout']);
   }
 
-  UserApps.fromJson(Map<String, dynamic> json){
-    this.appId = json['app_id'];
+  UserApps.fromJson(Map<String, dynamic> json) {
     this.userId = json['user_id'];
-    this.apps = json['apps'];
-    this.layout = json['layout'];
+    this.apps = buildAppsList(json['apps']);
+    this.layout = buildAppsList(json['layout']);
   }
 
-  Map<String, dynamic> toJson() =>
-  {
-    'app_id': this.appId,
+  Map<String, dynamic> toJson() => {
     'user_id': this.userId,
     'apps': this.apps,
     'layout': this.layout
   };
-}
 
+  buildAppsList(List<dynamic> appsIdList) {
+    List<String> appsList = new List();
+    for (String appId in appsIdList) {
+      appsList.add(appId);
+    }
+    return appsList;
+  }
+}

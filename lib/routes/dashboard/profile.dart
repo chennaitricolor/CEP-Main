@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
+import 'package:namma_chennai/model/orgs.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
 CollectionReference collectionRef = db.collection('users');
+CollectionReference collectionRef2 = db.collection('orgs');
 
 class Profile extends StatefulWidget {
   @override
@@ -15,6 +17,7 @@ class Profile extends StatefulWidget {
 class ProfileState extends State<Profile> {
   User currentUser;
   String userId;
+  List<Orgs> currentOrgs = new List();
   bool isLoaded = false;
 
   showNGOForm() {
@@ -38,6 +41,22 @@ class ProfileState extends State<Profile> {
     });
   }
 
+  getOrgInfo() {
+    collectionRef
+        .where("user_id", isEqualTo: userId)
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
+          List<DocumentSnapshot> docs = snapshot.documents;
+          for (DocumentSnapshot doc in docs) {
+            Orgs org = new Orgs.fromSnapShot(doc);
+            currentOrgs.add(org);
+          }
+          setState(() {
+            isLoaded = true;
+          });
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +64,7 @@ class ProfileState extends State<Profile> {
       setState(() {
         userId = val;
         getMyInfo();
+        getOrgInfo();
       });
     });
   }

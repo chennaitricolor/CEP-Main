@@ -4,7 +4,7 @@ import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 
 Firestore db = Firestore.instance;
-CollectionReference collectionRef = db.collection('allapps');
+CollectionReference collectionRef = db.collection('apps');
 
 class AllApps extends StatefulWidget {
   @override
@@ -28,7 +28,7 @@ class AllAppsState extends State<AllApps> {
 
   renderObjects() {
     listW.add(ListTile(
-      title: Text("Top Apps"),
+      title: Text("All Apps"),
     ));
 
     for (Apps app in apps) {

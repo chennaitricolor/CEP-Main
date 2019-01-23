@@ -17,14 +17,14 @@ class Apps {
   String appUrl;
   String appFeatureScore;
   String appFeaturePref;
-  String appLaunchDate;
+  DateTime appLaunchDate;
   String appCategory;
 
   Apps.fromSnapShot(DocumentSnapshot snapshot){
     this.appId = snapshot['app_id'];
     this.appName = snapshot['app_name'];
     this.appDesc = snapshot['app_desc'];
-    this.appMetaTags = snapshot['app_meta_tags'];
+    // this.appMetaTags = snapshot['app_meta_tags'];
     this.appIconUrl = snapshot['app_icon_url'];
     this.appUrl = snapshot['app_url'];
     this.appFeatureScore = snapshot['app_feature_score'];
@@ -37,7 +37,7 @@ class Apps {
     this.appId = json['app_id'];
     this.appName = json['app_name'];
     this.appDesc = json['app_desc'];
-    this.appMetaTags = json['app_meta_tags'];
+    // this.appMetaTags = json['app_meta_tags'];
     this.appIconUrl = json['app_icon_url'];
     this.appUrl = json['app_url'];
     this.appFeatureScore = json['app_feature_score'];
@@ -51,7 +51,7 @@ class Apps {
     'app_id': this.appId,
     'app_name': this.appName,
     'app_desc': this.appDesc,
-    'app_meta_tags': this.appMetaTags,
+    // 'app_meta_tags': this.appMetaTags,
     'app_icon_url': this.appIconUrl,
     'app_url': this.appUrl,
     'app_feature_score': this.appFeatureScore,
