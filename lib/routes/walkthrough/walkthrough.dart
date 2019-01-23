@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/routes/walkthrough/page_view_indicator.dart';
 import 'package:namma_chennai/routes/walkthrough/page_model.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
 
-SharedPrefs _sharedPrefs = new SharedPrefs();
 class WalkThrough extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -61,7 +59,7 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
     if (_pageController.hasClients) {
       double page = _pageController.page ?? _pageController.initialPage;
       setState(() {
-        if (page >= 1.5) {
+        if (page >= 2.5) {
           _bottomState = CrossFadeState.showSecond;
         } else {
           _bottomState = CrossFadeState.showFirst;
@@ -138,7 +136,7 @@ class WalkThroughBodyState extends State<WalkThroughBody> {
               secondChild: FlatButton(
                 color: Colors.redAccent,
                 onPressed: () {
-                  if (_pageController.page >= 1.5) {
+                  if (_pageController.page >= 2.5) {
                     Navigator.pushNamed(context, "/language");
                   }
                 },

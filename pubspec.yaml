@@ -22,6 +22,7 @@ dependencies:
   shared_preferences: ^0.4.3
   firebase_database:
   cloud_firestore:
+  flutter_webview_plugin:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -47,6 +48,7 @@ flutter:
   assets:
    - assets/images/logo/techforcities.png
    - assets/images/logo/corporationofchennai.png
+   - assets/images/logo/smartcities.png
    - assets/locale/lang_en.json
    - assets/locale/lang_ta.json
    - assets/locale/lang_te.json

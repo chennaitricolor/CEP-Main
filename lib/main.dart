@@ -8,6 +8,7 @@ import 'package:namma_chennai/routes/form/userform.dart';
 import 'package:namma_chennai/routes/dashboard/home.dart';
 import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 import 'package:namma_chennai/routes/language/language.dart';
+import 'package:namma_chennai/routes/webview/webview.dart';
 
 void main() async {
   // Initializes the translation module
@@ -66,6 +67,7 @@ class _NammaAppState extends State<NammaApp> {
         '/form': (BuildContext context) => new UserForm(),
         '/home': (BuildContext context) => new Home(),
         '/appdetail': (BuildContext context) => new AppDetailScreen(),
+        '/appview': (BuildContext context) => new WebViewScreen(),
       },
     );
   }

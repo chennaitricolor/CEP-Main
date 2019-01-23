@@ -14,6 +14,10 @@ List<PageModel> pages = [
     text: 'An Initiative by Chennai Corporation',
   ),
   PageModel(
+    assetImagePath: 'assets/images/logo/smartcities.png',
+    text: 'In Collaboration with Smart Cities',
+  ),
+  PageModel(
       assetImagePath: 'assets/images/logo/techforcities.png',
       text: 'Powered by Tech for Cities'
   ),

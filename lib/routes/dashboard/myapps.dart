@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/apps.dart';
-import 'package:namma_chennai/routes/appdetail/appdetail.dart';
+import 'package:namma_chennai/routes/webview/webview.dart';
+import 'package:namma_chennai/utils/shared_prefs.dart';
 
+SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
-CollectionReference collectionRef = db.collection('myapps');
-CollectionReference collectionRef2 = db.collection('allapps');
+CollectionReference collectionRef = db.collection('userapps');
+CollectionReference collectionRef2 = db.collection('apps');
 
 class MyApps extends StatefulWidget {
   @override
@@ -15,23 +17,29 @@ class MyApps extends StatefulWidget {
 class MyAppsState extends State<MyApps> {
   List<Widget> listW = new List<Widget>();
   List<Apps> apps = new List();
+  String userId;
 
   getAllMyApps() {
-    // TO DO search using user id
-    collectionRef.snapshots().listen((QuerySnapshot snapshot) {
+    collectionRef
+        .where("user_id", isEqualTo: userId)
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
-        collectionRef2
-            .where("app_id", isEqualTo: doc["app_id"])
-            .snapshots()
-            .listen((QuerySnapshot snapshot2) {
-          List<DocumentSnapshot> docs2 = snapshot2.documents;
-          for (DocumentSnapshot doc2 in docs2) {
-            Apps app = new Apps.fromSnapShot(doc2);
-            apps.add(app);
-          }
-          renderObjects();
-        });
+        List<dynamic> appIds = doc["apps"];
+        for (String appId in appIds) {
+          collectionRef2
+              .where("app_id", isEqualTo: appId)
+              .snapshots()
+              .listen((QuerySnapshot snapshot2) {
+            List<DocumentSnapshot> docs2 = snapshot2.documents;
+            for (DocumentSnapshot doc2 in docs2) {
+              Apps app = new Apps.fromSnapShot(doc2);
+              apps.add(app);
+            }
+            renderObjects();
+          });
+        }
       }
     });
   }
@@ -49,7 +57,7 @@ class MyAppsState extends State<MyApps> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AppDetailScreen(app: app)));
+                    builder: (context) => WebViewScreen(url: app.appUrl, name: app.appName)));
           },
           child: ListTile(
             leading: Image.network(
@@ -72,51 +80,24 @@ class MyAppsState extends State<MyApps> {
   @override
   void initState() {
     super.initState();
-    getAllMyApps();
+    _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
+      userId = val;
+      getAllMyApps();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.redAccent,
-        resizeToAvoidBottomPadding: false,
-        body: SingleChildScrollView(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  // Box decoration takes a gradient
-                  gradient: LinearGradient(
-                    // Where the linear gradient begins and ends
-                    begin: Alignment.topCenter,
-                    end: Alignment.center,
-                    // Add one stop for each color. Stops should increase from 0 to 1
-                    stops: [0.2, 0.35, 0.6],
-                    tileMode: TileMode.clamp,
-                    colors: [
-                      // Colors are easy thanks to Flutter's Colors class.
-                      Colors.redAccent,
-                      Colors.orange,
-                      Color(0xFFEEEEEE),
-                    ],
-                  ),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 70,
-                    ),
-                    new Text(
-                      'Hi, ithu Namma Chennai',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 30.0,
-                          color: Colors.yellow),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ]..addAll(listW),
-                ))));
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.redAccent,
+          elevation: 0,
+          centerTitle: false,
+          title: Text('Namma Chennai'),
+        ),
+        body: Column(
+          children: listW,
+        ));
   }
 }
