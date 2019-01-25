@@ -136,7 +136,7 @@ class AuthState extends State<Auth> {
                           child: TextField(
                               keyboardType: TextInputType.number,
                               maxLength: 10,
-                              textInputAction: TextInputAction.send,
+                              textInputAction: TextInputAction.done,
                               onChanged: (String phone) {
                                 phonenumber = phone;
                               },
