@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
@@ -10,6 +11,7 @@ import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/routes/form/ngoform.dart';
+import 'package:namma_chennai/routes/form/location.dart';
 
 void main() async {
   // Initializes the translation module
@@ -17,8 +19,8 @@ void main() async {
 
   // then start the application
   runApp(
-    NammaApp(),
-  );
+      // MyApp(),
+      NammaApp());
 }
 
 class NammaApp extends StatefulWidget {
@@ -27,6 +29,8 @@ class NammaApp extends StatefulWidget {
 }
 
 class _NammaAppState extends State<NammaApp> {
+  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +38,24 @@ class _NammaAppState extends State<NammaApp> {
     // Initializes a callback should something need
     // to be done when the language is changed
     allTranslations.onLocaleChangedCallback = _onLocaleChanged;
+
+    _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
+      print("onMessage");
+      print(message);
+    }, onResume: (Map<String, dynamic> message) {
+      print("onResume");
+      print(message);
+    }, onLaunch: (Map<String, dynamic> message) {
+      print("onLaunch");
+      print(message);
+    });
+    _firebaseMessaging.getToken().then((token) {
+      print("====================");
+      print(token);
+      print("====================");
+    });
+
+    _firebaseMessaging.setAutoInitEnabled(true);
   }
 
   ///
