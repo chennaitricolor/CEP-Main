@@ -26,6 +26,7 @@ dependencies:
   flutter_webview_plugin:
   firebase_storage:
   file_picker:
+  firebase_messaging:
   google_maps_flutter: ^0.2.0
   location: ^1.4.1
   google_maps_webservice: ^0.0.11
@@ -54,7 +55,9 @@ flutter:
   assets:
    - assets/images/logo/techforcities.png
    - assets/images/logo/corporationofchennai.png
+   - assets/images/logo/nammachennai.png
    - assets/images/logo/smartcities.png
+   - assets/images/logo/splash_bg.png
    - assets/locale/lang_en.json
    - assets/locale/lang_ta.json
    - assets/locale/lang_te.json
