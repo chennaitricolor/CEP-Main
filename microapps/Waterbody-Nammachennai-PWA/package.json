@@ -1,0 +1,11 @@
+{
+  "name": "pwa-firebase",
+  "version": "1.0.0",
+  "description": "namma chennai",
+  "main": "service-worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
