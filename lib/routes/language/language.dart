@@ -34,7 +34,8 @@ class _LangPrefState extends State<LanguagePreferences> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0)),
                       onPressed: () {
-                        showLanguageSelection();
+                        Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                        // showLanguageSelection();
                       },
                       child: Container(
                         padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),

@@ -80,7 +80,7 @@ class _NammaAppState extends State<NammaApp> {
       // Tells the system which are the supported languages
       supportedLocales: allTranslations.supportedLocales(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Raleway', primarySwatch: Colors.red),
+      theme: ThemeData(fontFamily: 'Raleway', primarySwatch: Colors.blue),
       initialRoute: '/start',
       home: new WalkThrough(),
       routes: <String, WidgetBuilder>{

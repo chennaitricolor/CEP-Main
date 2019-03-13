@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
+import 'package:namma_chennai/routes/dashboard/search.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class HomeState extends State<Home> {
   int currentIndex = 0;
   final List<Widget> children = [
     MyApps(),
+    Search(),
     AllApps(),
     Profile()
   ];
@@ -35,6 +37,10 @@ class HomeState extends State<Home> {
           new BottomNavigationBarItem(
             icon: Icon(Icons.home),
             title: Text('My Apps'),
+          ),
+          new BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            title: Text('Search'),
           ),
           new BottomNavigationBarItem(
             icon: Icon(Icons.apps),
