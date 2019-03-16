@@ -138,10 +138,9 @@ class MyAppsState extends State<MyApps> {
         .document(documentId)
         .updateData(userApps.toJson())
         .then((onValue) {
-          getAllMyApps();
-          Navigator.of(context).pop();
-        })
-        .catchError((e) {
+      getAllMyApps();
+      Navigator.of(context).pop();
+    }).catchError((e) {
       print(e);
     });
   }

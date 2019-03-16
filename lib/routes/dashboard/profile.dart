@@ -44,13 +44,13 @@ class ProfileState extends State<Profile> {
         .where("user_id", isEqualTo: userId)
         .snapshots()
         .listen((QuerySnapshot snapshot) {
-          List<DocumentSnapshot> docs = snapshot.documents;
-          for (DocumentSnapshot doc in docs) {
-            Orgs org = new Orgs.fromSnapShot(doc);
-            currentOrgs.add(org);
-          }
-          renderObjects();
-        });
+      List<DocumentSnapshot> docs = snapshot.documents;
+      for (DocumentSnapshot doc in docs) {
+        Orgs org = new Orgs.fromSnapShot(doc);
+        currentOrgs.add(org);
+      }
+      renderObjects();
+    });
   }
 
   renderObjects() {
@@ -112,7 +112,7 @@ class ProfileState extends State<Profile> {
         resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.black12,
         appBar: AppBar(
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.blue,
           elevation: 0,
           centerTitle: false,
           title: Text('My Profile'),
@@ -123,7 +123,33 @@ class ProfileState extends State<Profile> {
               children: <Widget>[
                 Container(
                   height: MediaQuery.of(context).size.height * .22,
-                  color: Colors.redAccent,
+                  margin: EdgeInsets.only(bottom: 10),
+                  color: Colors.blue,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 20,
+                  child: FlatButton(
+                    color: Colors.redAccent,
+                    onPressed: () {
+                      _sharedPrefs
+                          .removeApplicationSavedInformation("loggedinuser");
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/auth', (_) => false);
+                    },
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 18.0, horizontal: 98.0),
+                      child: Text(
+                        'Log Out',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -151,13 +177,24 @@ class ProfileState extends State<Profile> {
                                     Icons.person_pin_circle,
                                     color: Colors.green,
                                   ),
-                                  subtitle: Text(currentUser.userPhoneNumber + "\nMember since: " + currentUser.userCreatedOn.toLocal().toString().substring(0, currentUser.userCreatedOn.toLocal().toString().length - 7)),
+                                  subtitle: Text(currentUser.userPhoneNumber +
+                                      "\nMember since: " +
+                                      currentUser.userCreatedOn
+                                          .toLocal()
+                                          .toString()
+                                          .substring(
+                                              0,
+                                              currentUser.userCreatedOn
+                                                      .toLocal()
+                                                      .toString()
+                                                      .length -
+                                                  7)),
                                 ),
                               ),
                               elevation: 4.0,
                             ),
-                            Column(                              
-                                children: listW,
+                            Column(
+                              children: listW,
                             ),
                             Expanded(child: Container()),
                             FlatButton(
@@ -165,7 +202,8 @@ class ProfileState extends State<Profile> {
                               onPressed: () {
                                 _sharedPrefs.removeApplicationSavedInformation(
                                     "loggedinuser");
-                                Navigator.pushNamedAndRemoveUntil(context, '/start', (_) => false);
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/start', (_) => false);
                               },
                               shape: new RoundedRectangleBorder(
                                   borderRadius:

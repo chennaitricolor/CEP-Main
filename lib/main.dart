@@ -82,7 +82,7 @@ class _NammaAppState extends State<NammaApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Raleway', primarySwatch: Colors.blue),
       initialRoute: '/start',
-      home: new WalkThrough(),
+      home: new Auth(),
       routes: <String, WidgetBuilder>{
         '/start': (BuildContext context) => new Splash(),
         '/language': (BuildContext context) => new LanguagePreferences(),
