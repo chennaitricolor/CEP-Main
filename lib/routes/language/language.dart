@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
+import 'package:namma_chennai/utils/default_data.dart';
 
 class LanguagePreferences extends StatefulWidget {
   @override
@@ -100,7 +101,7 @@ class _LangPrefState extends State<LanguagePreferences> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "App Title",
+                                    DefaultData.platformTitle,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
@@ -115,7 +116,7 @@ class _LangPrefState extends State<LanguagePreferences> {
                                     ),
                                   ),
                                   Text(
-                                    "Here we have Tag Line",
+                                    DefaultData.platformTagline,
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 12.0),
                                   )

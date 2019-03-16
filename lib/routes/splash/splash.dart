@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
 import 'package:namma_chennai/routes/auth/auth.dart';
+import 'package:namma_chennai/utils/default_data.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
@@ -68,7 +69,7 @@ class SplashState extends State<Splash> {
                         padding: EdgeInsets.only(top: 20.0),
                       ),
                       Text(
-                        "App Title",
+                        DefaultData.platformTitle,
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -83,7 +84,7 @@ class SplashState extends State<Splash> {
                         ),
                       ),
                       Text(
-                        "Here we have Tag Line",
+                        DefaultData.platformTagline,
                         style: TextStyle(
                             color: Colors.grey,
                             fontSize: 12.0),
@@ -114,7 +115,7 @@ class SplashState extends State<Splash> {
                       padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
                     ),
                     Text(
-                      "Footer Text 1",
+                      DefaultData.developedBy,
                       softWrap: true,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -123,7 +124,7 @@ class SplashState extends State<Splash> {
                             fontSize: 16.0),
                     ),
                     Text(
-                      "This is Footer Text 2",
+                      DefaultData.poweredBy,
                       softWrap: true,
                       textAlign: TextAlign.center,
                       style: TextStyle(

@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namma_chennai/routes/language/language.dart';
+import 'package:namma_chennai/utils/default_data.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:namma_chennai/routes/form/userform.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:flutter/services.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final SharedPrefs _sharedPrefs = new SharedPrefs();
@@ -21,10 +25,14 @@ class AuthState extends State<Auth> {
   String phonenumber;
   AuthStage status = AuthStage.INIT;
   String prefLang = "Language";
+  bool isLoading = false;
   FirebaseUser currentUser;
+  var otpController = new TextEditingController();
 
   Future<void> verifyPhoneNumber() async {
+    // isLoading = true;
     final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      print(verId);
       this.verificationId = verId;
       setState(() {
         status = AuthStage.SMS_TIMEOUT;
@@ -32,6 +40,7 @@ class AuthState extends State<Auth> {
     };
 
     final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResent]) {
+      print(verId);
       this.verificationId = verId;
       setState(() {
         status = AuthStage.SMS_SENT;
@@ -40,15 +49,18 @@ class AuthState extends State<Auth> {
 
     final PhoneVerificationCompleted verificationCompleted =
         (FirebaseUser user) {
+      // _showDialog("Verfication Completed");
       currentUser = user;
       setState(() {
         status = AuthStage.PHONE_VERIFIED;
       });
+      goHome(user);
     };
 
     final PhoneVerificationFailed verificationFailed =
         (AuthException exception) {
-      print(exception.message + " " + exception.code);
+      print("Exception");
+      // _showDialog(exception.message + " " + exception.code);
       setState(() {
         status = AuthStage.PHONE_FAILED;
       });
@@ -63,19 +75,51 @@ class AuthState extends State<Auth> {
         verificationFailed: verificationFailed);
   }
 
+  goHome(user) {
+    _sharedPrefs.setApplicationSavedInformation('loggedinuser', user.uid);
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+  }
+
   signIn() {
     _auth
         .signInWithPhoneNumber(
             verificationId: this.verificationId, smsCode: this.smsCode)
         .then((user) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  UserForm(phonenumber: phonenumber, userid: user.uid)));
+      // _showDialog(user.toString());
+      goHome(user);
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) =>
+      //             UserForm(phonenumber: phonenumber, userid: user.uid)));
     }).catchError((e) {
+      _showDialog(e.toString());
+      print("Signin exception");
       print(e);
     });
+  }
+
+  void _showDialog(content) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert"),
+          content: new Text(content),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -131,7 +175,7 @@ class AuthState extends State<Auth> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "App Title",
+                                    DefaultData.platformTitle,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
@@ -146,7 +190,7 @@ class AuthState extends State<Auth> {
                                     ),
                                   ),
                                   Text(
-                                    "Here we have Tag Line",
+                                    DefaultData.platformTagline,
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 12.0),
                                   )
@@ -161,106 +205,251 @@ class AuthState extends State<Auth> {
                       image: AssetImage('assets/images/logo/splash_bg.png'),
                       width: MediaQuery.of(context).size.width,
                     ),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(top: 10.0, left: 10.0),
-                                child: Text(
-                                  "Enter your phone number",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24.0),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(top: 0.0, bottom: 20.0),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 10, right: 10),
-                                child: TextField(
-                                    keyboardType: TextInputType.number,
-                                    maxLength: 10,
-                                    textInputAction: TextInputAction.next,
-                                    onChanged: (String phone) {
-                                      phonenumber = phone;
-                                    },
-                                    onSubmitted: (String phone) {
-                                      phonenumber = phone;
-                                      // verifyPhoneNumber();
-                                    },
-                                    decoration: InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.blue),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.blue, width: 1.0),
-                                      ),
-                                      labelStyle: TextStyle(color: Colors.blue),
-                                      labelText: "Your Mobile Number",
-                                      hasFloatingPlaceholder: true,
-                                      prefixText: "+91-",
-                                      border: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.blue)),
-                                    ),
-                                    autofocus: false),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 10.0,
-                                    bottom: 20.0,
-                                    left: 10,
-                                    right: 10),
-                                child: FlatButton(
-                                  color: Colors.blueAccent,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(25.0)),
-                                  onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
-                                    // Navigator.pushReplacement(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (BuildContext context) =>
-                                    //             LanguagePreferences()));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12.0, horizontal: 100.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          'GET OTP',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          'Tap to get an OTP and verify',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12.0,
-                                          ),
-                                        )
-                                      ],
+                    (status == AuthStage.INIT)
+                        ? Expanded(
+                            flex: 1,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 10.0, left: 10.0),
+                                    child: Text(
+                                      "Enter your phone number",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24.0),
                                     ),
                                   ),
-                                ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 0.0, bottom: 20.0),
+                                  ),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(left: 10, right: 10),
+                                    child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        maxLength: 10,
+                                        textInputAction: TextInputAction.done,
+                                        onChanged: (String phone) {
+                                          phonenumber = phone;
+                                          if (phone.length == 10) {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          }
+                                        },
+                                        onSubmitted: (String phone) {
+                                          phonenumber = phone;
+                                          if (phone.length == 10) {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          }
+                                          // verifyPhoneNumber();
+                                        },
+                                        decoration: InputDecoration(
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.blue),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.blue, width: 1.0),
+                                          ),
+                                          labelStyle:
+                                              TextStyle(color: Colors.blue),
+                                          labelText: "Your Mobile Number",
+                                          hasFloatingPlaceholder: true,
+                                          prefixText: "+91-",
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.blue)),
+                                        ),
+                                        autofocus: false),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          top: 10.0, left: 10, right: 10),
+                                      child: SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: FlatButton(
+                                            color: Colors.blueAccent,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        25.0)),
+                                            onPressed: () {
+                                              // _showDialog(phonenumber);
+                                              verifyPhoneNumber();
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12.0,
+                                                      horizontal: 12.0),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Text(
+                                                    'GET OTP',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.0,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                    'Tap to get an OTP and verify',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12.0,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ))),
+                                ],
                               ),
-                            ],
-                          ),
-                        ))
+                            ))
+                        : Expanded(
+                            flex: 1,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 10.0, left: 10.0),
+                                    child: Text(
+                                      "Verify number",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24.0),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 0.0, bottom: 20.0),
+                                  ),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(left: 10, right: 10),
+                                    child: TextField(
+                                        controller: otpController,
+                                        keyboardType: TextInputType.number,
+                                        maxLength: 6,
+                                        textInputAction: TextInputAction.done,
+                                        onChanged: (String code) {
+                                          this.smsCode = code;
+                                          if (code.length == 6) {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          }
+                                        },
+                                        onSubmitted: (String code) {
+                                          this.smsCode = code;
+                                          if (code.length == 6) {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          }
+                                          // verifyPhoneNumber();
+                                        },
+                                        decoration: InputDecoration(
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.blue),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.blue, width: 1.0),
+                                          ),
+                                          labelStyle:
+                                              TextStyle(color: Colors.blue),
+                                          labelText: "OTP (XXXXXX)",
+                                          hasFloatingPlaceholder: true,
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.blue)),
+                                        ),
+                                        autofocus: false),
+                                  ),
+                                  !isLoading
+                                      ? Container(
+                                          margin: EdgeInsets.only(
+                                              top: 10.0, left: 10, right: 10),
+                                          child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: FlatButton(
+                                              color: Colors.blueAccent,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25.0)),
+                                              onPressed: () {
+                                                signIn();
+                                                // Navigator.pushNamedAndRemoveUntil(
+                                                //     context, '/home', (_) => false);
+                                                // Navigator.pushReplacement(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (BuildContext context) =>
+                                                //             LanguagePreferences()));
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12.0,
+                                                        horizontal: 12.0),
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Text(
+                                                      'Verify',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.0,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Text(
+                                                      'Tap to login/signup',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12.0,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ))
+                                      : Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            SizedBox(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                              height: 20.0,
+                                              width: 20.0,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(10),
+                                            ),
+                                            Text("Waiting for OTP", style: TextStyle(fontSize: 15),)
+                                          ],
+                                        )
+                                ],
+                              ),
+                            ))
                   ],
                 )
               ],
