@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/routes/dashboard/home.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
+import 'package:namma_chennai/utils/default_data.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -19,8 +20,53 @@ class MyApps extends StatefulWidget {
 class MyAppsState extends State<MyApps> {
   List<Widget> listW = new List<Widget>();
   List<Apps> apps = new List();
+  List<Map<String, String>> featuredApps;
+  List<Widget> featuredAppsWidget = new List<Widget>();
   String userId;
-  showAppSelection() {
+
+  @override
+  void initState() {
+    super.initState();
+    this.featuredApps = DefaultData.apps;
+    buildDefaultApps();
+  }
+
+  buildDefaultApps() {
+    this.featuredApps.forEach((app) {
+      this.featuredAppsWidget.add(
+            Flexible(
+                fit: FlexFit.tight,
+                child: InkWell(
+                  onTap: () {
+                    showAppSelection(app);
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: <Widget>[
+                          Image(
+                            image: AssetImage(app["appIconUrl"]),
+                            width: 60.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(2),
+                          ),
+                          Text(
+                            app["appName"],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                )),
+          );
+    });
+  }
+
+  showAppSelection(app) {
     showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
@@ -29,26 +75,30 @@ class MyAppsState extends State<MyApps> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(5),),
+                  padding: EdgeInsets.all(5),
+                ),
                 ListTile(
-                  leading: Image.network(
-                    "https://www.olacabs.com/webstatic/img/favicon.ico",
-                    width: 50,
+                  leading: Image(
+                    image: AssetImage(app["appIconUrl"]),
+                    width: 60.0,
                   ),
-                  title: Text("Hello world"),
+                  // Image.network(
+                  //   app["appIconUrl"],
+                  //   width: 50,
+                  // ),
+                  title: Text(app["appName"]),
                   subtitle: InkWell(
-                    child: Text("01-01-2019"),
+                    child: Text(app["appLaunchDate"]),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 30),
                   child: ListTile(
-                    subtitle: Text(
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. \nLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+                    subtitle: Text(app["appDesc"]),
                   ),
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width-20,
+                  width: MediaQuery.of(context).size.width - 20,
                   child: FlatButton(
                     color: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
@@ -146,18 +196,19 @@ class MyAppsState extends State<MyApps> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
-      userId = val;
-      getAllMyApps();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
+  //     userId = val;
+  //     getAllMyApps();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -330,7 +381,8 @@ class MyAppsState extends State<MyApps> {
                             margin: EdgeInsets.only(left: 10),
                             child: InkWell(
                               onTap: () {
-                                final BottomNavigationBar navigationBar = globalKey.currentWidget;
+                                final BottomNavigationBar navigationBar =
+                                    globalKey.currentWidget;
                                 navigationBar.onTap(2);
                               },
                               child: Container(
@@ -366,13 +418,19 @@ class MyAppsState extends State<MyApps> {
                         ),
                         Flexible(
                           child: Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "view all",
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 15.0),
-                            ),
-                          ),
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                onTap: () {
+                                  final BottomNavigationBar navigationBar =
+                                      globalKey.currentWidget;
+                                  navigationBar.onTap(2);
+                                },
+                                child: Text(
+                                  "view all",
+                                  style: TextStyle(
+                                      color: Colors.blue, fontSize: 15.0),
+                                ),
+                              )),
                           fit: FlexFit.tight,
                         ),
                       ],
@@ -380,114 +438,7 @@ class MyAppsState extends State<MyApps> {
                 Container(
                   margin: const EdgeInsets.only(top: 5.0),
                   // padding: const EdgeInsets.all(3.0),
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                          fit: FlexFit.tight,
-                          child: InkWell(
-                            onTap: () {
-                              showAppSelection();
-                            },
-                            child: Container(
-                                padding: EdgeInsets.all(5),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: <Widget>[
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/images/apps/1.png'),
-                                      width: 60.0,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(2),
-                                    ),
-                                    Text(
-                                      "Adopt Chennai",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                          )),
-                      Flexible(
-                          fit: FlexFit.tight,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                                padding: EdgeInsets.all(5),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: <Widget>[
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/images/apps/2.png'),
-                                      width: 60.0,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(2),
-                                    ),
-                                    Text(
-                                      "Volunteer for Chennai",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 12.0),
-                                    ),
-                                  ],
-                                )),
-                          )),
-                      Flexible(
-                          fit: FlexFit.tight,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                                padding: EdgeInsets.all(5),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: <Widget>[
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/images/apps/3.png'),
-                                      width: 60.0,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(2),
-                                    ),
-                                    Text(
-                                      "Upcoming event",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 12.0),
-                                    ),
-                                  ],
-                                )),
-                          )),
-                      Flexible(
-                          fit: FlexFit.tight,
-                          child: InkWell(
-                            onTap: () {},
-                            child: Container(
-                                padding: EdgeInsets.all(5),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: <Widget>[
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/images/apps/4.png'),
-                                      width: 60.0,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(2),
-                                    ),
-                                    Text(
-                                      "Grievances & Complaints",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 12.0),
-                                    ),
-                                  ],
-                                )),
-                          ))
-                    ],
-                  ),
+                  child: Row(children: this.featuredAppsWidget),
                 ),
               ],
             ),

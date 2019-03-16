@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namma_chennai/utils/default_data.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -6,29 +7,32 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  List<Widget> initSearchWidgets = [
-    ListTile(
-      title: Text("Recent Searches"),
-    ),
-    Column(
-      children: <Widget>[
-        InkWell(
-          onTap: () {},
-          child: ListTile(
-            leading: Icon(Icons.trending_up),
-            title: Text('Petta'),
-          ),
-        ),
-        InkWell(
-          onTap: () {},
-          child: ListTile(
-            leading: Icon(Icons.trending_up),
-            title: Text('Viswasam'),
-          ),
-        ),
-      ],
-    )
-  ];
+  List<Map<String, String>> searchResult;
+  List<Widget> searchResultWidget;
+  String searchTerm = '';
+
+  @override
+  void initState() {
+    super.initState();
+    this.searchResult = DefaultData.apps;
+    // getAllApps();
+    buildSearchResultWidget();
+  }
+
+  buildSearchResultWidget() {
+    this.searchResultWidget = [];
+    searchResult.forEach((result) {
+      if (result["appName"].toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || searchTerm.isEmpty) {
+        this.searchResultWidget.add(InkWell(
+              onTap: () {},
+              child: ListTile(
+                leading: Icon(Icons.trending_up),
+                title: Text(result["appName"]),
+              ),
+            ));
+      }
+    });
+  }
 
   Widget searchCard() => Padding(
         padding: const EdgeInsets.all(8.0),
@@ -48,6 +52,12 @@ class _SearchState extends State<Search> {
                 ),
                 Expanded(
                   child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchTerm = value;
+                      });
+                      buildSearchResultWidget();
+                    },
                     decoration: InputDecoration(
                         border: InputBorder.none, hintText: "Search apps"),
                   ),
@@ -78,7 +88,14 @@ class _SearchState extends State<Search> {
           ]),
           Container(
             child: Column(
-              children: initSearchWidgets,
+              children: <Widget>[
+                ListTile(
+                  title: Text(searchTerm.length == 0
+                      ? "Recent Searches"
+                      : "Search Result"),
+                ),
+                Column(children: searchResultWidget)
+              ],
             ),
           )
         ]));

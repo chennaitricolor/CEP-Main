@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/routes/appdetail/appdetail.dart';
+import 'package:namma_chennai/utils/default_data.dart';
 
 Firestore db = Firestore.instance;
 CollectionReference collectionRef = db.collection('apps');
@@ -14,6 +15,7 @@ class AllApps extends StatefulWidget {
 class AllAppsState extends State<AllApps> {
   List<Widget> listW = new List<Widget>();
   List<Apps> apps = new List();
+  List<Map<String, String>> allApps;
 
   getAllApps() {
     collectionRef.snapshots().listen((QuerySnapshot snapshot) {
@@ -62,6 +64,7 @@ class AllAppsState extends State<AllApps> {
   @override
   void initState() {
     super.initState();
+    this.allApps = DefaultData.apps;
     // getAllApps();
   }
 
@@ -76,7 +79,7 @@ class AllAppsState extends State<AllApps> {
         title: Text('All Apps'),
       ),
       body: ListView.separated(
-          itemCount: 10,
+          itemCount: this.allApps.length,
           separatorBuilder: (context, index) => Divider(
                 color: Colors.grey,
                 height: 0.1,
@@ -85,23 +88,33 @@ class AllAppsState extends State<AllApps> {
             return Column(
               children: <Widget>[
                 ListTile(
-                  leading: Image.network(
-                    "https://www.olacabs.com/webstatic/img/favicon.ico",
-                    width: 50,
+                  leading: Image(
+                    image: AssetImage(this.allApps[Index]["appIconUrl"]),
+                    width: 50.0,
                   ),
-                  title: Text("Hello world"),
+                  // Image.network(
+                  //   this.allApps[Index][""],
+                  //   width: 50,
+                  // ),
+                  title: Text(this.allApps[Index]["appName"]),
                   subtitle: InkWell(
-                    child: Text(
-                      "11.1 MB"
-                    ),
+                    child: Text(this.allApps[Index]["appLaunchDate"]),
                   ),
-                  trailing: FlatButton.icon(onPressed: (){}, icon: Icon(Icons.arrow_downward,color: Colors.blue,), label: Text("Download", style: TextStyle(color: Colors.blue),)),
+                  trailing: FlatButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.add_box,
+                        color: Colors.blue,
+                      ),
+                      label: Text(
+                        "Add",
+                        style: TextStyle(color: Colors.blue,),
+                      )),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10),
                   child: ListTile(
-                    subtitle: Text(
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. \nLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+                    subtitle: Text(this.allApps[Index]["appDesc"]),
                   ),
                 )
               ],
