@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/apps.dart';
+import 'package:namma_chennai/routes/dashboard/home.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -19,6 +20,72 @@ class MyAppsState extends State<MyApps> {
   List<Widget> listW = new List<Widget>();
   List<Apps> apps = new List();
   String userId;
+  showAppSelection() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(5),),
+                ListTile(
+                  leading: Image.network(
+                    "https://www.olacabs.com/webstatic/img/favicon.ico",
+                    width: 50,
+                  ),
+                  title: Text("Hello world"),
+                  subtitle: InkWell(
+                    child: Text("01-01-2019"),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 30),
+                  child: ListTile(
+                    subtitle: Text(
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. \nLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width-20,
+                  child: FlatButton(
+                    color: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                    onPressed: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 0.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            'Install',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'This will add to your home screen',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(40),
+                ),
+              ],
+            ),
+          );
+        });
+  }
 
   getAllMyApps() {
     collectionRef
@@ -109,54 +176,320 @@ class MyAppsState extends State<MyApps> {
                 Container(
                   width: MediaQuery.of(context).size.width,
                   margin:
-                      const EdgeInsets.only(left: 5.0, right: 5.0, top: 10),
+                      const EdgeInsets.only(left: 10.0, right: 10.0, top: 10),
                   height: 150,
-                  color: Colors.transparent,
-                  child: CarouselSlider(
-                    height: 140.0,
-                    enlargeCenterPage: true,
-                    items: [1, 2, 3, 4, 5].map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.symmetric(horizontal: 3.0),
-                              decoration: BoxDecoration(color: Colors.blueGrey),
-                              );
-                        },
-                      );
-                    }).toList(),
+                  decoration: BoxDecoration(
+                    // Border color
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.grey,
+                        offset: Offset(1.0, 1.0),
+                        blurRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Row(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage(
+                                  'assets/images/logo/corporationofchennai.png'),
+                              width: 80.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(10),
+                            ),
+                            Text(
+                              "Corporation of Chennai \nwelcomes you!",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        child: Image(
+                          image:
+                              AssetImage('assets/images/logo/carousel_bg.png'),
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                // CarouselSlider(
+                //     height: 140.0,
+                //     enlargeCenterPage: true,
+                //     items: [1].map((i) {
+                //       return Builder(
+                //         builder: (BuildContext context) {
+                //           return Container(
+                //             width: MediaQuery.of(context).size.width,
+                //             margin: EdgeInsets.symmetric(horizontal: 3.0),
+                //             decoration: BoxDecoration(
+                //               // Border color
+                //               color: Colors.white,
+                //               boxShadow: <BoxShadow>[
+                //                 BoxShadow(
+                //                   color: Colors.grey,
+                //                   offset: Offset(1.0, 1.0),
+                //                   blurRadius: 1.0,
+                //                 ),
+                //               ],
+                //             ),
+                //           );
+                //         },
+                //       );
+                //     }).toList(),
+                //   ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(5),
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Updates & Notifications",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18.0),
+                      ),
+                      Container(
+                          margin: const EdgeInsets.only(top: 15.0),
+                          // padding: const EdgeInsets.all(3.0),
+                          decoration: new BoxDecoration(
+                            border: Border(
+                              left: BorderSide(width: 3.0, color: Colors.blue),
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              title: Text(
+                                'Have you paid your property tax yet?',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry."),
+                              trailing: Icon(Icons.keyboard_arrow_right),
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    // Border color
+                    color: Color.fromRGBO(158, 158, 158, 0.1),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          "Your micro apps",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
+                      Container(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text(
+                              "You have not downloaded any apps on Namma Chennai yet.",
+                              style: TextStyle(fontSize: 12.0),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: InkWell(
+                              onTap: () {
+                                final BottomNavigationBar navigationBar = globalKey.currentWidget;
+                                navigationBar.onTap(2);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: new Border.all(
+                                        color: Colors.blueAccent),
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                width: 50,
+                                height: 50,
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                    ],
+                  ),
+                ),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            "Featured micro apps",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18.0),
+                          ),
+                          fit: FlexFit.tight,
+                        ),
+                        Flexible(
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "view all",
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 15.0),
+                            ),
+                          ),
+                          fit: FlexFit.tight,
+                        ),
+                      ],
+                    )),
+                Container(
+                  margin: const EdgeInsets.only(top: 5.0),
+                  // padding: const EdgeInsets.all(3.0),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                          fit: FlexFit.tight,
+                          child: InkWell(
+                            onTap: () {
+                              showAppSelection();
+                            },
+                            child: Container(
+                                padding: EdgeInsets.all(5),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: <Widget>[
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/images/apps/1.png'),
+                                      width: 60.0,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(2),
+                                    ),
+                                    Text(
+                                      "Adopt Chennai",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          )),
+                      Flexible(
+                          fit: FlexFit.tight,
+                          child: InkWell(
+                            onTap: () {},
+                            child: Container(
+                                padding: EdgeInsets.all(5),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: <Widget>[
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/images/apps/2.png'),
+                                      width: 60.0,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(2),
+                                    ),
+                                    Text(
+                                      "Volunteer for Chennai",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 12.0),
+                                    ),
+                                  ],
+                                )),
+                          )),
+                      Flexible(
+                          fit: FlexFit.tight,
+                          child: InkWell(
+                            onTap: () {},
+                            child: Container(
+                                padding: EdgeInsets.all(5),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: <Widget>[
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/images/apps/3.png'),
+                                      width: 60.0,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(2),
+                                    ),
+                                    Text(
+                                      "Upcoming event",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 12.0),
+                                    ),
+                                  ],
+                                )),
+                          )),
+                      Flexible(
+                          fit: FlexFit.tight,
+                          child: InkWell(
+                            onTap: () {},
+                            child: Container(
+                                padding: EdgeInsets.all(5),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: <Widget>[
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/images/apps/4.png'),
+                                      width: 60.0,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(2),
+                                    ),
+                                    Text(
+                                      "Grievances & Complaints",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 12.0),
+                                    ),
+                                  ],
+                                )),
+                          ))
+                    ],
                   ),
                 ),
               ],
-            ),
-            Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const ListTile(
-                    leading: Icon(Icons.album),
-                    title: Text('Title'),
-                    subtitle:
-                        Text('Subs'),
-                  ),
-                  ButtonTheme.bar(
-                    // make buttons use the appropriate styles for cards
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: const Text('B1'),
-                          onPressed: () {/* ... */},
-                        ),
-                        FlatButton(
-                          child: const Text('B2'),
-                          onPressed: () {/* ... */},
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ));

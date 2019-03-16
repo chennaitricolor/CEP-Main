@@ -9,8 +9,8 @@ class Home extends StatefulWidget {
   HomeState createState() => new HomeState();
 }
 
+GlobalKey globalKey = new GlobalKey(debugLabel: 'btm_app_bar');
 class HomeState extends State<Home> {
-
   int currentIndex = 0;
   final List<Widget> children = [
     MyApps(),
@@ -30,6 +30,7 @@ class HomeState extends State<Home> {
     return Scaffold(
       body: children[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        key: globalKey,
         type: BottomNavigationBarType.fixed,
         onTap: onTabTapped,
         currentIndex: currentIndex,

@@ -95,7 +95,7 @@ class AllAppsState extends State<AllApps> {
                       "11.1 MB"
                     ),
                   ),
-                  trailing: FlatButton.icon(onPressed: (){}, icon: Icon(Icons.arrow_downward), label: Text("Download")),
+                  trailing: FlatButton.icon(onPressed: (){}, icon: Icon(Icons.arrow_downward,color: Colors.blue,), label: Text("Download", style: TextStyle(color: Colors.blue),)),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10),

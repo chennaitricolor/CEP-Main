@@ -92,7 +92,7 @@ class AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomPadding: true,
         body: SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height,
@@ -188,7 +188,7 @@ class AuthState extends State<Auth> {
                                 child: TextField(
                                     keyboardType: TextInputType.number,
                                     maxLength: 10,
-                                    textInputAction: TextInputAction.done,
+                                    textInputAction: TextInputAction.next,
                                     onChanged: (String phone) {
                                       phonenumber = phone;
                                     },
@@ -203,7 +203,7 @@ class AuthState extends State<Auth> {
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.blue, width: 5.0),
+                                            color: Colors.blue, width: 1.0),
                                       ),
                                       labelStyle: TextStyle(color: Colors.blue),
                                       labelText: "Your Mobile Number",
@@ -213,7 +213,7 @@ class AuthState extends State<Auth> {
                                           borderSide:
                                               BorderSide(color: Colors.blue)),
                                     ),
-                                    autofocus: true),
+                                    autofocus: false),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
@@ -227,11 +227,12 @@ class AuthState extends State<Auth> {
                                       borderRadius:
                                           BorderRadius.circular(25.0)),
                                   onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                LanguagePreferences()));
+                                    Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+                                    // Navigator.pushReplacement(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (BuildContext context) =>
+                                    //             LanguagePreferences()));
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(

@@ -59,6 +59,11 @@ flutter:
    - assets/images/logo/nammachennai.png
    - assets/images/logo/smartcities.png
    - assets/images/logo/splash_bg.png
+   - assets/images/logo/carousel_bg.png
+   - assets/images/apps/1.png
+   - assets/images/apps/2.png
+   - assets/images/apps/3.png
+   - assets/images/apps/4.png
    - assets/locale/lang_en.json
    - assets/locale/lang_ta.json
    - assets/locale/lang_te.json
