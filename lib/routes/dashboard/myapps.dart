@@ -330,6 +330,9 @@ class MyAppsState extends State<MyApps> {
                       url: installedApps[index]["appUrl"],
                       name: installedApps[index]["appName"])));
         },
+        onLongPress: () {
+          showAppSelection(installedApps[index]);
+        },
         child: Container(
             alignment: Alignment.center,
             child: Column(

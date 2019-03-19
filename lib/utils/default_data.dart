@@ -36,6 +36,14 @@ class DefaultData {
       "appIconUrl": "assets/images/apps/4.png",
       "appUrl": "https://adopt-nammachennai.firebaseapp.com/",
       "appLaunchDate": "Added on Jan-2019"
+    },
+    {
+      "appId": "5",
+      "appName": "Ola",
+      "appDesc": "Ola Cabs offers to book cabs nearby your location for best fares. For best taxi service at lowest fares, say Ola!",
+      "appIconUrl": "assets/images/apps/5.png",
+      "appUrl": "https://book.olacabs.com",
+      "appLaunchDate": "Added on Jan-2019"
     }
   ];
 }

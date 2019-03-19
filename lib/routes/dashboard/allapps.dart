@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/apps.dart';
@@ -23,7 +25,7 @@ class AllAppsState extends State<AllApps> {
   List<Apps> apps = new List();
   List<Map<String, String>> allApps;
   MyAppsState myAppsState = new MyAppsState();
-  List<String> installedAppIds = new List();
+  List<dynamic> installedAppIds = new List();
   String userId;
 
   var app;
@@ -38,29 +40,32 @@ class AllAppsState extends State<AllApps> {
     this.allApps = DefaultData.apps;
     _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
       userId = val;
+      getAllMyApps();
+      getMyInfo(false);
     });
-    getAllMyApps();
-    getMyInfo(false);
-    // getAllApps();
+    // getAllMyApps();
   }
 
   getAllMyApps() {
-    collectionRef1
+    StreamSubscription<QuerySnapshot> myApps;
+    print(userId);
+    myApps = collectionRef1
         .where("user_id", isEqualTo: userId)
         .snapshots()
         .listen((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
-        print(doc);
+        print("Iteration doc");
         List<dynamic> appIds = doc["apps"];
         print(appIds);
-        for (var fApp in this.allApps) {
-          print(fApp["appId"]);
-          if (appIds.contains(fApp["appId"])) {
-            // print(fApp);
-            installedAppIds.add(fApp["appId"]);
-          }
-        }
+        installedAppIds = appIds;
+        // for (var fApp in this.allApps) {
+        //   print(fApp["appId"]);
+        //   if (appIds.contains(fApp["appId"])) {
+        //     // print(fApp);
+        //     installedAppIds.add(fApp["appId"]);
+        //   }
+        // }
 
         setState(() {
           this.installedAppIds = installedAppIds;
@@ -166,15 +171,18 @@ class AllAppsState extends State<AllApps> {
     // selectedApp
     print("delete app");
     print(userApps);
+    userApps = new UserApps(userId);
     List<String> updatedList = [];
-    userApps.apps.forEach((uApp) {
-      if (selectedApp["appId"] != uApp) {
-        updatedList.add(uApp);
+    installedAppIds.forEach((iAppId) {
+      if (selectedApp["appId"] != iAppId) {
+        updatedList.add(iAppId);
       }
     });
     print(updatedList);
     userApps.apps = updatedList;
     userApps.layout = updatedList;
+    print("doc id");
+    print(documentId);
     collectionRef1
         .document(documentId)
         .updateData(userApps.toJson())
@@ -183,7 +191,7 @@ class AllAppsState extends State<AllApps> {
         this.installedAppIds = [];
       });
       getAllMyApps();
-      getMyInfo(false);
+      // getMyInfo(false);
     }).catchError((e) {
       print(e);
     });

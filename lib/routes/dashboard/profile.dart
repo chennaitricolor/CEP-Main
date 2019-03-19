@@ -96,7 +96,7 @@ class ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    _sharedPrefs.removeApplicationSavedInformation("loggedinuser");
+    // _sharedPrefs.removeApplicationSavedInformation("loggedinuser");
     // _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
     //   setState(() {
     //     userId = val;
