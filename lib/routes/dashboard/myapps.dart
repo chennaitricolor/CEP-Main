@@ -71,8 +71,8 @@ class MyAppsState extends State<MyApps> {
         .snapshots()
         .listen((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
-      print("Fetch existing");
-      print(docs);
+      // print("Fetch existing");
+      // print(docs);
       for (DocumentSnapshot doc in docs) {
         documentId = doc.documentID;
         userApps = UserApps.fromSnapShot(doc);
@@ -80,8 +80,8 @@ class MyAppsState extends State<MyApps> {
       if (isAddApp) {
         addApp();
       } else {
-        print("Am in else");
-        print(app);
+        // print("Am in else");
+        // print(app);
         if (userApps != null && userApps.apps != null && app != null) {
           if (userApps.apps.contains(app["appId"])) {
             setState(() {
@@ -94,8 +94,8 @@ class MyAppsState extends State<MyApps> {
   }
 
   addApp() {
-    print("trying to add app");
-    print(app);
+    // print("trying to add app");
+    // print(app);
     if (installed == false) {
       if (userApps == null) {
         userApps = new UserApps(userId);
@@ -132,7 +132,7 @@ class MyAppsState extends State<MyApps> {
         updatedList.add(uApp);
       }
     });
-    print(updatedList);
+    // print(updatedList);
     userApps.apps = updatedList;
     collectionRef
         .document(documentId)
@@ -285,12 +285,12 @@ class MyAppsState extends State<MyApps> {
         .listen((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
-        print(doc);
+        // print(doc);
         List<dynamic> appIds = doc["apps"];
-        print(appIds);
+        // print(appIds);
         installedApps = new List();
         for (var fApp in DefaultData.apps) {
-          print(fApp["appId"]);
+          // print(fApp["appId"]);
           if (appIds.contains(fApp["appId"])) {
             // print(fApp);
             installedApps.add(fApp);
@@ -318,8 +318,8 @@ class MyAppsState extends State<MyApps> {
     // listW.add(ListTile(
     //   title: Text("My Apps"),
     // ));
-    print("render obj");
-    print(installedApps);
+    // print("render obj");
+    // print(installedApps);
     listW = List.generate(installedApps.length, (index) {
       return InkWell(
         onTap: () {

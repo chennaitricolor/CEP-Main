@@ -12,6 +12,10 @@ import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/routes/form/ngoform.dart';
 import 'package:namma_chennai/routes/form/location.dart';
+import 'package:namma_chennai/utils/shared_prefs.dart';
+
+
+final SharedPrefs _sharedPrefs = new SharedPrefs();
 
 void main() async {
   // Initializes the translation module
@@ -52,6 +56,8 @@ class _NammaAppState extends State<NammaApp> {
     _firebaseMessaging.getToken().then((token) {
       print("====================");
       print(token);
+      // _share
+    _sharedPrefs.setApplicationSavedInformation("messageToken", token);
       print("====================");
     });
 

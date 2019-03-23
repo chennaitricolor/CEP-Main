@@ -30,9 +30,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
       withLocalStorage: true,
       appCacheEnabled: true,
       hidden: false,
-      initialChild: Container(
-        child: CircularProgressIndicator(),
-      ),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
@@ -22,38 +24,19 @@ class ProfileState extends State<Profile> {
   bool isLoaded = false;
 
   showNGOForm() {
-    Navigator.pushNamed(context, "/ngoform");
+    Navigator.pushNamed(context, "/form");
   }
 
-  getMyInfo() {
-    collectionRef
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
-      List<DocumentSnapshot> docs = snapshot.documents;
-      for (DocumentSnapshot doc in docs) {
-        User user = new User.fromSnapShot(doc);
-        currentUser = user;
-      }
-    });
+  Future<QuerySnapshot> getMyInfo() async {
+    return collectionRef.where("user_id", isEqualTo: userId).getDocuments();
   }
 
-  getOrgInfo() {
-    currentOrgs = new List();
-    collectionRef2
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
-      List<DocumentSnapshot> docs = snapshot.documents;
-      for (DocumentSnapshot doc in docs) {
-        Orgs org = new Orgs.fromSnapShot(doc);
-        currentOrgs.add(org);
-      }
-      renderObjects();
-    });
+  Future<QuerySnapshot> getOrgInfo() async {
+    return collectionRef2.where("user_id", isEqualTo: userId).getDocuments();
   }
 
   renderObjects() {
+    print("I am gonna render");
     listW.add(ListTile(
       title: Text("My Orgs"),
     ));
@@ -88,6 +71,8 @@ class ProfileState extends State<Profile> {
     ));
 
     setState(() {
+      print("it is loaded");
+      print(currentUser);
       this.listW = listW;
       isLoaded = true;
     });
@@ -96,14 +81,28 @@ class ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    // _sharedPrefs.removeApplicationSavedInformation("loggedinuser");
-    // _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
-    //   setState(() {
-    //     userId = val;
-    //     getMyInfo();
-    //     getOrgInfo();
-    //   });
-    // });
+    _sharedPrefs
+        .getApplicationSavedInformation("loggedinuser")
+        .then((val) async {
+      setState(() {
+        userId = val;
+      });
+      currentOrgs = new List();
+      List<Future<QuerySnapshot>> futures = [getMyInfo(), getOrgInfo()];
+      List<QuerySnapshot> result = await Future.wait(futures);
+      List<DocumentSnapshot> infoDocs = result[0].documents;
+      for (DocumentSnapshot doc in infoDocs) {
+        currentUser = new User.fromSnapShot(doc);
+      }
+      List<DocumentSnapshot> orgDocs = result[1].documents;
+      for (DocumentSnapshot doc in orgDocs) {
+        Orgs org = new Orgs.fromSnapShot(doc);
+        currentOrgs.add(org);
+      }
+      renderObjects();
+      // getMyInfo();
+      // getOrgInfo();
+    });
   }
 
   @override
@@ -119,40 +118,6 @@ class ProfileState extends State<Profile> {
         ),
         body: Stack(
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height * .22,
-                  margin: EdgeInsets.only(bottom: 10),
-                  color: Colors.blue,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width - 20,
-                  child: FlatButton(
-                    color: Colors.redAccent,
-                    onPressed: () {
-                      _sharedPrefs
-                          .removeApplicationSavedInformation("loggedinuser");
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/auth', (_) => false);
-                    },
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 18.0, horizontal: 98.0),
-                      child: Text(
-                        'Log Out',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
             isLoaded
                 ? Container(
                     alignment: Alignment.topCenter,
@@ -203,7 +168,7 @@ class ProfileState extends State<Profile> {
                                 _sharedPrefs.removeApplicationSavedInformation(
                                     "loggedinuser");
                                 Navigator.pushNamedAndRemoveUntil(
-                                    context, '/start', (_) => false);
+                                    context, '/auth', (_) => false);
                               },
                               shape: new RoundedRectangleBorder(
                                   borderRadius:

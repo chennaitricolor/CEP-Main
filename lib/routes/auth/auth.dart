@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/utils/default_data.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/services.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final SharedPrefs _sharedPrefs = new SharedPrefs();
+CollectionReference collectionRef1 = db.collection('users');
 
 class Auth extends StatefulWidget {
   @override
@@ -76,8 +79,9 @@ class AuthState extends State<Auth> {
   }
 
   goHome(user) {
+    makeEntry(user.uid);
     _sharedPrefs.setApplicationSavedInformation('loggedinuser', user.uid);
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
   }
 
   signIn() {
@@ -129,6 +133,40 @@ class AuthState extends State<Auth> {
     _sharedPrefs.getApplicationSavedInformation("language").then((val) {
       setState(() {
         prefLang = val;
+      });
+    });
+  }
+
+  makeEntry(userId) {
+    _sharedPrefs.getApplicationSavedInformation("messageToken").then((token) {
+      
+      collectionRef1
+          .where("user_phone_number", isEqualTo: phonenumber)
+          .getDocuments()
+          .then((QuerySnapshot snapshot) {
+        String docId = "";
+        User user;
+        List<DocumentSnapshot> docs = snapshot.documents;
+        for (DocumentSnapshot doc in docs) {
+          user = User.fromSnapShot(doc);
+          docId = doc.documentID;
+        }
+        if (docId.length > 0) {
+          user.userId = userId;
+          user.messageToken = token;
+          collectionRef1
+              .document(docId)
+              .updateData(user.toJson())
+              .catchError((e) {
+            print(e);
+          });
+        } else {
+          user = new User(phonenumber, userId, "USER");
+          user.messageToken = token;
+          collectionRef1.document().setData(user.toJson()).catchError((e) {
+            print(e);
+          });
+        }
       });
     });
   }
@@ -433,7 +471,8 @@ class AuthState extends State<Auth> {
                                             ),
                                           ))
                                       : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: <Widget>[
                                             SizedBox(
                                               child:
@@ -444,7 +483,10 @@ class AuthState extends State<Auth> {
                                             Padding(
                                               padding: EdgeInsets.all(10),
                                             ),
-                                            Text("Waiting for OTP", style: TextStyle(fontSize: 15),)
+                                            Text(
+                                              "Waiting for OTP",
+                                              style: TextStyle(fontSize: 15),
+                                            )
                                           ],
                                         )
                                 ],

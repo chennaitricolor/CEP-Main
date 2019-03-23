@@ -4,6 +4,7 @@ class DefaultData {
   static String developedBy = "Tech for Cities";
   static String poweredBy = "Powered by Government of Tamilnadu";
   static String platformLogo = "assets/images/logo/corporationofchennai.png";
+
   static List<Map<String, String>> apps = [
     {
       "appId": "1",

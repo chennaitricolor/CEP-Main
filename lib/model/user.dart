@@ -28,25 +28,27 @@ class User {
   DateTime userUpdatedOn;
   String userAadharId;
   String userPanId;
+  String messageToken;
 
   User(this.userPhoneNumber, this.userId, this.userPersona);
 
   User.fromSnapShot(DocumentSnapshot snapshot){
-    this.userId = snapshot['user_id'];
-    this.userName = snapshot['user_name'];
-    this.userPhoneNumber = snapshot['user_phone_number'];
-    this.userEmail = snapshot['user_email'];
-    this.userWard = snapshot['user_ward'];
-    this.userZone = snapshot['user_zone'];
-    this.userGeo = snapshot['user_geo'];
-    this.userLangPref = snapshot['user_lang_pref'];
+    this.userId = snapshot['user_id'] ?? "";
+    this.userName = snapshot['user_name'] ?? "";
+    this.userPhoneNumber = snapshot['user_phone_number'] ?? "";
+    this.userEmail = snapshot['user_email'] ?? "";
+    this.userWard = snapshot['user_ward'] ?? "";
+    this.userZone = snapshot['user_zone'] ?? "";
+    this.userGeo = snapshot['user_geo'] ?? "";
+    this.userLangPref = snapshot['user_lang_pref'] ?? "";
     this.userDob = snapshot['user_dob'];
-    this.userGender = snapshot['user_gender'];
-    this.userPersona = snapshot['user_persona'];
+    this.userGender = snapshot['user_gender'] ?? "";
+    this.userPersona = snapshot['user_persona'] ?? "";
     this.userCreatedOn = snapshot['user_created_on'];
     this.userUpdatedOn = snapshot['user_updated_on'];
-    this.userAadharId = snapshot['user_aadhar_id'];
-    this.userPanId = snapshot['user_pan_id'];
+    this.userAadharId = snapshot['user_aadhar_id'] ?? "";
+    this.userPanId = snapshot['user_pan_id'] ?? "";
+    this.messageToken = snapshot['message_token'] ?? "";
   }
 
   User.fromJson(Map<String, dynamic> json){
@@ -65,6 +67,7 @@ class User {
     this.userUpdatedOn = json['user_updated_on'];
     this.userAadharId = json['user_aadhar_id'];
     this.userPanId = json['user_pan_id'];
+    this.messageToken = json['message_token'];
   }
 
   Map<String, dynamic> toJson() =>
@@ -84,6 +87,7 @@ class User {
     'user_updated_on': this.userUpdatedOn,
     'user_aadhar_id': this.userAadharId,
     'user_pan_id': this.userPanId,
+    'message_token': this.messageToken,
   };
 }
 
