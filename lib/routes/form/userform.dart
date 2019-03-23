@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:intl/intl.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:location/location.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
@@ -22,45 +25,94 @@ class UserFormState extends State<UserForm> {
   User currentUser;
   String documentId;
   Gender selectedGender;
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController aadharController = new TextEditingController();
+  TextEditingController panController = new TextEditingController();
   TextEditingController dobController = new TextEditingController();
+  TextEditingController locationController = new TextEditingController();
+
+  int _radioValue = -1;
+
+  void _handleRadioValueChange(int value) {
+    setState(() {
+      _radioValue = value;
+      switch (_radioValue) {
+        case 0:
+          currentUser.userGender = "MALE";
+          break;
+        case 1:
+          currentUser.userGender = "FEMALE";
+          break;
+        case 2:
+          currentUser.userGender = "OTHER";
+          break;
+      }
+    });
+  }
+
+  setRadioValue(type) {
+    switch (type) {
+      case "MALE":
+        _handleRadioValueChange(0);
+        break;
+      case "FEMALE":
+        _handleRadioValueChange(1);
+        break;
+      case "OTHER":
+        _handleRadioValueChange(2);
+        break;
+      default:
+        _handleRadioValueChange(0);
+    }
+  }
 
   getUser() {
-    collectionRef
-        .where("user_id", isEqualTo: widget.userid)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
-          List<DocumentSnapshot> docs = snapshot.documents;
-          for (DocumentSnapshot doc in docs) {
-            documentId = doc.documentID;
-            User user = new User.fromSnapShot(doc);
-            currentUser = user;
-          }
+    _sharedPrefs.getApplicationSavedInformation('loggedinuser').then((userId) {
+      print(userId);
+      collectionRef
+          .where("user_id", isEqualTo: userId)
+          .getDocuments()
+          .then((QuerySnapshot snapshot) {
+        List<DocumentSnapshot> docs = snapshot.documents;
+        for (DocumentSnapshot doc in docs) {
+          documentId = doc.documentID;
+          currentUser = new User.fromSnapShot(doc);
+        }
+        setState(() {
+          usernameController.text = currentUser.userName;
+          emailController.text = currentUser.userEmail;
+          aadharController.text = currentUser.userAadharId;
+          panController.text = currentUser.userPanId;
+          locationController.text = currentUser.userGeo;
+          var formatter = new DateFormat('yyyy-MM-dd');
+          dobController.text =
+              currentUser.userDob == null ? "" : formatter.format(currentUser.userDob);
+          setRadioValue(currentUser.userGender);
         });
+      });
+    });
   }
 
   saveOrUpdateUser() {
-    if (documentId != null) {
-      collectionRef
-          .document(documentId)
-          .updateData(currentUser.toJson())
-          .catchError((e) {
-        print(e);
-      });
-    } else {
-      currentUser.userId = widget.userid;
-      collectionRef.document().setData(currentUser.toJson()).catchError((e) {
-        print(e);
-      });
-    }
-    _sharedPrefs.setApplicationSavedInformation('loggedinuser', currentUser.userId);
-    Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
+    print(documentId);
+    collectionRef
+        .document(documentId)
+        .updateData(currentUser.toJson())
+        .catchError((e) {
+      print(e);
+    });
+    // _sharedPrefs.setApplicationSavedInformation(
+    //     'loggedinuser', currentUser.userId);
+    Navigator.of(context).pop();
   }
 
-  genderChange(Gender gender){
-    if(currentUser != null){
+  genderChange(Gender gender) {
+    if (currentUser != null) {
       currentUser.userGender = gender.toString();
     } else {
-      currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
+      currentUser = new User(
+          "+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
       currentUser.userGender = gender.toString();
     }
   }
@@ -68,15 +120,15 @@ class UserFormState extends State<UserForm> {
   Future<Null> dateSelector(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: DateTime.now().subtract(Duration(days: 365 * 25)),
         firstDate: DateTime(1900, 1),
         lastDate: DateTime.now());
-        if (picked != null)
-        setState(() {
-          currentUser.userDob = picked;
-          var formatter = new DateFormat('yyyy-MM-dd');
-          dobController.text = formatter.format(picked);
-        });
+    if (picked != null)
+      setState(() {
+        currentUser.userDob = picked;
+        var formatter = new DateFormat('yyyy-MM-dd');
+        dobController.text = formatter.format(picked);
+      });
   }
 
   @override
@@ -85,175 +137,213 @@ class UserFormState extends State<UserForm> {
     getUser();
   }
 
+  EdgeInsets defaultSpacing = EdgeInsets.only(bottom: 15);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          // Box decoration takes a gradient
-          gradient: LinearGradient(
-            // Where the linear gradient begins and ends
-            begin: Alignment.topCenter,
-            end: Alignment.center,
-            // Add one stop for each color. Stops should increase from 0 to 1
-            stops: [0.5, 0.5],
-            tileMode: TileMode.clamp,
-            colors: [
-              // Colors are easy thanks to Flutter's Colors class.
-              Colors.redAccent,
-              Color(0xFFEEEEEE),
-            ],
-          ),
+        resizeToAvoidBottomPadding: true,
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          elevation: 0,
+          centerTitle: false,
+          title: Text('Personal Information'),
         ),
-        child: Column(
-          children: <Widget>[
-            Container(
-                margin: EdgeInsets.only(top: 80),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'Profile Information',
-                      style: TextStyle(fontSize: 30.0, color: Colors.white),
+        body: SingleChildScrollView(
+            child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: TextField(
+                    keyboardType: TextInputType.text,
+                    maxLength: 30,
+                    controller: usernameController,
+                    textInputAction: TextInputAction.next,
+                    onChanged: (String name) {
+                      currentUser.userName = name;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Name",
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal)),
                     ),
-                    Text(
-                      '(More about you)',
-                      style: TextStyle(fontSize: 15.0, color: Colors.white),
+                    autofocus: false),
+              ),
+              Container(
+                child: TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    maxLength: 50,
+                    controller: emailController,
+                    textInputAction: TextInputAction.next,
+                    onChanged: (String email) {
+                      currentUser.userEmail = email;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Email (optional)",
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal)),
+                    )),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    new Radio(
+                      value: 0,
+                      groupValue: _radioValue,
+                      onChanged: _handleRadioValueChange,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        _handleRadioValueChange(0);
+                      },
+                      child: new Text(
+                        'Male',
+                        style: new TextStyle(fontSize: 16.0),
+                      ),
+                    ),
+                    new Radio(
+                      value: 1,
+                      groupValue: _radioValue,
+                      onChanged: _handleRadioValueChange,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        _handleRadioValueChange(1);
+                      },
+                      child: new Text(
+                        'Female',
+                        style: new TextStyle(fontSize: 16.0),
+                      ),
+                    ),
+                    new Radio(
+                      value: 2,
+                      groupValue: _radioValue,
+                      onChanged: _handleRadioValueChange,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        _handleRadioValueChange(2);
+                      },
+                      child: new Text(
+                        'Other',
+                        style: new TextStyle(fontSize: 16.0),
+                      ),
                     ),
                   ],
-                )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 80),
-                  width: 300.0,
-                  child: TextField(
-                      keyboardType: TextInputType.text,
-                      maxLength: 30,
-                      textInputAction: TextInputAction.next,
-                      onChanged: (String name) {
-                        if (currentUser == null) {
-                          currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
-                        }
-                        currentUser.userName = name;
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Name",
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal)),
-                      ),
-                      autofocus: true),
                 ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Container(
-                color: Colors.transparent,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 300.0,
-                  child: TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      maxLength: 50,
-                      textInputAction: TextInputAction.next,
-                      onChanged: (String email) {
-                        if (currentUser == null) {
-                          currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
+              Container(
+                margin: defaultSpacing,
+                child: GestureDetector(
+                    onTap: () => dateSelector(context),
+                    child: AbsorbPointer(
+                      child: TextField(
+                          controller: dobController,
+                          decoration: InputDecoration(
+                            labelText: "Date of Birth",
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.teal)),
+                          )),
+                    )),
+              ),
+              Container(
+                padding: defaultSpacing,
+                child: TextField(
+                    controller: locationController,
+                    keyboardType: TextInputType.multiline,
+                    maxLength: null,
+                    textInputAction: TextInputAction.next,
+                    onTap: () {
+                      var location = new Location();
+                      try {
+                        location.getLocation().then((val) {
+                          locationController.text = val["latitude"].toString() +
+                              ", " +
+                              val["longitude"].toString();
+
+                          currentUser.userGeo = locationController.text;
+                        });
+                      } catch (e) {
+                        if (e.code == 'PERMISSION_DENIED') {
+                          print("Permission Denied");
                         }
-                        currentUser.userEmail = email;
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Email (optional)",
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.teal)),
-                      )
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Container(
-                color: Colors.transparent,
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Location",
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal)),
+                    )),
               ),
-            ),
-            DropdownButton<Gender>(
-              hint: Text("Select Gender"),
-              items: <Gender>[Gender.MALE, Gender.FEMALE, Gender.TRANSGENDER].map((Gender value) {
-                return DropdownMenuItem<Gender>(
-                  value: value,
-                  child: Text(value.toString().substring(7)),
-                );
-              }).toList(),
-              value: selectedGender,
-              onChanged: (Gender value) {
-                if (currentUser == null) {
-                  currentUser = new User("+91" + widget.phonenumber, widget.userid, Persona.USER.toString());
-                }
-                currentUser.userGender = value.toString();
-                setState(() {
-                  selectedGender = value;
-                });
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: Container(
-                color: Colors.transparent,
+              Container(
+                child: TextField(
+                    keyboardType: TextInputType.number,
+                    controller: aadharController,
+                    maxLength: 50,
+                    textInputAction: TextInputAction.next,
+                    onChanged: (String email) {
+                      currentUser.userAadharId = email;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Aadhaar (optional)",
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal)),
+                    )),
               ),
-            ),
-            Container(
-                  width: 300.0,
-                  child: GestureDetector(
-                          onTap:() => dateSelector(context),
-                          child:AbsorbPointer(
-                            child: TextField(
-                                controller: dobController,
-                                decoration: InputDecoration(
-                                  labelText: "Date of Birth",
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.teal)),
-                                )
-                            ),
-                          )
+              Container(
+                child: TextField(
+                    keyboardType: TextInputType.text,
+                    maxLength: 50,
+                    controller: panController,
+                    textInputAction: TextInputAction.next,
+                    onChanged: (String email) {
+                      currentUser.userPanId = email;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Pan ID (optional)",
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal)),
+                    )),
+              ),
+              Container(
+                  margin: EdgeInsets.only(top: 10.0, left: 10, right: 10),
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: FlatButton(
+                        color: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0)),
+                        onPressed: () {
+                          saveOrUpdateUser();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 12.0),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Update',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'Save to database',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.0,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
-            FlatButton(
-              color: Colors.red,
-              onPressed: () {
-                saveOrUpdateUser();
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 18.0, horizontal: 58.0),
-                child: Text(
-                  'Update',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ));
+                      ))),
+            ],
+          ),
+        )));
   }
 }

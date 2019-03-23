@@ -7,7 +7,7 @@ import 'package:namma_chennai/routes/dashboard/home.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/utils/default_data.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;

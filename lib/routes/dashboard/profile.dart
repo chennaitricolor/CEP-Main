@@ -24,7 +24,7 @@ class ProfileState extends State<Profile> {
   bool isLoaded = false;
 
   showNGOForm() {
-    Navigator.pushNamed(context, "/form");
+    Navigator.pushNamed(context, "/ngoform");
   }
 
   Future<QuerySnapshot> getMyInfo() async {
@@ -38,7 +38,7 @@ class ProfileState extends State<Profile> {
   renderObjects() {
     print("I am gonna render");
     listW.add(ListTile(
-      title: Text("My Orgs"),
+      title: Text("Your Organisations"),
     ));
 
     for (Orgs org in currentOrgs) {
@@ -64,7 +64,7 @@ class ProfileState extends State<Profile> {
           onTap: () {
             showNGOForm();
           },
-          title: Text("Add new Org"),
+          title: Text("Add Organisation"),
           trailing: Icon(Icons.add_box),
         ),
       ),
@@ -105,11 +105,13 @@ class ProfileState extends State<Profile> {
     });
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
-        backgroundColor: Colors.black12,
+        backgroundColor: Color.fromARGB(150, 224, 224, 224),
         appBar: AppBar(
           backgroundColor: Colors.blue,
           elevation: 0,
@@ -120,75 +122,90 @@ class ProfileState extends State<Profile> {
           children: <Widget>[
             isLoaded
                 ? Container(
-                    alignment: Alignment.topCenter,
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .02,
-                        right: 10.0,
-                        left: 10.0),
                     child: Container(
                         width: MediaQuery.of(context).size.width,
                         child: Column(
                           children: <Widget>[
                             Card(
                               color: Colors.white,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 15, bottom: 15),
-                                child: ListTile(
+                              child: ListTile(
                                   title: Text(
                                     currentUser.userName,
                                     style: TextStyle(fontSize: 22),
                                   ),
-                                  trailing: Icon(
-                                    Icons.person_pin_circle,
-                                    color: Colors.green,
+                                  trailing: InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, "/form");
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.grey,
+                                        size: 25,
+                                      ),
+                                    ),
                                   ),
-                                  subtitle: Text(currentUser.userPhoneNumber +
-                                      "\nMember since: " +
-                                      currentUser.userCreatedOn
-                                          .toLocal()
-                                          .toString()
-                                          .substring(
-                                              0,
-                                              currentUser.userCreatedOn
-                                                      .toLocal()
-                                                      .toString()
-                                                      .length -
-                                                  7)),
+                                  subtitle: Text("+91-"+currentUser.userPhoneNumber),
                                 ),
-                              ),
-                              elevation: 4.0,
                             ),
                             Column(
                               children: listW,
                             ),
-                            Expanded(child: Container()),
-                            FlatButton(
-                              color: Colors.red,
-                              onPressed: () {
-                                _sharedPrefs.removeApplicationSavedInformation(
-                                    "loggedinuser");
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/auth', (_) => false);
-                              },
-                              shape: new RoundedRectangleBorder(
-                                  borderRadius:
-                                      new BorderRadius.circular(30.0)),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 18.0, horizontal: 98.0),
-                                child: Text(
-                                  'Log Out',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                            Container(
+                                margin: EdgeInsets.only(
+                                    top: 10.0, left: 10, right: 10),
+                                child: SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: FlatButton(
+                                      color: Colors.blue,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25.0)),
+                                      onPressed: () {
+                                        _sharedPrefs
+                                            .removeApplicationSavedInformation(
+                                                "loggedinuser");
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context, '/auth', (_) => false);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 12.0),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              'LOGOUT',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              'This action logs you out',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12.0,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ))),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Center(
+                              child: Text(
+                                "v1.0",
+                                style: TextStyle(color: Colors.black54),
                               ),
-                            )
+                            ),)
                           ],
                         )),
                   )
-                : Container(),
+                : Center(
+                  child: CircularProgressIndicator(),
+                ),
           ],
         ));
   }
