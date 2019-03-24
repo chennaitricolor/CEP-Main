@@ -35,12 +35,18 @@ class NGOFormState extends State<NGOForm> {
     Navigator.pop(context);
   }
 
+  List<Widget> documentList = [];
   void getFilePath() async {
-   try {
+    try {
       String filePath = await FilePicker.getFilePath(type: FileType.ANY);
       if (filePath == '') {
         return;
       }
+      setState(() {
+        documentList
+            .add(Text((documentList.length + 1).toString() + ". " + filePath));
+      });
+      print(filePath);
       isUploaded = false;
       this.filePath = filePath;
       uploadFile();
@@ -65,7 +71,7 @@ class NGOFormState extends State<NGOForm> {
     setState(() {
       isUploaded = true;
     });
-}
+  }
 
   @override
   void initState() {
@@ -78,23 +84,19 @@ class NGOFormState extends State<NGOForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        elevation: 0,
-        centerTitle: false,
-        title: Text('Add Org'),
-      ),
-      body: SingleChildScrollView(
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          elevation: 0,
+          centerTitle: false,
+          title: Text('Add Organisation'),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.all(10),
+            child: Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 30),
-                  width: 300.0,
                   child: TextField(
                       keyboardType: TextInputType.text,
                       maxLength: 100,
@@ -110,104 +112,149 @@ class NGOFormState extends State<NGOForm> {
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal)),
                       ),
-                      autofocus: true),
+                      autofocus: false),
                 ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+                Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            width: 2.0,
+                            style: BorderStyle.solid,
+                            color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<OrgType>(
+                        isExpanded: true,
+                        hint: Text("Select Organization Type"),
+                        items: <OrgType>[
+                          OrgType.GOVERNMENT,
+                          OrgType.NGO,
+                          OrgType.PRIVATE,
+                          OrgType.OTHER
+                        ].map((OrgType value) {
+                          return DropdownMenuItem<OrgType>(
+                            value: value,
+                            child: Text(value.toString().substring(8)),
+                          );
+                        }).toList(),
+                        value: selectedOrgType,
+                        onChanged: (OrgType value) {
+                          if (currentOrg == null) {
+                            currentOrg = new Orgs();
+                          }
+                          currentOrg.orgType = value.toString();
+                          setState(() {
+                            selectedOrgType = value;
+                          });
+                        },
+                      ),
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.all(5),
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          width: 2.0,
+                          style: BorderStyle.solid,
+                          color: Colors.grey),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                  ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: documentList),
+                ),
+                Container(
+                    margin: EdgeInsets.only(top: 10.0, left: 10, right: 10),
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: OutlineButton(
+                          color: Colors.blue,
+                          borderSide: BorderSide(
+                              width: 2.0,
+                              style: BorderStyle.solid,
+                              color: Colors.blue),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          onPressed: () {
+                            getFilePath();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12.0, horizontal: 12.0),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'Document Upload',
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Trustdeet/Incorporation/Authorization Letter',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 12.0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ))),
+                Container(
+                    margin: EdgeInsets.only(top: 10.0, left: 10, right: 10),
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: FlatButton(
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          onPressed: () {
+                            saveOrg();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12.0, horizontal: 12.0),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'Save',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Save to database',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ))),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
-            DropdownButton<OrgType>(
-              hint: Text("Select Organization Type"),
-              items: <OrgType>[OrgType.GOVERNMENT, OrgType.NGO, OrgType.PRIVATE, OrgType.OTHER].map((OrgType value) {
-                return DropdownMenuItem<OrgType>(
-                  value: value,
-                  child: Text(value.toString().substring(8)),
-                );
-              }).toList(),
-              value: selectedOrgType,
-              onChanged: (OrgType value) {
-                if (currentOrg == null) {
-                  currentOrg = new Orgs();
-                }
-                currentOrg.orgType = value.toString();
-                setState(() {
-                  selectedOrgType = value;
-                });
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
-            (isUploaded == false) ?
-            FlatButton(
-              color: Colors.red,
-              onPressed: () {
-                getFilePath();
-              },
-              shape: new RoundedRectangleBorder(
-                borderRadius:
-                    new BorderRadius.circular(30.0)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 18.0, horizontal: 58.0),
-                child: Text(
-                  'Document Upload',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ) : Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                      size: 50.0,
-                    ),
-                    Text(
-                      "Document Uploaded!",
-                      style: TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.w900),
-                    ),
-                  ],
-                ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
-            FlatButton(
-              color: Colors.red,
-              onPressed: () {
-                saveOrg();
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 18.0, horizontal: 58.0),
-                child: Text(
-                  'Save',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    )
-    );
+          ),
+        ));
   }
 }

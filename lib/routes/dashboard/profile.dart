@@ -138,7 +138,7 @@ class ProfileState extends State<Profile> {
                                       Navigator.pushNamed(context, "/form");
                                     },
                                     child: Padding(
-                                      padding: EdgeInsets.all(10),
+                                      padding: EdgeInsets.all(0),
                                       child: Icon(
                                         Icons.edit,
                                         color: Colors.grey,
