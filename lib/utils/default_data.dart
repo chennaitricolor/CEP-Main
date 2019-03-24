@@ -45,6 +45,14 @@ class DefaultData {
       "appIconUrl": "assets/images/apps/5.png",
       "appUrl": "https://book.olacabs.com",
       "appLaunchDate": "Added on Jan-2019"
+    },
+    {
+      "appId": "6",
+      "appName": "News",
+      "appDesc": "Top headlines at fingertips. It contains news from The Hindu and Times of India",
+      "appIconUrl": "assets/images/apps/6.png",
+      "appUrl": "https://chennai-news.herokuapp.com/",
+      "appLaunchDate": "Added on Mar-2019"
     }
   ];
 }

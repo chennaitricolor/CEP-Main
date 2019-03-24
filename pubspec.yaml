@@ -65,6 +65,7 @@ flutter:
    - assets/images/apps/3.png
    - assets/images/apps/4.png
    - assets/images/apps/5.png
+   - assets/images/apps/6.png
    - assets/locale/lang_en.json
    - assets/locale/lang_ta.json
    - assets/locale/lang_te.json
