@@ -132,7 +132,7 @@ class AppDetailState extends State<AppDetailScreen> {
                             app.appIconUrl,
                             width: 50,
                           ),
-                          title: Text(app.appName,
+                          title: Text(app.appName["en"].toString(),
                               style: TextStyle(
                                   fontSize: 24.0, fontWeight: FontWeight.bold)),
                           subtitle: Text(app.appUrl,
@@ -152,7 +152,7 @@ class AppDetailState extends State<AppDetailScreen> {
                                     title: Text("Launch Date:",
                                         style: TextStyle(fontSize: 14.0)),
                                     subtitle: Text(
-                                        app.appLaunchDate.toLocal().toString(),
+                                        app.appLaunchDate,
                                         style: TextStyle(fontSize: 12.0)),
                                   ),
                                 ],
@@ -164,7 +164,7 @@ class AppDetailState extends State<AppDetailScreen> {
                               child: Column(
                                 children: <Widget>[
                                   ListTile(
-                                    title: Text(app.appDesc,
+                                    title: Text(app.appDesc["en"].toString(),
                                         style: TextStyle(fontSize: 18.0)),
                                   ),
                                 ],

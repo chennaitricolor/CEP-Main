@@ -1,19 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/model/userapps.dart';
-import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
-import 'package:namma_chennai/utils/default_data.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
-
-SharedPrefs _sharedPrefs = new SharedPrefs();
-Firestore db = Firestore.instance;
-CollectionReference collectionRef1 = db.collection('userapps');
-CollectionReference collectionRef2 = db.collection('users');
+import 'package:namma_chennai/utils/globals.dart';
 
 class AllApps extends StatefulWidget {
   @override
@@ -23,10 +14,11 @@ class AllApps extends StatefulWidget {
 class AllAppsState extends State<AllApps> {
   List<Widget> listW = new List<Widget>();
   List<Apps> apps = new List();
-  List<Map<String, String>> allApps;
+  List<Apps> allApps;
   MyAppsState myAppsState = new MyAppsState();
-  List<dynamic> installedAppIds = new List();
+  List<String> installedAppIds = new List();
   String userId;
+  bool isLoading = true;
 
   var app;
   UserApps userApps;
@@ -37,54 +29,40 @@ class AllAppsState extends State<AllApps> {
   @override
   void initState() {
     super.initState();
-    this.allApps = DefaultData.apps;
-    _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
+    // this.allApps = DefaultData.apps;
+
+    fireCollections.getLoggedInUserId().then((val) {
       userId = val;
-      getAllMyApps();
-      getMyInfo(false);
+    }).then((r) {
+      refresh();
     });
-    // getAllMyApps();
   }
 
-  getAllMyApps() {
-    StreamSubscription<QuerySnapshot> myApps;
-    print(userId);
-    myApps = collectionRef1
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
+  refresh() {
+    // Collecting user apps and extracting installed apps ids
+    fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
         print("Iteration doc");
-        List<dynamic> appIds = doc["apps"];
-        print(appIds);
-        installedAppIds = appIds;
-        // for (var fApp in this.allApps) {
-        //   print(fApp["appId"]);
-        //   if (appIds.contains(fApp["appId"])) {
-        //     // print(fApp);
-        //     installedAppIds.add(fApp["appId"]);
-        //   }
-        // }
-
-        setState(() {
-          this.installedAppIds = installedAppIds;
-        });
-        print(installedAppIds);
-        // for (String appId in appIds) {
-        //   collectionRef2
-        //       .where("app_id", isEqualTo: appId)
-        //       .snapshots()
-        //       .listen((QuerySnapshot snapshot2) {
-        //     List<DocumentSnapshot> docs2 = snapshot2.documents;
-        //     for (DocumentSnapshot doc2 in docs2) {
-        //       Apps app = new Apps.fromSnapShot(doc2);
-        //       apps.add(app);
-        //     }
-        //     renderObjects();
-        //   });
-        // }
+        UserApps userAppInfo = UserApps.fromSnapShot(doc);
+        installedAppIds = userAppInfo.apps;
       }
+      setState(() {
+        this.installedAppIds = installedAppIds;
+      });
+    }).then((r) {
+      // Collecting all apps available in the store
+      fireCollections.getAllApps().then((QuerySnapshot snapshot) {
+        List<DocumentSnapshot> docs = snapshot.documents;
+        allApps = [];
+        for (DocumentSnapshot doc in docs) {
+          Apps app = Apps.fromSnapShot(doc);
+          allApps.add(app);
+        }
+        setState(() {
+          isLoading = false;
+        });
+      });
     });
   }
 
@@ -95,10 +73,8 @@ class AllAppsState extends State<AllApps> {
   }
 
   getMyInfo(bool isAddApp) {
-    collectionRef2
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
+    fireCollections.getUserInfoByUserId(userId)
+        .then((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
         User user = new User.fromSnapShot(doc);
@@ -109,10 +85,7 @@ class AllAppsState extends State<AllApps> {
   }
 
   fetchExistingUserApps(bool isAddApp) {
-    collectionRef1
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
+    fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       print("Fetch existing");
       print(docs);
@@ -150,15 +123,14 @@ class AllAppsState extends State<AllApps> {
       userApps.apps.add(app["appId"]);
       userApps.layout.add(app["appId"]);
       if (documentId != null) {
-        collectionRef1
-            .document(documentId)
-            .updateData(userApps.toJson())
+        fireCollections
+            .updateUserAppsByDocumentId(documentId, userApps)
             .catchError((e) {
-          print(e);
+          popupWidget.show(context, e);
         });
       } else {
-        collectionRef1.document().setData(userApps.toJson()).catchError((e) {
-          print(e);
+        fireCollections.assignUserAppToUserId(userApps).catchError((e) {
+          popupWidget.show(context, e);
         });
       }
       setState(() {
@@ -183,14 +155,13 @@ class AllAppsState extends State<AllApps> {
     userApps.layout = updatedList;
     print("doc id");
     print(documentId);
-    collectionRef1
-        .document(documentId)
-        .updateData(userApps.toJson())
+    fireCollections
+        .updateUserAppsByDocumentId(documentId, userApps)
         .then((onValue) {
       setState(() {
         this.installedAppIds = [];
       });
-      getAllMyApps();
+      // getAllMyApps();
       // getMyInfo(false);
     }).catchError((e) {
       print(e);
@@ -207,68 +178,73 @@ class AllAppsState extends State<AllApps> {
         centerTitle: false,
         title: Text('All Apps'),
       ),
-      body: ListView.separated(
-          itemCount: this.allApps.length,
-          separatorBuilder: (context, index) => Divider(
-                color: Colors.grey,
-                height: 0.1,
-              ),
-          itemBuilder: (BuildContext ctxt, int Index) {
-            return Column(
-              children: <Widget>[
-                ListTile(
-                  leading: Image(
-                    image: AssetImage(this.allApps[Index]["appIconUrl"]),
-                    width: 50.0,
+      body: !isLoading
+          ? ListView.separated(
+              itemCount: this.allApps.length,
+              separatorBuilder: (context, index) => Divider(
+                    color: Colors.grey,
+                    height: 0.1,
                   ),
-                  // Image.network(
-                  //   this.allApps[Index][""],
-                  //   width: 50,
-                  // ),
-                  title: Text(this.allApps[Index]["appName"]),
-                  subtitle: InkWell(
-                    child: Text(this.allApps[Index]["appLaunchDate"]),
-                  ),
-                  trailing: installedAppIds != null &&
-                          installedAppIds.contains(this.allApps[Index]["appId"])
-                      ? FlatButton.icon(
-                          onPressed: () {
-                            removeApp(this.allApps[Index]);
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                          label: Text(
-                            "Remove",
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          ))
-                      : FlatButton.icon(
-                          onPressed: () {
-                            installApp(this.allApps[Index]);
-                          },
-                          icon: Icon(
-                            Icons.add_box,
-                            color: Colors.blue,
-                          ),
-                          label: Text(
-                            "Add",
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          )),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: ListTile(
-                    subtitle: Text(this.allApps[Index]["appDesc"]),
-                  ),
-                )
-              ],
-            );
-          }),
+              itemBuilder: (BuildContext ctxt, int Index) {
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Image(
+                        image: AssetImage(this.allApps[Index].appIconUrl),
+                        width: 50.0,
+                      ),
+                      // Image.network(
+                      //   this.allApps[Index][""],
+                      //   width: 50,
+                      // ),
+                      title: Text(this.allApps[Index].appName["en"]),
+                      subtitle: InkWell(
+                        child: Text(this.allApps[Index].appLaunchDate),
+                      ),
+                      trailing: installedAppIds != null &&
+                              installedAppIds
+                                  .contains(this.allApps[Index].appId)
+                          ? FlatButton.icon(
+                              onPressed: () {
+                                removeApp(this.allApps[Index]);
+                              },
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              label: Text(
+                                "Remove",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ))
+                          : FlatButton.icon(
+                              onPressed: () {
+                                installApp(this.allApps[Index]);
+                              },
+                              icon: Icon(
+                                Icons.add_box,
+                                color: Colors.blue,
+                              ),
+                              label: Text(
+                                "Add",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                ),
+                              )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: ListTile(
+                        subtitle: Text(this.allApps[Index].appDesc["en"]),
+                      ),
+                    )
+                  ],
+                );
+              })
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
 
       // Column(
       //   children: listW,

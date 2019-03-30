@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:namma_chennai/utils/default_data.dart';
+import 'package:namma_chennai/model/apps.dart';
+import 'package:namma_chennai/utils/globals.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -7,30 +9,46 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  List<Map<String, String>> searchResult;
-  List<Widget> searchResultWidget;
+  List<Apps> searchResult = [];
+  List<Widget> searchResultWidget = [];
   String searchTerm = '';
 
   @override
   void initState() {
     super.initState();
-    this.searchResult = DefaultData.apps;
+    this.searchResult = [];
     // getAllApps();
-    buildSearchResultWidget();
+    // buildSearchResultWidget();
+    fireCollections.getAllApps().then((QuerySnapshot result) {
+      List<DocumentSnapshot> docs = result.documents;
+      this.searchResult = [];
+      for (DocumentSnapshot doc in docs) {
+        Apps app = new Apps.fromSnapShot(doc);
+        this.searchResult.add(app);
+      }
+    });
   }
 
   buildSearchResultWidget() {
     this.searchResultWidget = [];
     searchResult.forEach((result) {
-      if (result["appName"].toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0 || searchTerm.isEmpty) {
+      if (result.appName["en"]
+                  .toString()
+                  .toLowerCase()
+                  .indexOf(searchTerm.toLowerCase()) >=
+              0 ||
+          searchTerm.isEmpty) {
         this.searchResultWidget.add(InkWell(
               onTap: () {},
               child: ListTile(
                 leading: Icon(Icons.trending_up),
-                title: Text(result["appName"]),
+                title: Text(result.appName["en"].toString()),
               ),
             ));
       }
+    });
+    setState(() {
+      this.searchResultWidget = this.searchResultWidget;
     });
   }
 
@@ -70,7 +88,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomPadding: true,
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -78,26 +96,28 @@ class _SearchState extends State<Search> {
           centerTitle: false,
           title: Text('Search'),
         ),
-        body: Column(children: <Widget>[
-          Stack(children: <Widget>[
+        body: SingleChildScrollView(
+          child: Column(children: <Widget>[
+            Stack(children: <Widget>[
+              Container(
+                height: 80,
+                color: Colors.blue,
+              ),
+              searchCard()
+            ]),
             Container(
-              height: 80,
-              color: Colors.blue,
-            ),
-            searchCard()
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text(searchTerm.length == 0 && searchResultWidget.length == 0
+                        ? "Key in some text to search"
+                        : "Search Result"),
+                  ),
+                  Column(children: searchResultWidget)
+                ],
+              ),
+            )
           ]),
-          Container(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  title: Text(searchTerm.length == 0
-                      ? "Recent Searches"
-                      : "Search Result"),
-                ),
-                Column(children: searchResultWidget)
-              ],
-            ),
-          )
-        ]));
+        ));
   }
 }

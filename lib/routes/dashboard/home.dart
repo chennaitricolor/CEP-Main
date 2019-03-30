@@ -3,13 +3,13 @@ import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
 import 'package:namma_chennai/routes/dashboard/search.dart';
+import 'package:namma_chennai/utils/globals.dart';
 
 class Home extends StatefulWidget {
   @override
   HomeState createState() => new HomeState();
 }
 
-GlobalKey globalKey = new GlobalKey(debugLabel: 'btm_app_bar');
 class HomeState extends State<Home> {
   int currentIndex = 0;
   final List<Widget> children = [

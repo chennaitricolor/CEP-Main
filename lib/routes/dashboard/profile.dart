@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/model/orgs.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:namma_chennai/utils/globals.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
@@ -28,11 +29,11 @@ class ProfileState extends State<Profile> {
   }
 
   Future<QuerySnapshot> getMyInfo() async {
-    return collectionRef.where("user_id", isEqualTo: userId).getDocuments();
+    return fireCollections.getUserInfoByUserId(userId);
   }
 
   Future<QuerySnapshot> getOrgInfo() async {
-    return collectionRef2.where("user_id", isEqualTo: userId).getDocuments();
+    return fireCollections.getUserOrgsByUserId(userId);
   }
 
   renderObjects() {
@@ -81,8 +82,7 @@ class ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    _sharedPrefs
-        .getApplicationSavedInformation("loggedinuser")
+    fireCollections.getLoggedInUserId()
         .then((val) async {
       setState(() {
         userId = val;
@@ -163,9 +163,7 @@ class ProfileState extends State<Profile> {
                                           borderRadius:
                                               BorderRadius.circular(25.0)),
                                       onPressed: () {
-                                        _sharedPrefs
-                                            .removeApplicationSavedInformation(
-                                                "loggedinuser");
+                                        fireCollections.removeLoggedInUserId();
                                         Navigator.pushNamedAndRemoveUntil(
                                             context, '/auth', (_) => false);
                                       },

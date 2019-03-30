@@ -3,16 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/model/userapps.dart';
-import 'package:namma_chennai/routes/dashboard/home.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
-import 'package:namma_chennai/utils/default_data.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:namma_chennai/utils/globals.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
-
-SharedPrefs _sharedPrefs = new SharedPrefs();
-Firestore db = Firestore.instance;
-CollectionReference collectionRef = db.collection('userapps');
-CollectionReference collectionRef2 = db.collection('users');
 
 class MyApps extends StatefulWidget {
   @override
@@ -22,8 +15,10 @@ class MyApps extends StatefulWidget {
 class MyAppsState extends State<MyApps> {
   List<Widget> listW = new List<Widget>();
   List<Apps> apps = new List();
-  List<Map<String, String>> installedApps = new List();
-  List<Map<String, String>> featuredApps;
+  UserApps userAppsInfo;
+  List<String> installedAppIds = new List();
+  List<Apps> installedApps = new List();
+  List<Apps> featuredApps = new List();
   List<Widget> featuredAppsWidget = new List<Widget>();
   String userId;
 
@@ -36,12 +31,23 @@ class MyAppsState extends State<MyApps> {
   @override
   void initState() {
     super.initState();
-    this.featuredApps = DefaultData.apps;
-    buildDefaultApps();
-    _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
-      userId = val;
-      getAllMyApps();
-      getMyInfo(false);
+
+    fireCollections.getAllApps().then((QuerySnapshot result) {
+      List<DocumentSnapshot> docs = result.documents;
+      this.featuredApps = [];
+      for (DocumentSnapshot doc in docs) {
+        Apps app = new Apps.fromSnapShot(doc);
+        this.featuredApps.add(app);
+      }
+      print("part 1 execution");
+      buildFeaturedApps();
+    }).then((result) {
+      fireCollections.getLoggedInUserId().then((val) {
+        userId = val;
+        getAllMyApps();
+        // getMyInfo(false);
+        print("part 2 execution");
+      });
     });
   }
 
@@ -52,10 +58,7 @@ class MyAppsState extends State<MyApps> {
   }
 
   getMyInfo(bool isAddApp) {
-    collectionRef2
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
+    fireCollections.getUserInfoByUserId(userId).then((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
         User user = new User.fromSnapShot(doc);
@@ -66,10 +69,7 @@ class MyAppsState extends State<MyApps> {
   }
 
   fetchExistingUserApps(bool isAddApp) {
-    collectionRef
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
+    fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       // print("Fetch existing");
       // print(docs);
@@ -105,15 +105,14 @@ class MyAppsState extends State<MyApps> {
       userApps.apps.add(app["appId"]);
       userApps.layout.add(app["appId"]);
       if (documentId != null) {
-        collectionRef
-            .document(documentId)
-            .updateData(userApps.toJson())
+        fireCollections
+            .updateUserAppsByDocumentId(documentId, userApps)
             .catchError((e) {
-          print(e);
+          popupWidget.show(context, e);
         });
       } else {
-        collectionRef.document().setData(userApps.toJson()).catchError((e) {
-          print(e);
+        fireCollections.assignUserAppToUserId(userApps).catchError((e) {
+          popupWidget.show(context, e);
         });
       }
       setState(() {
@@ -134,9 +133,8 @@ class MyAppsState extends State<MyApps> {
     });
     // print(updatedList);
     userApps.apps = updatedList;
-    collectionRef
-        .document(documentId)
-        .updateData(userApps.toJson())
+    fireCollections
+        .updateUserAppsByDocumentId(documentId, userApps)
         .then((onValue) {
       getAllMyApps();
       Navigator.of(context).pop();
@@ -145,7 +143,7 @@ class MyAppsState extends State<MyApps> {
     });
   }
 
-  buildDefaultApps() {
+  buildFeaturedApps() {
     this.featuredApps.forEach((fApp) {
       this.featuredAppsWidget.add(
             Flexible(
@@ -160,14 +158,14 @@ class MyAppsState extends State<MyApps> {
                       child: Column(
                         children: <Widget>[
                           Image(
-                            image: AssetImage(fApp["appIconUrl"]),
+                            image: AssetImage(fApp.appIconUrl),
                             width: 60.0,
                           ),
                           Padding(
                             padding: EdgeInsets.all(2),
                           ),
                           Text(
-                            fApp["appName"],
+                            fApp.appName["en"],
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12.0,
@@ -177,6 +175,9 @@ class MyAppsState extends State<MyApps> {
                       )),
                 )),
           );
+    });
+    setState(() {
+      this.featuredApps = this.featuredApps;
     });
   }
 
@@ -279,39 +280,67 @@ class MyAppsState extends State<MyApps> {
   }
 
   getAllMyApps() {
-    collectionRef
-        .where("user_id", isEqualTo: userId)
-        .snapshots()
-        .listen((QuerySnapshot snapshot) {
-      List<DocumentSnapshot> docs = snapshot.documents;
+    fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot result) {
+      List<DocumentSnapshot> docs = result.documents;
       for (DocumentSnapshot doc in docs) {
-        // print(doc);
-        List<dynamic> appIds = doc["apps"];
-        // print(appIds);
-        installedApps = new List();
-        for (var fApp in DefaultData.apps) {
-          // print(fApp["appId"]);
-          if (appIds.contains(fApp["appId"])) {
-            // print(fApp);
-            installedApps.add(fApp);
+        UserApps app = new UserApps.fromSnapShot(doc);
+        this.installedAppIds = app.apps;
+      }
+    }).then((r) {
+      print(this.installedAppIds);
+      fireCollections.getAllApps().then((result) {
+        List<DocumentSnapshot> docs = result.documents;
+        for (DocumentSnapshot doc in docs) {
+          Apps app = new Apps.fromSnapShot(doc);
+          if (this.installedAppIds.contains(app.appId)) {
+            installedApps.add(app);
           }
         }
-        renderObjects();
-        // for (String appId in appIds) {
-        //   collectionRef2
-        //       .where("app_id", isEqualTo: appId)
-        //       .snapshots()
-        //       .listen((QuerySnapshot snapshot2) {
-        //     List<DocumentSnapshot> docs2 = snapshot2.documents;
-        //     for (DocumentSnapshot doc2 in docs2) {
-        //       Apps app = new Apps.fromSnapShot(doc2);
-        //       apps.add(app);
-        //     }
-        //     renderObjects();
-        //   });
+        // List<DocumentSnapshot> docs = result.documents;
+        // installedApps = [];
+        // print(docs);
+        // for (DocumentSnapshot doc in docs) {
+        //   Apps app = new Apps.fromSnapShot(doc);
+        //   installedApps.add(app);
+        //   print(app.appId);
         // }
-      }
+        setState(() {
+          this.listW = [];
+          this.installedApps = installedApps;
+        });
+        // print("gonna render");
+        renderObjects();
+      });
     });
+    //
+    // List<DocumentSnapshot> docs = snapshot.documents;
+    // for (DocumentSnapshot doc in docs) {
+    //   // print(doc);
+    //   List<dynamic> appIds = doc["apps"];
+    //   // print(appIds);
+    //   installedApps = new List();
+    //   for (var fApp in DefaultData.apps) {
+    //     // print(fApp["appId"]);
+    //     if (appIds.contains(fApp["appId"])) {
+    //       // print(fApp);
+    //       installedApps.add(fApp);
+    //     }
+    //   }
+    //   renderObjects();
+    //   // for (String appId in appIds) {
+    //   //   collectionRef2
+    //   //       .where("app_id", isEqualTo: appId)
+    //   //       .snapshots()
+    //   //       .listen((QuerySnapshot snapshot2) {
+    //   //     List<DocumentSnapshot> docs2 = snapshot2.documents;
+    //   //     for (DocumentSnapshot doc2 in docs2) {
+    //   //       Apps app = new Apps.fromSnapShot(doc2);
+    //   //       apps.add(app);
+    //   //     }
+    //   //     renderObjects();
+    //   //   });
+    //   // }
+    // }
   }
 
   renderObjects() {
@@ -321,16 +350,18 @@ class MyAppsState extends State<MyApps> {
     // print("render obj");
     // print(installedApps);
     listW = List.generate(installedApps.length, (index) {
+      print("index " + index.toString());
       return InkWell(
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => WebViewScreen(
-                      url: installedApps[index]["appUrl"],
-                      name: installedApps[index]["appName"])));
+                      url: installedApps[index].appUrl,
+                      name: installedApps[index].appName["en"])));
         },
         onLongPress: () {
+          // popupWidget.show(context, "content");
           showAppSelection(installedApps[index]);
         },
         child: Container(
@@ -338,14 +369,14 @@ class MyAppsState extends State<MyApps> {
             child: Column(
               children: <Widget>[
                 Image(
-                  image: AssetImage(installedApps[index]["appIconUrl"]),
+                  image: AssetImage(installedApps[index].appIconUrl),
                   width: 60.0,
                 ),
                 Padding(
                   padding: EdgeInsets.all(2),
                 ),
                 Text(
-                  installedApps[index]["appName"],
+                  installedApps[index].appName["en"],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12.0,
@@ -386,15 +417,6 @@ class MyAppsState extends State<MyApps> {
       this.listW = listW;
     });
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
-  //     userId = val;
-  //     getAllMyApps();
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

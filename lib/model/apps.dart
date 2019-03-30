@@ -1,29 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum Category {
-  GOVT,
-  NGO,
-  PEER_TO_PEER,
-  COMMERCIAL
-}
+enum Category { GOVT, NGO, PEER_TO_PEER, COMMERCIAL }
 
 class Apps {
-
   String appId;
-  String appName;
-  String appDesc;
+  Map<String, Object> appName;
+  Map<String, Object> appDesc;
   List<String> appMetaTags;
   String appIconUrl;
   String appUrl;
   String appFeatureScore;
   String appFeaturePref;
-  DateTime appLaunchDate;
+  String appLaunchDate;
   String appCategory;
 
-  Apps.fromSnapShot(DocumentSnapshot snapshot){
+  Apps(this.appId, this.appName, this.appDesc, this.appIconUrl, this.appUrl, this.appLaunchDate);
+  Apps.fromSnapShot(DocumentSnapshot snapshot) {
     this.appId = snapshot['app_id'];
-    this.appName = snapshot['app_name'];
-    this.appDesc = snapshot['app_desc'];
+    this.appName = snapshot['app_name'].cast<String, dynamic>();
+    this.appDesc = snapshot['app_desc'].cast<String, dynamic>();
     // this.appMetaTags = snapshot['app_meta_tags'];
     this.appIconUrl = snapshot['app_icon_url'];
     this.appUrl = snapshot['app_url'];
@@ -33,7 +28,7 @@ class Apps {
     this.appCategory = snapshot['app_category'];
   }
 
-  Apps.fromJson(Map<String, dynamic> json){
+  Apps.fromJson(Map<String, dynamic> json) {
     this.appId = json['app_id'];
     this.appName = json['app_name'];
     this.appDesc = json['app_desc'];
@@ -46,18 +41,16 @@ class Apps {
     this.appCategory = json['app_category'];
   }
 
-  Map<String, dynamic> toJson() =>
-  {
-    'app_id': this.appId,
-    'app_name': this.appName,
-    'app_desc': this.appDesc,
-    // 'app_meta_tags': this.appMetaTags,
-    'app_icon_url': this.appIconUrl,
-    'app_url': this.appUrl,
-    'app_feature_score': this.appFeatureScore,
-    'app_feature_pref': this.appFeaturePref,
-    'app_launch_date': this.appLaunchDate,
-    'app_category': this.appCategory
-  };
+  Map<String, dynamic> toJson() => {
+        'app_id': this.appId,
+        'app_name': this.appName,
+        'app_desc': this.appDesc,
+        // 'app_meta_tags': this.appMetaTags,
+        'app_icon_url': this.appIconUrl,
+        'app_url': this.appUrl,
+        'app_feature_score': this.appFeatureScore,
+        'app_feature_pref': this.appFeaturePref,
+        'app_launch_date': this.appLaunchDate,
+        'app_category': this.appCategory
+      };
 }
-

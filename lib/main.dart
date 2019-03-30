@@ -14,7 +14,6 @@ import 'package:namma_chennai/routes/form/ngoform.dart';
 import 'package:namma_chennai/routes/form/location.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 
-
 final SharedPrefs _sharedPrefs = new SharedPrefs();
 
 void main() async {
