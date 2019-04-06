@@ -134,8 +134,8 @@ class MyAppsState extends State<MyApps> {
         },
         onLongPress: () {
           operations
-              .showAppSelection(userApps, installedApps[index], userId,
-                  documentId, context)
+              .showAppSelection(
+                  userApps, installedApps[index], userId, documentId, context)
               .then((r) {
             getAllMyApps();
             Navigator.of(context).pop();

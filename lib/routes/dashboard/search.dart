@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:namma_chennai/model/apps.dart';
+import 'package:namma_chennai/model/userapps.dart';
 import 'package:namma_chennai/utils/globals.dart';
 
 class Search extends StatefulWidget {
@@ -12,20 +14,44 @@ class _SearchState extends State<Search> {
   List<Apps> searchResult = [];
   List<Widget> searchResultWidget = [];
   String searchTerm = '';
+  String userId;
+  UserApps userApps;
+  String documentId;
+  List<String> installedAppIds = new List();
+  List<Apps> installedApps = new List();
 
   @override
   void initState() {
     super.initState();
     this.searchResult = [];
-    // getAllApps();
-    // buildSearchResultWidget();
-    fireCollections.getAllApps().then((QuerySnapshot result) {
+    fireCollections.getLoggedInUserId().then((val) {
+      userId = val;
+    }).then((r) {
+      getAllMyApps();
+    });
+  }
+
+  getAllMyApps() {
+    fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot result) {
       List<DocumentSnapshot> docs = result.documents;
-      this.searchResult = [];
       for (DocumentSnapshot doc in docs) {
-        Apps app = new Apps.fromSnapShot(doc);
-        this.searchResult.add(app);
+        documentId = doc.documentID;
+        userApps = new UserApps.fromSnapShot(doc);
+        this.installedAppIds = userApps.apps;
       }
+    }).then((r) {
+      fireCollections.getAllApps().then((result) {
+        this.searchResult = [];
+        installedApps = [];
+        List<DocumentSnapshot> docs = result.documents;
+        for (DocumentSnapshot doc in docs) {
+          Apps app = new Apps.fromSnapShot(doc);
+          this.searchResult.add(app);
+        }
+        setState(() {
+          this.installedApps = installedApps;
+        });
+      });
     });
   }
 
@@ -39,7 +65,15 @@ class _SearchState extends State<Search> {
               0 ||
           searchTerm.isEmpty) {
         this.searchResultWidget.add(InkWell(
-              onTap: () {},
+              onTap: () {
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
+                operations
+                    .showAppSelection(
+                        userApps, result, userId, documentId, context)
+                    .then((r) {
+                  Navigator.of(context).pop();
+                });
+              },
               child: ListTile(
                 leading: Icon(Icons.trending_up),
                 title: Text(result.appName["en"].toString()),
@@ -109,9 +143,10 @@ class _SearchState extends State<Search> {
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(searchTerm.length == 0 && searchResultWidget.length == 0
-                        ? "Key in some text to search"
-                        : "Search Result"),
+                    title: Text(
+                        searchTerm.length == 0 && searchResultWidget.length == 0
+                            ? "Key in some text to search"
+                            : "Search Result"),
                   ),
                   Column(children: searchResultWidget)
                 ],

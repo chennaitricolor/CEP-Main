@@ -48,6 +48,6 @@ class PopupWidget {
   }
 
   void hideLoading(BuildContext context) {
-    Navigator.pop(context);
+    Navigator.of(context).pop();
   }
 }
