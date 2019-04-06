@@ -32,12 +32,12 @@ class UserFormState extends State<UserForm> {
   TextEditingController dobController = new TextEditingController();
   TextEditingController locationController = new TextEditingController();
 
-  int _radioValue = -1;
+  int _radioValueForGender = -1;
 
-  void _handleRadioValueChange(int value) {
+  void _handleRadioValueChangeForGender(int value) {
     setState(() {
-      _radioValue = value;
-      switch (_radioValue) {
+      _radioValueForGender = value;
+      switch (_radioValueForGender) {
         case 0:
           currentUser.userGender = "MALE";
           break;
@@ -51,25 +51,24 @@ class UserFormState extends State<UserForm> {
     });
   }
 
-  setRadioValue(type) {
+  setRadioValueForGender(type) {
     switch (type) {
       case "MALE":
-        _handleRadioValueChange(0);
+        _handleRadioValueChangeForGender(0);
         break;
       case "FEMALE":
-        _handleRadioValueChange(1);
+        _handleRadioValueChangeForGender(1);
         break;
       case "OTHER":
-        _handleRadioValueChange(2);
+        _handleRadioValueChangeForGender(2);
         break;
       default:
-        _handleRadioValueChange(0);
+        _handleRadioValueChangeForGender(0);
     }
   }
 
   getUser() {
     _sharedPrefs.getApplicationSavedInformation('loggedinuser').then((userId) {
-      print(userId);
       collectionRef
           .where("user_id", isEqualTo: userId)
           .getDocuments()
@@ -86,16 +85,16 @@ class UserFormState extends State<UserForm> {
           panController.text = currentUser.userPanId;
           locationController.text = currentUser.userGeo;
           var formatter = new DateFormat('yyyy-MM-dd');
-          dobController.text =
-              currentUser.userDob == null ? "" : formatter.format(currentUser.userDob);
-          setRadioValue(currentUser.userGender);
+          dobController.text = currentUser.userDob == null
+              ? ""
+              : formatter.format(currentUser.userDob);
+          setRadioValueForGender(currentUser.userGender);
         });
       });
     });
   }
 
   saveOrUpdateUser() {
-    print(documentId);
     collectionRef
         .document(documentId)
         .updateData(currentUser.toJson())
@@ -186,18 +185,23 @@ class UserFormState extends State<UserForm> {
                     )),
               ),
               Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(width: 1, color: Colors.black54)
+                ),
                 margin: EdgeInsets.only(bottom: 10),
+                padding: EdgeInsets.all(5),
                 child: new Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     new Radio(
                       value: 0,
-                      groupValue: _radioValue,
-                      onChanged: _handleRadioValueChange,
+                      groupValue: _radioValueForGender,
+                      onChanged: _handleRadioValueChangeForGender,
                     ),
                     InkWell(
                       onTap: () {
-                        _handleRadioValueChange(0);
+                        _handleRadioValueChangeForGender(0);
                       },
                       child: new Text(
                         'Male',
@@ -206,12 +210,12 @@ class UserFormState extends State<UserForm> {
                     ),
                     new Radio(
                       value: 1,
-                      groupValue: _radioValue,
-                      onChanged: _handleRadioValueChange,
+                      groupValue: _radioValueForGender,
+                      onChanged: _handleRadioValueChangeForGender,
                     ),
                     InkWell(
                       onTap: () {
-                        _handleRadioValueChange(1);
+                        _handleRadioValueChangeForGender(1);
                       },
                       child: new Text(
                         'Female',
@@ -220,12 +224,12 @@ class UserFormState extends State<UserForm> {
                     ),
                     new Radio(
                       value: 2,
-                      groupValue: _radioValue,
-                      onChanged: _handleRadioValueChange,
+                      groupValue: _radioValueForGender,
+                      onChanged: _handleRadioValueChangeForGender,
                     ),
                     InkWell(
                       onTap: () {
-                        _handleRadioValueChange(2);
+                        _handleRadioValueChangeForGender(2);
                       },
                       child: new Text(
                         'Other',

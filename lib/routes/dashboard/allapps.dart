@@ -93,7 +93,7 @@ class AllAppsState extends State<AllApps> {
                       //   this.allApps[Index][""],
                       //   width: 50,
                       // ),
-                      title: Text(this.allApps[Index].appName["en"]),
+                      title: Text(this.allApps[Index].appName[languageCode]),
                       subtitle: InkWell(
                         child: Text(this.allApps[Index].appLaunchDate),
                       ),
@@ -148,7 +148,7 @@ class AllAppsState extends State<AllApps> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: ListTile(
-                        subtitle: Text(this.allApps[Index].appDesc["en"]),
+                        subtitle: Text(this.allApps[Index].appDesc[languageCode]),
                       ),
                     )
                   ],

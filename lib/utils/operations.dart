@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/model/userapps.dart';
@@ -84,7 +85,7 @@ class Operations {
                   //   app["appIconUrl"],
                   //   width: 50,
                   // ),
-                  title: Text(app.appName["en"]),
+                  title: Text(app.appName[languageCode]),
                   subtitle: InkWell(
                     child: Text(app.appLaunchDate),
                   ),
@@ -92,7 +93,7 @@ class Operations {
                 Padding(
                   padding: EdgeInsets.only(bottom: 30),
                   child: ListTile(
-                    subtitle: Text(app.appDesc["en"]),
+                    subtitle: Text(app.appDesc[languageCode]),
                   ),
                 ),
                 SizedBox(
@@ -164,6 +165,117 @@ class Operations {
                 Padding(
                   padding: EdgeInsets.all(40),
                 ),
+              ],
+            ),
+          );
+        });
+    return completer.future;
+  }
+
+  Future<dynamic> showLanguageSelection(BuildContext context) {
+    Completer completer = new Completer();
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: Column(
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(top: 20)),
+                Text(
+                  "Choose Language",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 20.0, bottom: 20.0, left: 10, right: 10),
+                    child: Column(
+                      children: <Widget>[
+                        FlatButton(
+                          color: Color(0xFFDDDDDD),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          onPressed: () {
+                            allTranslations.setNewLanguage("en").then((r) {
+                              return completer.complete("en");
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'English',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(5),
+                        ),
+                        FlatButton(
+                          color: Color(0xFFDDDDDD),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          onPressed: () {
+                            allTranslations.setNewLanguage("ta").then((r) {
+                              return completer.complete("ta");
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'Tamil',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(5),
+                        ),
+                        FlatButton(
+                          color: Color(0xFFDDDDDD),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0)),
+                          onPressed: () {
+                            allTranslations.setNewLanguage("tn").then((r) {
+                              return completer.complete("tn");
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'Tanglish',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
               ],
             ),
           );

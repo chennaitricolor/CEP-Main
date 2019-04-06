@@ -58,7 +58,7 @@ class _SearchState extends State<Search> {
   buildSearchResultWidget() {
     this.searchResultWidget = [];
     searchResult.forEach((result) {
-      if (result.appName["en"]
+      if (result.appName[languageCode]
                   .toString()
                   .toLowerCase()
                   .indexOf(searchTerm.toLowerCase()) >=
@@ -76,7 +76,7 @@ class _SearchState extends State<Search> {
               },
               child: ListTile(
                 leading: Icon(Icons.trending_up),
-                title: Text(result.appName["en"].toString()),
+                title: Text(result.appName[languageCode].toString()),
               ),
             ));
       }

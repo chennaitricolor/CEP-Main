@@ -7,7 +7,7 @@ import 'package:namma_chennai/utils/shared_prefs.dart';
 ///
 /// Preferences related
 ///
-const List<String> _supportedLanguages = ['en','ta', 'te'];
+const List<String> _supportedLanguages = ['en','ta', 'tn'];
 SharedPrefs _sharedPrefs = new SharedPrefs();
 class GlobalTranslations {
   Locale _locale;

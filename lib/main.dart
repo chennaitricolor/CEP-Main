@@ -19,7 +19,6 @@ final SharedPrefs _sharedPrefs = new SharedPrefs();
 void main() async {
   // Initializes the translation module
   await allTranslations.init();
-
   // then start the application
   runApp(
       // MyApp(),
@@ -41,7 +40,7 @@ class _NammaAppState extends State<NammaApp> {
     // Initializes a callback should something need
     // to be done when the language is changed
     allTranslations.onLocaleChangedCallback = _onLocaleChanged;
-
+    
     _firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
       print("onMessage");
       print(message);

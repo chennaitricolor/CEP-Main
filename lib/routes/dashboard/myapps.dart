@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/model/userapps.dart';
@@ -45,6 +46,9 @@ class MyAppsState extends State<MyApps> {
         }
       });
     });
+    // streamController.stream.listen((data) {
+    //   print(data);
+    // });
   }
 
   buildFeaturedApps() {
@@ -61,7 +65,6 @@ class MyAppsState extends State<MyApps> {
           });
         },
         child: Container(
-            padding: EdgeInsets.all(5),
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
@@ -73,7 +76,7 @@ class MyAppsState extends State<MyApps> {
                   padding: EdgeInsets.all(2),
                 ),
                 Text(
-                  this.featuredApps[index].appName["en"],
+                  this.featuredApps[index].appName[languageCode],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12.0,
@@ -85,6 +88,54 @@ class MyAppsState extends State<MyApps> {
     });
     setState(() {
       this.featuredApps = this.featuredApps;
+    });
+  }
+
+  renderObjects() {
+    listW = List.generate(installedApps.length, (index) {
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => WebViewScreen(
+                      url: installedApps[index].appUrl,
+                      name: installedApps[index].appName[languageCode])));
+        },
+        onLongPress: () {
+          operations
+              .showAppSelection(
+                  userApps, installedApps[index], userId, documentId, context)
+              .then((r) {
+            getAllMyApps();
+            Navigator.of(context).pop();
+          });
+        },
+        child: Container(
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                Image(
+                  image: AssetImage(installedApps[index].appIconUrl),
+                  width: 60.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(2),
+                ),
+                Text(
+                  installedApps[index].appName[languageCode],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12.0,
+                  ),
+                ),
+              ],
+            )),
+      );
+    });
+
+    setState(() {
+      this.listW = listW;
     });
   }
 
@@ -121,53 +172,7 @@ class MyAppsState extends State<MyApps> {
     });
   }
 
-  renderObjects() {
-    listW = List.generate(installedApps.length, (index) {
-      return InkWell(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => WebViewScreen(
-                      url: installedApps[index].appUrl,
-                      name: installedApps[index].appName["en"])));
-        },
-        onLongPress: () {
-          operations
-              .showAppSelection(
-                  userApps, installedApps[index], userId, documentId, context)
-              .then((r) {
-            getAllMyApps();
-            Navigator.of(context).pop();
-          });
-        },
-        child: Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: <Widget>[
-                Image(
-                  image: AssetImage(installedApps[index].appIconUrl),
-                  width: 60.0,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(2),
-                ),
-                Text(
-                  installedApps[index].appName["en"],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12.0,
-                  ),
-                ),
-              ],
-            )),
-      );
-    });
-
-    setState(() {
-      this.listW = listW;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +184,7 @@ class MyAppsState extends State<MyApps> {
           elevation: 0,
           centerTitle: false,
           title: Text(
-              'Vanakkam ${currentUser == null ? '' : currentUser.userName}!'),
+              '${allTranslations.text('home_title')} ${currentUser == null ? '' : currentUser.userName}!'),
         ),
         body: SingleChildScrollView(
           child: Column(
