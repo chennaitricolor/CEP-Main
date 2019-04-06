@@ -23,5 +23,31 @@ class PopupWidget {
       },
     );
   }
-  
+
+  void showLoading(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return new Dialog(
+            child: Container(
+              padding: EdgeInsets.all(20),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(),
+              Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: new Text(message),
+              ),
+            ],
+          ),
+        ));
+      },
+    );
+  }
+
+  void hideLoading(BuildContext context) {
+    Navigator.pop(context);
+  }
 }

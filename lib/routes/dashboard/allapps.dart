@@ -29,8 +29,6 @@ class AllAppsState extends State<AllApps> {
   @override
   void initState() {
     super.initState();
-    // this.allApps = DefaultData.apps;
-
     fireCollections.getLoggedInUserId().then((val) {
       userId = val;
     }).then((r) {
@@ -43,9 +41,9 @@ class AllAppsState extends State<AllApps> {
     fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
-        print("Iteration doc");
-        UserApps userAppInfo = UserApps.fromSnapShot(doc);
-        installedAppIds = userAppInfo.apps;
+        documentId = doc.documentID;
+        userApps = new UserApps.fromSnapShot(doc);
+        installedAppIds = userApps.apps;
       }
       setState(() {
         this.installedAppIds = installedAppIds;
@@ -63,108 +61,6 @@ class AllAppsState extends State<AllApps> {
           isLoading = false;
         });
       });
-    });
-  }
-
-  installApp(selectedApp) {
-    app = selectedApp;
-    installed = false;
-    getMyInfo(true);
-  }
-
-  getMyInfo(bool isAddApp) {
-    fireCollections.getUserInfoByUserId(userId)
-        .then((QuerySnapshot snapshot) {
-      List<DocumentSnapshot> docs = snapshot.documents;
-      for (DocumentSnapshot doc in docs) {
-        User user = new User.fromSnapShot(doc);
-        currentUser = user;
-      }
-      fetchExistingUserApps(isAddApp);
-    });
-  }
-
-  fetchExistingUserApps(bool isAddApp) {
-    fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot snapshot) {
-      List<DocumentSnapshot> docs = snapshot.documents;
-      print("Fetch existing");
-      print(docs);
-      for (DocumentSnapshot doc in docs) {
-        documentId = doc.documentID;
-        userApps = UserApps.fromSnapShot(doc);
-      }
-      print(documentId);
-      if (isAddApp) {
-        addApp();
-      } else {
-        // print("Am in else");
-        // print(app);
-        // if (userApps != null && userApps.apps != null && app != null) {
-        //   if (userApps.apps.contains(app["appId"])) {
-        //     setState(() {
-        //       installed = true;
-        //     });
-        //   }
-        // }
-      }
-    });
-  }
-
-  addApp() {
-    print("trying to add app");
-    print(app);
-    print(userId);
-    if (installed == false) {
-      if (userApps == null) {
-        userApps = new UserApps(userId);
-        userApps.apps = new List();
-        userApps.layout = new List();
-      }
-      userApps.apps.add(app["appId"]);
-      userApps.layout.add(app["appId"]);
-      if (documentId != null) {
-        fireCollections
-            .updateUserAppsByDocumentId(documentId, userApps)
-            .catchError((e) {
-          popupWidget.show(context, e);
-        });
-      } else {
-        fireCollections.assignUserAppToUserId(userApps).catchError((e) {
-          popupWidget.show(context, e);
-        });
-      }
-      setState(() {
-        installed = true;
-      });
-    }
-  }
-
-  removeApp(selectedApp) {
-    // selectedApp
-    print("delete app");
-    print(userApps);
-    userApps = new UserApps(userId);
-    List<String> updatedList = [];
-    installedAppIds.forEach((iAppId) {
-      if (selectedApp["appId"] != iAppId) {
-        updatedList.add(iAppId);
-      }
-    });
-    print(updatedList);
-    userApps.apps = updatedList;
-    userApps.layout = updatedList;
-    print("doc id");
-    print(documentId);
-    fireCollections
-        .updateUserAppsByDocumentId(documentId, userApps)
-        .then((onValue) {
-      setState(() {
-        this.installedAppIds = [];
-      });
-      // getAllMyApps();
-      // getMyInfo(false);
-    }).catchError((e) {
-      print(e);
     });
   }
 
@@ -206,7 +102,15 @@ class AllAppsState extends State<AllApps> {
                                   .contains(this.allApps[Index].appId)
                           ? FlatButton.icon(
                               onPressed: () {
-                                removeApp(this.allApps[Index]);
+                                operations
+                                    .removeApp(userApps, this.allApps[Index],
+                                        documentId, context)
+                                    .then((r) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  refresh();
+                                });
                               },
                               icon: Icon(
                                 Icons.delete,
@@ -220,7 +124,15 @@ class AllAppsState extends State<AllApps> {
                               ))
                           : FlatButton.icon(
                               onPressed: () {
-                                installApp(this.allApps[Index]);
+                                operations
+                                    .installApp(userApps, this.allApps[Index],
+                                        userId, documentId, context)
+                                    .then((result) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  refresh();
+                                });
                               },
                               icon: Icon(
                                 Icons.add_box,

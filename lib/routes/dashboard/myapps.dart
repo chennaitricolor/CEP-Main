@@ -22,7 +22,6 @@ class MyAppsState extends State<MyApps> {
   List<Widget> featuredAppsWidget = new List<Widget>();
   String userId;
 
-  var app;
   UserApps userApps;
   User currentUser;
   String documentId;
@@ -32,325 +31,98 @@ class MyAppsState extends State<MyApps> {
   void initState() {
     super.initState();
 
-    fireCollections.getAllApps().then((QuerySnapshot result) {
-      List<DocumentSnapshot> docs = result.documents;
-      this.featuredApps = [];
-      for (DocumentSnapshot doc in docs) {
-        Apps app = new Apps.fromSnapShot(doc);
-        this.featuredApps.add(app);
-      }
-      print("part 1 execution");
-      buildFeaturedApps();
-    }).then((result) {
-      fireCollections.getLoggedInUserId().then((val) {
-        userId = val;
-        getAllMyApps();
-        // getMyInfo(false);
-        print("part 2 execution");
-      });
-    });
-  }
-
-  installApp(selectedApp) {
-    app = selectedApp;
-    installed = false;
-    getMyInfo(true);
-  }
-
-  getMyInfo(bool isAddApp) {
-    fireCollections.getUserInfoByUserId(userId).then((QuerySnapshot snapshot) {
-      List<DocumentSnapshot> docs = snapshot.documents;
-      for (DocumentSnapshot doc in docs) {
-        User user = new User.fromSnapShot(doc);
-        currentUser = user;
-      }
-      fetchExistingUserApps(isAddApp);
-    });
-  }
-
-  fetchExistingUserApps(bool isAddApp) {
-    fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot snapshot) {
-      List<DocumentSnapshot> docs = snapshot.documents;
-      // print("Fetch existing");
-      // print(docs);
-      for (DocumentSnapshot doc in docs) {
-        documentId = doc.documentID;
-        userApps = UserApps.fromSnapShot(doc);
-      }
-      if (isAddApp) {
-        addApp();
-      } else {
-        // print("Am in else");
-        // print(app);
-        if (userApps != null && userApps.apps != null && app != null) {
-          if (userApps.apps.contains(app["appId"])) {
-            setState(() {
-              installed = true;
-            });
-          }
+    fireCollections.getLoggedInUserId().then((val) {
+      userId = val;
+      getAllMyApps();
+    }).then((r) {
+      fireCollections
+          .getUserInfoByUserId(userId)
+          .then((QuerySnapshot snapshot) {
+        List<DocumentSnapshot> docs = snapshot.documents;
+        for (DocumentSnapshot doc in docs) {
+          User user = new User.fromSnapShot(doc);
+          currentUser = user;
         }
-      }
-    });
-  }
-
-  addApp() {
-    // print("trying to add app");
-    // print(app);
-    if (installed == false) {
-      if (userApps == null) {
-        userApps = new UserApps(userId);
-        userApps.apps = new List();
-        userApps.layout = new List();
-      }
-      userApps.apps.add(app["appId"]);
-      userApps.layout.add(app["appId"]);
-      if (documentId != null) {
-        fireCollections
-            .updateUserAppsByDocumentId(documentId, userApps)
-            .catchError((e) {
-          popupWidget.show(context, e);
-        });
-      } else {
-        fireCollections.assignUserAppToUserId(userApps).catchError((e) {
-          popupWidget.show(context, e);
-        });
-      }
-      setState(() {
-        installed = true;
       });
-      getAllMyApps();
-      Navigator.of(context).pop();
-    }
-  }
-
-  removeApp(selectedApp) {
-    // selectedApp
-    List<String> updatedList = [];
-    userApps.apps.forEach((uApp) {
-      if (selectedApp["appId"] != uApp) {
-        updatedList.add(uApp);
-      }
-    });
-    // print(updatedList);
-    userApps.apps = updatedList;
-    fireCollections
-        .updateUserAppsByDocumentId(documentId, userApps)
-        .then((onValue) {
-      getAllMyApps();
-      Navigator.of(context).pop();
-    }).catchError((e) {
-      print(e);
     });
   }
 
   buildFeaturedApps() {
-    this.featuredApps.forEach((fApp) {
-      this.featuredAppsWidget.add(
-            Flexible(
-                fit: FlexFit.tight,
-                child: InkWell(
-                  onTap: () {
-                    showAppSelection(fApp);
-                  },
-                  child: Container(
-                      padding: EdgeInsets.all(5),
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: <Widget>[
-                          Image(
-                            image: AssetImage(fApp.appIconUrl),
-                            width: 60.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(2),
-                          ),
-                          Text(
-                            fApp.appName["en"],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12.0,
-                            ),
-                          ),
-                        ],
-                      )),
-                )),
-          );
+    this.featuredAppsWidget = [];
+    this.featuredAppsWidget = List.generate(this.featuredApps.length, (index) {
+      return InkWell(
+        onTap: () {
+          operations
+              .showAppSelection(userApps, this.featuredApps[index], userId,
+                  documentId, context)
+              .then((r) {
+            getAllMyApps();
+            Navigator.of(context).pop();
+          });
+        },
+        child: Container(
+            padding: EdgeInsets.all(5),
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                Image(
+                  image: AssetImage(this.featuredApps[index].appIconUrl),
+                  width: 60.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(2),
+                ),
+                Text(
+                  this.featuredApps[index].appName["en"],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12.0,
+                  ),
+                ),
+              ],
+            )),
+      );
     });
     setState(() {
       this.featuredApps = this.featuredApps;
     });
   }
 
-  showAppSelection(app) {
-    showModalBottomSheet<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(5),
-                ),
-                ListTile(
-                  leading: Image(
-                    image: AssetImage(app["appIconUrl"]),
-                    width: 60.0,
-                  ),
-                  // Image.network(
-                  //   app["appIconUrl"],
-                  //   width: 50,
-                  // ),
-                  title: Text(app["appName"]),
-                  subtitle: InkWell(
-                    child: Text(app["appLaunchDate"]),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 30),
-                  child: ListTile(
-                    subtitle: Text(app["appDesc"]),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width - 20,
-                  child:
-                      (userApps != null && userApps.apps.contains(app["appId"]))
-                          ? FlatButton(
-                              color: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              onPressed: () {
-                                removeApp(app);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 0.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Remove',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          : FlatButton(
-                              color: Colors.blueAccent,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
-                              onPressed: () {
-                                installApp(app);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 0.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Install',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      'This will add to your home screen',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12.0,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(40),
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
   getAllMyApps() {
+    popupWidget.showLoading(context, "Loading");
     fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot result) {
       List<DocumentSnapshot> docs = result.documents;
       for (DocumentSnapshot doc in docs) {
-        UserApps app = new UserApps.fromSnapShot(doc);
-        this.installedAppIds = app.apps;
+        documentId = doc.documentID;
+        userApps = new UserApps.fromSnapShot(doc);
+        this.installedAppIds = userApps.apps;
       }
     }).then((r) {
-      print(this.installedAppIds);
       fireCollections.getAllApps().then((result) {
+        this.featuredApps = [];
+        installedApps = [];
         List<DocumentSnapshot> docs = result.documents;
         for (DocumentSnapshot doc in docs) {
           Apps app = new Apps.fromSnapShot(doc);
           if (this.installedAppIds.contains(app.appId)) {
             installedApps.add(app);
+          } else {
+            this.featuredApps.add(app);
           }
         }
-        // List<DocumentSnapshot> docs = result.documents;
-        // installedApps = [];
-        // print(docs);
-        // for (DocumentSnapshot doc in docs) {
-        //   Apps app = new Apps.fromSnapShot(doc);
-        //   installedApps.add(app);
-        //   print(app.appId);
-        // }
         setState(() {
           this.listW = [];
           this.installedApps = installedApps;
         });
-        // print("gonna render");
+        popupWidget.hideLoading(context);
+        buildFeaturedApps();
         renderObjects();
       });
     });
-    //
-    // List<DocumentSnapshot> docs = snapshot.documents;
-    // for (DocumentSnapshot doc in docs) {
-    //   // print(doc);
-    //   List<dynamic> appIds = doc["apps"];
-    //   // print(appIds);
-    //   installedApps = new List();
-    //   for (var fApp in DefaultData.apps) {
-    //     // print(fApp["appId"]);
-    //     if (appIds.contains(fApp["appId"])) {
-    //       // print(fApp);
-    //       installedApps.add(fApp);
-    //     }
-    //   }
-    //   renderObjects();
-    //   // for (String appId in appIds) {
-    //   //   collectionRef2
-    //   //       .where("app_id", isEqualTo: appId)
-    //   //       .snapshots()
-    //   //       .listen((QuerySnapshot snapshot2) {
-    //   //     List<DocumentSnapshot> docs2 = snapshot2.documents;
-    //   //     for (DocumentSnapshot doc2 in docs2) {
-    //   //       Apps app = new Apps.fromSnapShot(doc2);
-    //   //       apps.add(app);
-    //   //     }
-    //   //     renderObjects();
-    //   //   });
-    //   // }
-    // }
   }
 
   renderObjects() {
-    // listW.add(ListTile(
-    //   title: Text("My Apps"),
-    // ));
-    // print("render obj");
-    // print(installedApps);
     listW = List.generate(installedApps.length, (index) {
-      print("index " + index.toString());
       return InkWell(
         onTap: () {
           Navigator.push(
@@ -361,8 +133,13 @@ class MyAppsState extends State<MyApps> {
                       name: installedApps[index].appName["en"])));
         },
         onLongPress: () {
-          // popupWidget.show(context, "content");
-          showAppSelection(installedApps[index]);
+          operations
+              .showAppSelection(userApps, installedApps[index], userId,
+                  documentId, context)
+              .then((r) {
+            getAllMyApps();
+            Navigator.of(context).pop();
+          });
         },
         child: Container(
             alignment: Alignment.center,
@@ -387,32 +164,6 @@ class MyAppsState extends State<MyApps> {
       );
     });
 
-    // for (Apps app in apps) {
-    //   listW.add(value)
-
-    //   listW.add(Card(
-    //     margin: EdgeInsets.all(5),
-    //     child: InkWell(
-    //       onTap: () {
-    //         Navigator.push(
-    //             context,
-    //             MaterialPageRoute(
-    //                 builder: (context) =>
-    //                     WebViewScreen(url: app.appUrl, name: app.appName)));
-    //       },
-    //       child: ListTile(
-    //         leading: Image.network(
-    //           app.appIconUrl,
-    //           width: 50,
-    //         ),
-    //         title: Text(app.appName),
-    //         subtitle: Text(app.appUrl),
-    //         trailing: Icon(Icons.keyboard_arrow_right),
-    //       ),
-    //     ),
-    //   ));
-    // }
-
     setState(() {
       this.listW = listW;
     });
@@ -427,7 +178,8 @@ class MyAppsState extends State<MyApps> {
           backgroundColor: Colors.blue,
           elevation: 0,
           centerTitle: false,
-          title: Text('Vanakkam Raj!'),
+          title: Text(
+              'Vanakkam ${currentUser == null ? '' : currentUser.userName}!'),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -669,7 +421,14 @@ class MyAppsState extends State<MyApps> {
                   Container(
                     margin: const EdgeInsets.only(top: 5.0),
                     // padding: const EdgeInsets.all(3.0),
-                    child: Row(children: this.featuredAppsWidget),
+                    child: GridView.count(
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        // Create a grid with 2 columns. If you change the scrollDirection to
+                        // horizontal, this would produce 2 rows.
+                        crossAxisCount: 4,
+                        // Generate 100 Widgets that display their index in the List
+                        children: this.featuredAppsWidget),
                   ),
                 ],
               ),
