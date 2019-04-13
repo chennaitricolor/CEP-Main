@@ -21,11 +21,11 @@ class User {
   String userZone;
   String userGeo;
   String userLangPref;
-  DateTime userDob;
+  Timestamp userDob;
   String userGender;
   String userPersona;
-  DateTime userCreatedOn = DateTime.now();
-  DateTime userUpdatedOn;
+  Timestamp userCreatedOn = Timestamp.now();
+  Timestamp userUpdatedOn;
   String userAadharId;
   String userPanId;
   String messageToken;

@@ -87,7 +87,7 @@ class UserFormState extends State<UserForm> {
           var formatter = new DateFormat('yyyy-MM-dd');
           dobController.text = currentUser.userDob == null
               ? ""
-              : formatter.format(currentUser.userDob);
+              : formatter.format(currentUser.userDob.toDate());
           setRadioValueForGender(currentUser.userGender);
         });
       });
@@ -124,7 +124,7 @@ class UserFormState extends State<UserForm> {
         lastDate: DateTime.now());
     if (picked != null)
       setState(() {
-        currentUser.userDob = picked;
+        currentUser.userDob = Timestamp.fromDate(picked);
         var formatter = new DateFormat('yyyy-MM-dd');
         dobController.text = formatter.format(picked);
       });
