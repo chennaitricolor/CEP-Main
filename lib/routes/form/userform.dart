@@ -264,9 +264,9 @@ class UserFormState extends State<UserForm> {
                       var location = new Location();
                       try {
                         location.getLocation().then((val) {
-                          locationController.text = val["latitude"].toString() +
+                          locationController.text = val.latitude.toString() +
                               ", " +
-                              val["longitude"].toString();
+                              val.longitude.toString();
 
                           currentUser.userGeo = locationController.text;
                         });

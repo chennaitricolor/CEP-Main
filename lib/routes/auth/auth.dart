@@ -84,10 +84,11 @@ class AuthState extends State<Auth> {
     Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
   }
 
-  signIn() {
-    _auth
-        .signInWithPhoneNumber(
-            verificationId: this.verificationId, smsCode: this.smsCode)
+  signIn()  {
+    final AuthCredential credential = PhoneAuthProvider.getCredential(
+        verificationId: this.verificationId, smsCode: this.smsCode
+    );
+    _auth.signInWithCredential(credential)
         .then((user) {
       // _showDialog(user.toString());
       goHome(user);
