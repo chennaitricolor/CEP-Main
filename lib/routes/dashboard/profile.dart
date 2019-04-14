@@ -40,7 +40,7 @@ class ProfileState extends State<Profile> {
   renderObjects() {
     listW = [];
     listW.add(ListTile(
-      title: Text("Your Organisations"),
+      title: Text(allTranslations.text('translation_23')),
     ));
 
     for (Orgs org in currentOrgs) {
@@ -66,7 +66,7 @@ class ProfileState extends State<Profile> {
           onTap: () {
             showNGOForm();
           },
-          title: Text("Add Organisation"),
+          title: Text(allTranslations.text('translation_24')),
           trailing: Icon(Icons.add_box),
         ),
       ),
@@ -114,7 +114,7 @@ class ProfileState extends State<Profile> {
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: false,
-        title: Text('My Profile'),
+        title: Text(allTranslations.text('translation_21')),
       ),
       body: isLoaded
           ? SingleChildScrollView(
@@ -163,6 +163,7 @@ class ProfileState extends State<Profile> {
                                 setState(() {});
                                 languageCode = allTranslations.currentLanguage;
                                 Navigator.of(context).pop();
+                                refresh();
                               });
                               // streamController.add("English"+DateTime.now().toString());
                             },
@@ -201,14 +202,14 @@ class ProfileState extends State<Profile> {
                                       child: Column(
                                         children: <Widget>[
                                           Text(
-                                            'LOGOUT',
+                                            allTranslations.text('translation_5'),
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            'This action logs you out',
+                                            allTranslations.text('translation_6'),
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12.0,

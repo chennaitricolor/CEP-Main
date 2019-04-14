@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/model/userapps.dart';
 import 'package:namma_chennai/utils/globals.dart';
@@ -111,7 +112,7 @@ class _SearchState extends State<Search> {
                       buildSearchResultWidget();
                     },
                     decoration: InputDecoration(
-                        border: InputBorder.none, hintText: "Search apps"),
+                        border: InputBorder.none, hintText: allTranslations.text('translation_19')),
                   ),
                 ),
               ],
@@ -128,7 +129,7 @@ class _SearchState extends State<Search> {
           backgroundColor: Colors.blue,
           elevation: 0,
           centerTitle: false,
-          title: Text('Search'),
+          title: Text(allTranslations.text('translation_15')),
         ),
         body: SingleChildScrollView(
           child: Column(children: <Widget>[
@@ -145,8 +146,8 @@ class _SearchState extends State<Search> {
                   ListTile(
                     title: Text(
                         searchTerm.length == 0 && searchResultWidget.length == 0
-                            ? "Key in some text to search"
-                            : "Search Result"),
+                            ? allTranslations.text('translation_20')
+                            : allTranslations.text('translation_42')),
                   ),
                   Column(children: searchResultWidget)
                 ],

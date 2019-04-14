@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
@@ -37,19 +38,19 @@ class HomeState extends State<Home> {
         items: [
           new BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('My Apps'),
+            title: Text(allTranslations.text('translation_14')),
           ),
           new BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            title: Text('Search'),
+            title: Text(allTranslations.text('translation_15')),
           ),
           new BottomNavigationBarItem(
             icon: Icon(Icons.apps),
-            title: Text('All Apps'),
+            title: Text(allTranslations.text('translation_16')),
           ),
           new BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              title: Text('Profile'),
+              title: Text(allTranslations.text('translation_17')),
           ),
         ],
       ),

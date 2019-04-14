@@ -144,7 +144,7 @@ class Operations {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  'Install',
+                                  allTranslations.text('translation_41'),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18.0,

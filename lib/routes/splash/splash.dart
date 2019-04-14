@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'dart:async';
 import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
 import 'package:namma_chennai/routes/auth/auth.dart';
@@ -21,10 +22,8 @@ class SplashState extends State<Splash> {
   navigationPage() {
     _sharedPrefs.getApplicationSavedInformation("loggedinuser").then((val) {
       if (val == null || val.trim() == "") {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => Auth()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => Auth()));
       } else {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (_) => false);
       }
@@ -69,7 +68,9 @@ class SplashState extends State<Splash> {
                         padding: EdgeInsets.only(top: 20.0),
                       ),
                       Text(
-                        DefaultData.platformTitle,
+                        allTranslations.text('app_title'),
+                        softWrap: true,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -84,60 +85,55 @@ class SplashState extends State<Splash> {
                         ),
                       ),
                       Text(
-                        DefaultData.platformTagline,
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12.0),
+                        allTranslations.text('tag_line'),
+                        style: TextStyle(color: Colors.grey, fontSize: 12.0),
                       )
                     ],
                   ),
                 ),
               ),
               Image(
-                image: AssetImage(
-                    'assets/images/logo/splash_bg.png'),
+                image: AssetImage('assets/images/logo/splash_bg.png'),
                 width: MediaQuery.of(context).size.width,
               ),
               Expanded(
-                flex: 1,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                  flex: 1,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                        ),
+                        CircularProgressIndicator(
+                          valueColor:
+                              new AlwaysStoppedAnimation<Color>(Colors.blue),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                        ),
+                        Text(
+                          allTranslations.text('developed_by'),
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                              fontSize: 16.0),
+                        ),
+                        Text(
+                          allTranslations.text('translation_0'),
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                        ),
+                      ],
                     ),
-                    CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                    ),
-                    Text(
-                      DefaultData.developedBy,
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                            fontSize: 16.0),
-                    ),
-                    Text(
-                      DefaultData.poweredBy,
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.grey,
-                            fontSize: 14.0),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                    ),
-                  ],
-                ),
-                )
-              )
+                  ))
             ],
           )
         ],

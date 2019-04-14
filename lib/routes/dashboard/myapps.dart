@@ -140,7 +140,7 @@ class MyAppsState extends State<MyApps> {
   }
 
   getAllMyApps() {
-    popupWidget.showLoading(context, "Loading");
+    popupWidget.showLoading(context, allTranslations.text('translation_40'));
     fireCollections.getUserAppsByUserId(userId).then((QuerySnapshot result) {
       List<DocumentSnapshot> docs = result.documents;
       for (DocumentSnapshot doc in docs) {
@@ -172,8 +172,6 @@ class MyAppsState extends State<MyApps> {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,7 +182,7 @@ class MyAppsState extends State<MyApps> {
           elevation: 0,
           centerTitle: false,
           title: Text(
-              '${allTranslations.text('home_title')} ${currentUser == null ? '' : currentUser.userName}!'),
+              '${allTranslations.text('translation_7')} ${currentUser == null ? '' : currentUser.userName}!'),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -226,10 +224,14 @@ class MyAppsState extends State<MyApps> {
                               Padding(
                                 padding: EdgeInsets.all(10),
                               ),
-                              Text(
-                                "Corporation of Chennai \nwelcomes you!",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              Flexible(
+                                child: Text(
+                                    allTranslations.text('translation_8'),
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.left),
                               )
                             ],
                           ),
@@ -285,7 +287,7 @@ class MyAppsState extends State<MyApps> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "Updates & Notifications",
+                          allTranslations.text('translation_9'),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18.0),
                         ),
@@ -302,13 +304,13 @@ class MyAppsState extends State<MyApps> {
                               onTap: () {},
                               child: ListTile(
                                 title: Text(
-                                  'Have you paid your property tax yet?',
+                                  allTranslations.text('translation_10'),
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 subtitle: Text(
-                                    "The last dates for payment your property tax are March 31 and September 31, every year."),
+                                    allTranslations.text('translation_11')),
                                 trailing: Icon(Icons.keyboard_arrow_right),
                               ),
                             )),
@@ -327,7 +329,7 @@ class MyAppsState extends State<MyApps> {
                       children: <Widget>[
                         Container(
                           child: Text(
-                            "Your micro apps",
+                            allTranslations.text('translation_12'),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18.0),
                           ),
@@ -398,7 +400,7 @@ class MyAppsState extends State<MyApps> {
                         children: <Widget>[
                           Flexible(
                             child: Text(
-                              "Featured micro apps",
+                              allTranslations.text('translation_13'),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18.0),
                             ),
@@ -414,7 +416,7 @@ class MyAppsState extends State<MyApps> {
                                     navigationBar.onTap(2);
                                   },
                                   child: Text(
-                                    "view all",
+                                    allTranslations.text('translation_18'),
                                     style: TextStyle(
                                         color: Colors.blue, fontSize: 15.0),
                                   ),

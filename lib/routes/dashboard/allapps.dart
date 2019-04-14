@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/model/userapps.dart';
@@ -72,7 +73,7 @@ class AllAppsState extends State<AllApps> {
         backgroundColor: Colors.blueAccent,
         elevation: 0,
         centerTitle: false,
-        title: Text('All Apps'),
+        title: Text(allTranslations.text('translation_16')),
       ),
       body: !isLoading
           ? ListView.separated(

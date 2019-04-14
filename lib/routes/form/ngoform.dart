@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/orgs.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 import 'package:file_picker/file_picker.dart';
@@ -89,7 +90,7 @@ class NGOFormState extends State<NGOForm> {
           backgroundColor: Colors.blue,
           elevation: 0,
           centerTitle: false,
-          title: Text('Add Organisation'),
+          title: Text(allTranslations.text('translation_24')),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -108,7 +109,7 @@ class NGOFormState extends State<NGOForm> {
                         currentOrg.orgName = name;
                       },
                       decoration: InputDecoration(
-                        labelText: "Organization Name",
+                        labelText: allTranslations.text('translation_25'),
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.teal)),
                       ),
@@ -134,7 +135,7 @@ class NGOFormState extends State<NGOForm> {
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<OrgType>(
                         isExpanded: true,
-                        hint: Text("Select Organization Type"),
+                        hint: Text(allTranslations.text('translation_26')),
                         items: <OrgType>[
                           OrgType.GOVERNMENT,
                           OrgType.NGO,
@@ -201,14 +202,14 @@ class NGOFormState extends State<NGOForm> {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  'Document Upload',
+                                  allTranslations.text('translation_27'),
                                   style: TextStyle(
                                       color: Colors.blue,
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  'Trustdeet/Incorporation/Authorization Letter',
+                                  allTranslations.text('translation_43'),
                                   style: TextStyle(
                                     color: Colors.blue,
                                     fontSize: 12.0,
@@ -235,14 +236,14 @@ class NGOFormState extends State<NGOForm> {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  'Save',
+                                  allTranslations.text('translation_28'),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  'Save to database',
+                                  allTranslations.text('translation_29'),
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12.0,

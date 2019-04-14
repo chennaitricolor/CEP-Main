@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:intl/intl.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
@@ -163,7 +164,7 @@ class UserFormState extends State<UserForm> {
                       currentUser.userName = name;
                     },
                     decoration: InputDecoration(
-                      labelText: "Name",
+                      labelText: allTranslations.text('translation_30'),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal)),
                     ),
@@ -179,7 +180,7 @@ class UserFormState extends State<UserForm> {
                       currentUser.userEmail = email;
                     },
                     decoration: InputDecoration(
-                      labelText: "Email (optional)",
+                      labelText: allTranslations.text('translation_31'),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal)),
                     )),
@@ -204,7 +205,7 @@ class UserFormState extends State<UserForm> {
                         _handleRadioValueChangeForGender(0);
                       },
                       child: new Text(
-                        'Male',
+                        allTranslations.text('translation_32'),
                         style: new TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -218,7 +219,7 @@ class UserFormState extends State<UserForm> {
                         _handleRadioValueChangeForGender(1);
                       },
                       child: new Text(
-                        'Female',
+                        allTranslations.text('translation_33'),
                         style: new TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -232,7 +233,7 @@ class UserFormState extends State<UserForm> {
                         _handleRadioValueChangeForGender(2);
                       },
                       child: new Text(
-                        'Other',
+                        allTranslations.text('translation_34'),
                         style: new TextStyle(fontSize: 16.0),
                       ),
                     ),
@@ -247,7 +248,7 @@ class UserFormState extends State<UserForm> {
                       child: TextField(
                           controller: dobController,
                           decoration: InputDecoration(
-                            labelText: "Date of Birth",
+                            labelText: allTranslations.text('translation_35'),
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.teal)),
                           )),
@@ -277,7 +278,7 @@ class UserFormState extends State<UserForm> {
                       }
                     },
                     decoration: InputDecoration(
-                      labelText: "Location",
+                      labelText: allTranslations.text('translation_36'),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal)),
                     )),
@@ -292,7 +293,7 @@ class UserFormState extends State<UserForm> {
                       currentUser.userAadharId = email;
                     },
                     decoration: InputDecoration(
-                      labelText: "Aadhaar (optional)",
+                      labelText: allTranslations.text('translation_37'),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal)),
                     )),
@@ -307,7 +308,7 @@ class UserFormState extends State<UserForm> {
                       currentUser.userPanId = email;
                     },
                     decoration: InputDecoration(
-                      labelText: "Pan ID (optional)",
+                      labelText: allTranslations.text('translation_38'),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.teal)),
                     )),
@@ -329,14 +330,14 @@ class UserFormState extends State<UserForm> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                'Update',
+                                allTranslations.text('translation_39'),
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                'Save to database',
+                                allTranslations.text('translation_29'),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12.0,
