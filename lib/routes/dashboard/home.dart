@@ -4,6 +4,8 @@ import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
 import 'package:namma_chennai/routes/dashboard/search.dart';
+import 'package:namma_chennai/routes/chat/Chat.dart';
+
 import 'package:namma_chennai/utils/globals.dart';
 
 class Home extends StatefulWidget {
@@ -16,6 +18,7 @@ class HomeState extends State<Home> {
   final List<Widget> children = [
     MyApps(),
     Search(),
+    Chat(),
     AllApps(),
     Profile()
   ];
@@ -43,6 +46,10 @@ class HomeState extends State<Home> {
           new BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text(allTranslations.text('translation_15')),
+          ),
+          new BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            title: Text('Chat'),
           ),
           new BottomNavigationBarItem(
             icon: Icon(Icons.apps),

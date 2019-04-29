@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
 import 'dart:async';
-import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
 import 'package:namma_chennai/routes/auth/auth.dart';
-import 'package:namma_chennai/utils/default_data.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();

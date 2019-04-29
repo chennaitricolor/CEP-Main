@@ -1,0 +1,3 @@
+The Platform is OpenSourced and is free for use as-is. 
+If the repository is taken and modified or improved on, it is mandatory for the end user organization to commit those changes back into the repository under a different branch. 
+The license prohibits the commercial distribution of the codebase and derivative works thereof.
