@@ -4,7 +4,7 @@ import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
 import 'package:namma_chennai/routes/dashboard/search.dart';
-import 'package:namma_chennai/routes/chat/Chat.dart';
+import 'package:namma_chennai/routes/chat/chat.dart';
 
 import 'package:namma_chennai/utils/globals.dart';
 

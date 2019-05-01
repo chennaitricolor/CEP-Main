@@ -3,10 +3,12 @@ const String _name = "Anonymous";
 
 class ChatMessage extends StatelessWidget {
   final String text;
+  final String sentBy;
 
 // constructor to get text from textfield
   ChatMessage({
-    this.text
+    this.text,
+    this.sentBy
   });
 
   @override
@@ -25,7 +27,7 @@ class ChatMessage extends StatelessWidget {
             new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(_name, style: Theme.of(context).textTheme.subhead),
+                new Text(sentBy, style: Theme.of(context).textTheme.subhead),
                 new Container(
                   margin: const EdgeInsets.only(top: 5.0),
                   child: new Text(text),
