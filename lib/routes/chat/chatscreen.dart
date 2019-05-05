@@ -2,29 +2,13 @@ import 'package:flutter/material.dart';
 import 'chatmessage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'chatenvironement.dart';
-
-class Record {
-  final String message;
-  final String sentBy;
-  final String sentAt;
-  final DocumentReference reference;
-
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['message'] != null),
-        assert(map['sentBy'] != null),
-        assert(map['sentAt'] != null),
-        message = map['message'],
-        sentBy = map['sentBy'],
-        sentAt = map['sentAt'].toString();
-
-  Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$message:$sentBy>";
-}
+import 'Record.dart';
+import 'package:namma_chennai/model/user.dart';
 
 class ChatScreen extends StatefulWidget {
+  final User currentUser;
+
+  const ChatScreen({Key key, this.currentUser}): super(key: key);
   @override
   State createState() => new ChatScreenState();
 }
@@ -73,7 +57,7 @@ class ChatScreenState extends State<ChatScreen> {
           new Container(decoration: new BoxDecoration(
             color: Theme.of(context).cardColor,
           ),
-            child: ChatEnvironment(),)
+            child: ChatEnvironment(widget.currentUser),)
         ],
       )
     );

@@ -6,36 +6,17 @@ import 'package:namma_chennai/utils/globals.dart';
 
 final SharedPrefs _sharedPrefs = new SharedPrefs();
 
-class ChatEnvironment extends StatefulWidget{
-  @override
-  State createState() => new ChatEnvironmentState();
+//class ChatEnvironment extends StatefulWidget{
+//  @override
+//  State createState() => new ChatEnvironmentState();
+//
+//}
 
-}
-
-class ChatEnvironmentState extends State<ChatEnvironment>{
+class ChatEnvironment extends StatelessWidget{
   User currentUser;
-  String userId;
 
-  @override
-  void initState() {
-    super.initState();
-    fireCollections.getLoggedInUserId().then((val) {
-      userId = val;
-    }).then((r) {
-      fireCollections
-          .getUserInfoByUserId(userId)
-          .then((QuerySnapshot snapshot) {
-        List<DocumentSnapshot> docs = snapshot.documents;
-        for (DocumentSnapshot doc in docs) {
-          User user = new User.fromSnapShot(doc);
-          currentUser = user;
-        }
-      });
-    });
-    // streamController.stream.listen((data) {
-    //   print(data);
-    // });
-
+  ChatEnvironment(User user){
+    this.currentUser = user;
   }
 
   final TextEditingController _chatController = new TextEditingController();
