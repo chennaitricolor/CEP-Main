@@ -35,6 +35,7 @@ class ChatEnvironmentState extends State<ChatEnvironment>{
     // streamController.stream.listen((data) {
     //   print(data);
     // });
+
   }
 
   final TextEditingController _chatController = new TextEditingController();
@@ -47,6 +48,8 @@ class ChatEnvironmentState extends State<ChatEnvironment>{
   }
 
   Widget build(BuildContext context){
+    debugPrint('User Ward *********************************: ${currentUser.userWard}');
+
     return IconTheme(
       data: new IconThemeData(color: Colors.blue),
       child: new Container(
