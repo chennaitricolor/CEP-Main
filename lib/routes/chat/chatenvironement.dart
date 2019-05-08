@@ -6,11 +6,6 @@ import 'package:namma_chennai/utils/globals.dart';
 
 final SharedPrefs _sharedPrefs = new SharedPrefs();
 
-//class ChatEnvironment extends StatefulWidget{
-//  @override
-//  State createState() => new ChatEnvironmentState();
-//
-//}
 
 class ChatEnvironment extends StatelessWidget{
   User currentUser;
@@ -29,8 +24,6 @@ class ChatEnvironment extends StatelessWidget{
   }
 
   Widget build(BuildContext context){
-    debugPrint('User Ward *********************************: ${currentUser.userWard}');
-
     return IconTheme(
       data: new IconThemeData(color: Colors.blue),
       child: new Container(
