@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatMessage extends StatelessWidget {
+
+  final String loggedInUser;
   final String text;
   final String sentBy;
-  final String sentAt;
+  final DateTime sentAt;
   final Color otherMessageColor =  Colors.lightBlue[100];
   final Color selfMessageColor =  Colors.white;
   final selfMessageMargin =  new EdgeInsets.only(left:50,right: 5.0,bottom: 10);
   final otherMessageMargin =  new EdgeInsets.only(left: 5.0, right: 50,bottom: 10);
 
+  final f =  new DateFormat.yMd().add_jm();
 // constructor to get text from textfield
   ChatMessage({
     this.text,
     this.sentBy,
-    this.sentAt
+    this.sentAt,
+    this.loggedInUser
   });
 
   EdgeInsets getMarginForTheMessage(sentby){
-    return sentby == "author" ? otherMessageMargin : selfMessageMargin;
+    return sentby == this.loggedInUser? selfMessageMargin : otherMessageMargin;
   }
 
   Color getColorForTheMessage(sentby){
-    return sentby == "author" ? selfMessageColor : otherMessageColor;
+    return sentby == this.loggedInUser ? otherMessageColor : selfMessageColor;
   }
 
 
@@ -53,7 +58,7 @@ class ChatMessage extends StatelessWidget {
             new Container(
               padding: const EdgeInsets.fromLTRB(10,0,10,5),
               child: new Text(
-                "1/1/2012",
+                f.format(sentAt),
                 textAlign: TextAlign.right,
                 style: TextStyle(color: Colors.grey,fontSize: 12),
               ),

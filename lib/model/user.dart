@@ -89,5 +89,9 @@ class User {
     'user_pan_id': this.userPanId,
     'message_token': this.messageToken,
   };
+
+//  User(this.userId, this.userName, this.userWard);
+
+
 }
 

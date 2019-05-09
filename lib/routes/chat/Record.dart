@@ -4,6 +4,7 @@ class Record {
   final String message;
   final String sentBy;
   final String sentAt;
+  final Timestamp sentTime;
   final DocumentReference reference;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
@@ -12,7 +13,8 @@ class Record {
         assert(map['sentAt'] != null),
         message = map['message'],
         sentBy = map['sentBy'],
-        sentAt = map['sentAt'].toString();
+        sentAt = map['sentAt'].toString(),
+        sentTime=map['sentAt'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);

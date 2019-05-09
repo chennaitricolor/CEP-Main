@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
 import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/utils/globals.dart';
-
-final SharedPrefs _sharedPrefs = new SharedPrefs();
-
 
 class ChatEnvironment extends StatelessWidget{
   User currentUser;
@@ -18,9 +13,20 @@ class ChatEnvironment extends StatelessWidget{
 
   void _handleSubmit(String text) {
     _chatController.clear();
-    Firestore.instance.collection('wards').document('ward-2').collection('messages')
-        .document()
-        .setData({ 'message': text, 'sentBy': currentUser.userName, 'sentAt': DateTime.now(), 'sentId':currentUser.userId });
+    String data = currentUser.userName;
+    if(text != '' && data!=null) {
+      Firestore.instance.collection('wards').document(currentUser.userWard).collection(
+          'messages')
+          .document()
+          .setData({
+        'message': text,
+        'sentBy': currentUser.userName,
+        'sentAt': DateTime.now(),
+        'sentId': currentUser.userId
+      });
+    } else {
+      debugPrint('########### something wrong $text $data');
+    }
   }
 
   Widget build(BuildContext context){

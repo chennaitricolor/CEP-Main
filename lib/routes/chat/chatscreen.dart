@@ -17,9 +17,9 @@ class ChatScreenState extends State<ChatScreen> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
+      stream: Firestore.instance 
           .collection('wards')
-          .document('ward-2')
+          .document(widget.currentUser.userWard)
           .collection('messages')
           .orderBy('sentAt')
           .snapshots(),
@@ -38,14 +38,20 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    Timestamp temp;
     final record = Record.fromSnapshot(data);
-    return ChatMessage(text:record.message, sentBy: record.sentBy,);
+    temp = record.sentTime;
+    return ChatMessage(text:record.message,
+      sentBy: record.sentBy,
+      loggedInUser: widget.currentUser.userName,
+      sentAt: new DateTime.fromMicrosecondsSinceEpoch(temp.microsecondsSinceEpoch));
   }
 
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: new AppBar(title: new Text('Chat')),
         body: new Column(
         children: <Widget>[
           new Flexible(
