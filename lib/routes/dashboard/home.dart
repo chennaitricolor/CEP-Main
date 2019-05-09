@@ -15,18 +15,27 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   int currentIndex = 0;
+
+  //Chat was removed as it was promoted to a seperate route
   final List<Widget> children = [
     MyApps(),
     Search(),
-    Chat(),
     AllApps(),
-    Profile()
+    Profile(),
   ];
 
   void onTabTapped(int index) {
-    setState(() {
-      currentIndex = index;
-    });
+    // Chat Window Redirect
+    if(index == 4){
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Chat()),
+        );
+    } else {
+      setState(() {
+        currentIndex = index;
+      });
+    }
   }
 
   @override
@@ -48,16 +57,16 @@ class HomeState extends State<Home> {
             title: Text(allTranslations.text('translation_15')),
           ),
           new BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            title: Text('Chat'),
-          ),
-          new BottomNavigationBarItem(
             icon: Icon(Icons.apps),
             title: Text(allTranslations.text('translation_16')),
           ),
           new BottomNavigationBarItem(
               icon: Icon(Icons.person),
               title: Text(allTranslations.text('translation_17')),
+          ),
+          new BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            title: Text('Chat'),
           ),
         ],
       ),

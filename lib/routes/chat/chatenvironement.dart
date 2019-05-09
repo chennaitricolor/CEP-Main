@@ -15,16 +15,17 @@ class ChatEnvironment extends StatelessWidget{
     _chatController.clear();
     String data = currentUser.userName;
     if(text != '' && data!=null) {
-      Firestore.instance.collection('wards').document(currentUser.userWard).collection(
-          'messages')
+      Firestore.instance.collection('wards')
+          .document(currentUser.userWard)
+          .collection('messages')
           .document()
           .setData({
-        'message': text,
-        'sentBy': currentUser.userName,
-        'sentAt': DateTime.now(),
-        'sentId': currentUser.userId
-      });
-    } else {
+              'message': text,
+              'sentBy': currentUser.userName,
+              'sentAt': DateTime.now(),
+              'sentId': currentUser.userId
+            });
+      } else {
       debugPrint('########### something wrong $text $data');
     }
   }

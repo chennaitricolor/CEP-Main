@@ -66,6 +66,7 @@ flutter:
    - assets/images/apps/4.png
    - assets/images/apps/5.png
    - assets/images/apps/6.png
+   - assets/images/apps/chat-background.jpg
    - assets/locale/lang_en.json
    - assets/locale/lang_ta.json
    - assets/locale/lang_tn.json

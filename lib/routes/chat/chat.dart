@@ -27,6 +27,8 @@ class ChatState extends State<Chat>{
           User user = new User.fromSnapShot(doc);
           currentUser = user;
         }
+        currentUser.userWard='ward-2';
+
       });
     });
   }
@@ -34,17 +36,23 @@ class ChatState extends State<Chat>{
 
   @override
   Widget build(BuildContext context) {
-    currentUser.userWard='ward-2';
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Chat Screen',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChatScreen(currentUser: currentUser),
+      home: Container(
+       child: ChatScreen(currentUser: currentUser),
+       decoration: new BoxDecoration(
+          image: new DecorationImage(
+          image: new AssetImage("assets/images/apps/chat-background.jpg"),
+          fit: BoxFit.fill,
+        ),
+      ),
+      )
     );
   }
-
-
 }
 
