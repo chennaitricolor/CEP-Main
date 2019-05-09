@@ -7,18 +7,14 @@ import 'chatscreen.dart';
 class Chat extends StatefulWidget {
   @override
   State createState() => new ChatState();
-
 }
 
 class ChatState extends State<Chat>{
   User currentUser;
   String userId;
-  User mockUser = new User('1234568','123456','developer');
 
   @override
   void initState() {
-    mockUser.userWard='ward-2';
-    mockUser.userName='Surya';
     super.initState();
     fireCollections.getLoggedInUserId().then((val) {
       userId = val;
@@ -38,12 +34,14 @@ class ChatState extends State<Chat>{
 
   @override
   Widget build(BuildContext context) {
+    currentUser.userWard='ward-2';
+
     return MaterialApp(
       title: 'Chat Screen',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChatScreen(currentUser: mockUser),
+      home: ChatScreen(currentUser: currentUser),
     );
   }
 

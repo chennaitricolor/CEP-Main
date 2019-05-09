@@ -38,13 +38,11 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    Timestamp temp;
     final record = Record.fromSnapshot(data);
-    temp = record.sentTime;
     return ChatMessage(text:record.message,
       sentBy: record.sentBy,
       loggedInUser: widget.currentUser.userName,
-      sentAt: new DateTime.fromMicrosecondsSinceEpoch(temp.microsecondsSinceEpoch));
+      sentAt: new DateTime.fromMicrosecondsSinceEpoch(record.sentTime.microsecondsSinceEpoch));
   }
 
 
