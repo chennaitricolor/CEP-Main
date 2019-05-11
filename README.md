@@ -17,7 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## API Reference
 
-# auth.service
+### auth.service
 - #Endpoint: 
 
 - #Method: POST
