@@ -4,7 +4,7 @@ import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
 import 'package:namma_chennai/routes/dashboard/search.dart';
-import 'package:namma_chennai/routes/chat/chat.dart';
+import 'package:namma_chennai/routes/chat/chatselection.dart';
 
 import 'package:namma_chennai/utils/globals.dart';
 
@@ -29,7 +29,7 @@ class HomeState extends State<Home> {
     if(index == 4){
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Chat()),
+        MaterialPageRoute(builder: (context) => ChatSelection()),
         );
     } else {
       setState(() {

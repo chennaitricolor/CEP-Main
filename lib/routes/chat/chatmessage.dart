@@ -7,8 +7,8 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final String sentBy;
   final DateTime sentAt;
-  final Color otherMessageColor =  Colors.lightBlue[100];
-  final Color selfMessageColor =  Colors.white;
+  final Color selfMessageColor =  const Color(0xffDAF7A6);
+  final Color otherMessageColor =  Colors.white;
   final selfMessageMargin =  new EdgeInsets.only(left:50,right: 5.0,bottom: 10);
   final otherMessageMargin =  new EdgeInsets.only(left: 5.0, right: 50,bottom: 10);
 

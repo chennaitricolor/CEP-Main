@@ -7,19 +7,22 @@ import 'package:namma_chennai/model/user.dart';
 
 class ChatScreen extends StatefulWidget {
   final User currentUser;
-
-  const ChatScreen({Key key, this.currentUser}): super(key: key);
+  final bool isCityChat;
+  const ChatScreen({Key key, this.currentUser, this.isCityChat}): super(key: key);
   @override
   State createState() => new ChatScreenState();
 }
 
 class ChatScreenState extends State<ChatScreen> {
 
+  String getMessageBucket(){
+   return (widget.isCityChat) ? 'chennai-city' : widget.currentUser.userWard;
+ }
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance 
-          .collection('wards')
-          .document(widget.currentUser.userWard)
+      stream: Firestore.instance
+          .collection('chat-messages')
+          .document(getMessageBucket())
           .collection('messages')
           .orderBy('sentAt')
           .snapshots(),
@@ -48,23 +51,33 @@ class ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(title: new Text('Chat')),
+    String chatTitle  = (widget.isCityChat) ? "Chennai Chat Room" : "Ward Chat Room";
 
-        body: new Column(
-        children: <Widget>[
-          new Flexible(
-            child: _buildBody(context)
-          ),
-          new Divider(
-            height: 1.0,
-          ),
-          new Container(decoration: new BoxDecoration(
-            color: Theme.of(context).cardColor,
-          ),
-            child: ChatEnvironment(widget.currentUser),)
-        ],
-      )
+    return new Scaffold(
+        appBar: new AppBar(title: new Text(chatTitle)),
+
+        body: new Container(
+              child : new Column(
+                children: <Widget>[
+                  new Flexible(
+                      child: _buildBody(context)
+                  ),
+                  new Divider(
+                    height: 1.0,
+                  ),
+                  new Container(decoration: new BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                  ),
+                    child: ChatEnvironment(widget.currentUser,widget.isCityChat),)
+                ],
+              ),
+            decoration: new BoxDecoration(
+              image: new DecorationImage(
+                image: new AssetImage("assets/images/apps/chat-background.jpg"),
+                fit: BoxFit.fill,
+              ),
+            ),
+        )
     );
   }
 }

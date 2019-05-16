@@ -3,11 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 
 class ChatEnvironment extends StatelessWidget{
-  User currentUser;
+   User currentUser;
+   bool isCityChat;
 
-  ChatEnvironment(User user){
+   ChatEnvironment(User user,bool isCityChat){
     this.currentUser = user;
+    this.isCityChat = isCityChat;
   }
+   String getMessageBucket(){
+     return (this.isCityChat) ? 'chennai-city' : this.currentUser.userWard;
+   }
 
   final TextEditingController _chatController = new TextEditingController();
 
@@ -15,21 +20,20 @@ class ChatEnvironment extends StatelessWidget{
     _chatController.clear();
     String data = currentUser.userName;
     if(text != '' && data!=null) {
-      Firestore.instance.collection('wards')
-          .document(currentUser.userWard)
+      Firestore.instance.collection('chat-messages')
+          .document(getMessageBucket())
           .collection('messages')
           .document()
           .setData({
-              'message': text,
-              'sentBy': currentUser.userName,
-              'sentAt': DateTime.now(),
-              'sentId': currentUser.userId
-            });
-      } else {
+        'message': text,
+        'sentBy': currentUser.userName,
+        'sentAt': DateTime.now(),
+        'sentId': currentUser.userId
+      });
+    }else {
       debugPrint('########### something wrong $text $data');
     }
   }
-
   Widget build(BuildContext context){
     return IconTheme(
       data: new IconThemeData(color: Colors.blue),
