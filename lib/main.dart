@@ -11,7 +11,6 @@ import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/routes/form/ngoform.dart';
-import 'package:namma_chennai/routes/chat/chat.dart';
 
 import 'package:namma_chennai/routes/form/location.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
@@ -98,7 +97,6 @@ class _NammaAppState extends State<NammaApp> {
         '/appdetail': (BuildContext context) => new AppDetailScreen(),
         '/appview': (BuildContext context) => new WebViewScreen(),
         '/ngoform': (BuildContext context) => new NGOForm(),
-        '/chat': (BuildContext context) => new Chat(),
       },
     );
   }

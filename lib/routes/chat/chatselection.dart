@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/utils/globals.dart';
 
-import 'chatscreen.dart';
+import 'chat.dart';
 
 class ChatSelection extends StatefulWidget{
   @override
@@ -56,7 +56,7 @@ class _ChatSelectionState extends State<ChatSelection> {
         onPressed: (){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ChatScreen(isCityChat: isCityChat, currentUser: currentUser)),
+            MaterialPageRoute(builder: (context) => Chat(isCityChat: isCityChat, currentUser: currentUser)),
           );
         },
         child: new Padding(

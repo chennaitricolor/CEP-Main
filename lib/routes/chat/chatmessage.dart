@@ -7,7 +7,8 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final String sentBy;
   final DateTime sentAt;
-  final Color selfMessageColor =  const Color(0xffDAF7A6);
+//  final Color selfMessageColor =  const Color(0xffDAF7A6)
+  final Color selfMessageColor =  Colors.green[100];
   final Color otherMessageColor =  Colors.white;
   final selfMessageMargin =  new EdgeInsets.only(left:50,right: 5.0,bottom: 10);
   final otherMessageMargin =  new EdgeInsets.only(left: 5.0, right: 50,bottom: 10);
@@ -33,8 +34,16 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
+
         margin: getMarginForTheMessage(this.sentBy),
         decoration: new BoxDecoration(
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black,
+//                offset: Offset(1.0, 6.0),
+                blurRadius: 0.3,
+              ),
+            ],
             color: getColorForTheMessage(sentBy),
             borderRadius: BorderRadius.all(new Radius.circular(5))
         ),
