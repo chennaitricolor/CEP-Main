@@ -29,8 +29,7 @@ samples, guidance on mobile development, and a full API reference.
 - Method - POST
 - Request - userId
 - Response - user details (most importantly token to authenticate)
-- Auth - will authenticate if login goes well.
-
+- Auth - will authenticate if login goes well. <br/> <br/>
  
 - Endpoint  - /verify
 - Method - POST
