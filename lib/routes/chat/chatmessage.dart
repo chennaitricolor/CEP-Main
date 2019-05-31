@@ -41,7 +41,7 @@ class ChatMessage extends StatelessWidget {
               BoxShadow(
                 color: Colors.black,
 //                offset: Offset(1.0, 6.0),
-                blurRadius: 0.3,
+                blurRadius: 0.1,
               ),
             ],
             color: getColorForTheMessage(sentBy),

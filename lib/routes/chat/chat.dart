@@ -8,23 +8,25 @@ import 'package:namma_chennai/model/user.dart';
 class Chat extends StatefulWidget {
   final User currentUser;
   final bool isCityChat;
+
   const Chat({Key key, this.currentUser, this.isCityChat}): super(key: key);
   @override
   State createState() => new ChatState();
 }
 
 class ChatState extends State<Chat> {
-
+  ScrollController _listVIewController = ScrollController();
   String getMessageBucket(){
    return (widget.isCityChat) ? 'chennai-city' : widget.currentUser.userWard;
  }
   Widget _buildBody(BuildContext context) {
+
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('chat-messages')
           .document(getMessageBucket())
           .collection('messages')
-          .orderBy('sentAt')
+          .orderBy('sentAt',descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
@@ -35,6 +37,9 @@ class ChatState extends State<Chat> {
 
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
     return ListView(
+      reverse:true,
+      shrinkWrap: true,
+      controller: _listVIewController,
       padding: const EdgeInsets.only(top: 20.0),
       children: snapshot.map((data) => _buildListItem(context, data)).toList(),
     );
@@ -51,6 +56,10 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) =>{
+     _listVIewController.animateTo(0.0, duration: Duration(milliseconds: 300), curve: Curves.easeOut)
+  });
     String chatTitle  = (widget.isCityChat) ? "Chennai Chat Room" : "Ward Chat Room";
 
     return new Scaffold(
