@@ -70,12 +70,32 @@ class _ChatSelectionState extends State<ChatSelection> {
   }
 
   Widget displayScreen() {
-    return Container(
-        child: new Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[getButtonForChat(true), getButtonForChat(false)],
+    return Center(
+        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Icon(
+          Icons.chat,
+          color: Colors.grey,
+          size: 200.0,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        getButtonForChat(true),
+        getButtonForChat(false)
+      ],
     ));
+
+    // Container(
+    //     child: new Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   children: <Widget>[
+
+    //     getButtonForChat(true),
+    //     getButtonForChat(false)
+    //   ],
+    // ));
   }
 
   @override

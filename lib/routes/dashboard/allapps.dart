@@ -202,7 +202,7 @@ class AllAppsState extends State<AllApps> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: false,
         title: Text(allTranslations.text('translation_16')),
