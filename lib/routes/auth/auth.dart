@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/utils/default_data.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:namma_chennai/routes/form/userform.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 import 'package:flutter/services.dart';
