@@ -75,3 +75,4 @@ build/
 api/functions/src/credential.json
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
+api/functions/node_modules
