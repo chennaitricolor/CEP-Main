@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/utils/default_data.dart';
@@ -213,7 +214,7 @@ class AuthState extends State<Auth> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    DefaultData.platformTitle,
+                                    allTranslations.text('app_title'),
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,

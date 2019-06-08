@@ -5,7 +5,7 @@ import 'package:namma_chennai/utils/globals.dart';
 
 import 'chat.dart';
 
-class ChatSelection extends StatefulWidget{
+class ChatSelection extends StatefulWidget {
   @override
   _ChatSelectionState createState() => _ChatSelectionState();
 }
@@ -29,7 +29,7 @@ class _ChatSelectionState extends State<ChatSelection> {
           currentUser = user;
         }
         //should be removed when user ward details are added.
-        currentUser.userWard='ward-2';
+        currentUser.userWard = 'ward-2';
         setState(() {
           _isLoading = false;
         });
@@ -43,52 +43,46 @@ class _ChatSelectionState extends State<ChatSelection> {
     );
   }
 
-  Widget getButtonForChat(bool isCityChat){
-      String chatTitle  = (isCityChat) ? "Chennai Chat Room" : "Ward Chat Room";
+  Widget getButtonForChat(bool isCityChat) {
+    String chatTitle = (isCityChat) ? "Chennai Chat Room" : "Area Chat Room";
     return new Container(
       width: MediaQuery.of(context).size.width - 30,
-      margin: const EdgeInsets.only(left: 15,bottom: 15),
+      margin: const EdgeInsets.only(left: 15, bottom: 15),
       child: new FlatButton(
-        color: Colors.blue,
-        shape: RoundedRectangleBorder(
-            borderRadius:
-            BorderRadius.circular(10.0)),
-        onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Chat(isCityChat: isCityChat, currentUser: currentUser)),
-          );
-        },
-        child: new Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-            child:new Text(chatTitle,  style: TextStyle(color: Colors.white,fontSize: 15)
-          ),
-        )
-      ),
+          color: Colors.blue,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      Chat(isCityChat: isCityChat, currentUser: currentUser)),
+            );
+          },
+          child: new Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+            child: new Text(chatTitle,
+                style: TextStyle(color: Colors.white, fontSize: 15)),
+          )),
     );
-
   }
 
-  Widget displayScreen(){
+  Widget displayScreen() {
     return Container(
         child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            getButtonForChat(true),
-            getButtonForChat(false)
-            ],
-        )
-    );
-
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[getButtonForChat(true), getButtonForChat(false)],
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: new AppBar(title: new Text('Select Chat Room')),
-          body: (_isLoading) ? _loadingView() : displayScreen(),
-        );
+      appBar: new AppBar(title: new Text('Select Chat Room')),
+      body: (_isLoading) ? _loadingView() : displayScreen(),
+    );
   }
 }
-

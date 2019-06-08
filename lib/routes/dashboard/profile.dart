@@ -51,8 +51,8 @@ class ProfileState extends State<Profile> {
             title: Text(org.orgName),
             subtitle: Text(org.orgType.substring(8)),
             trailing: Icon(
-              Icons.verified_user,
-              color: Colors.green,
+              Icons.report_problem,
+              color: Colors.orange,
             ),
           ),
         ),

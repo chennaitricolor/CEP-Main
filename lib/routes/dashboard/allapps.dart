@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/apps.dart';
 import 'package:namma_chennai/model/user.dart';
@@ -13,12 +14,14 @@ class AllApps extends StatefulWidget {
 }
 
 class AllAppsState extends State<AllApps> {
-  List<Widget> listW = new List<Widget>();
   List<Apps> apps = new List();
   List<Apps> allApps;
   MyAppsState myAppsState = new MyAppsState();
   List<String> installedAppIds = new List();
   String userId;
+  List<Apps> searchResult = [];
+  Widget searchResultWidgetList;
+  String searchTerm = '';
   bool isLoading = true;
 
   var app;
@@ -58,53 +61,49 @@ class AllAppsState extends State<AllApps> {
           Apps app = Apps.fromSnapShot(doc);
           allApps.add(app);
         }
-        setState(() {
-          isLoading = false;
-        });
+        buildSearchResultWidget();
       });
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-        elevation: 0,
-        centerTitle: false,
-        title: Text(allTranslations.text('translation_16')),
-      ),
-      body: !isLoading
-          ? ListView.separated(
-              itemCount: this.allApps.length,
-              separatorBuilder: (context, index) => Divider(
-                    color: Colors.grey,
-                    height: 0.1,
-                  ),
-              itemBuilder: (BuildContext ctxt, int Index) {
-                return Column(
+  buildSearchResultWidget() {
+    Widget filteredListView = ListView.separated(
+        itemCount: this.allApps.length,
+        separatorBuilder: (context, index) => Divider(
+              color: Colors.grey,
+              height: 0.1,
+            ),
+        itemBuilder: (BuildContext ctxt, int index) {
+          return (this.searchTerm != null &&
+                  this
+                          .allApps[index]
+                          .appName[languageCode]
+                          .toString()
+                          .toLowerCase()
+                          .indexOf(this.searchTerm) >=
+                      0)
+              ? Column(
                   children: <Widget>[
                     ListTile(
                       leading: Image(
-                        image: AssetImage(this.allApps[Index].appIconUrl),
+                        image: AssetImage(this.allApps[index].appIconUrl),
                         width: 50.0,
                       ),
                       // Image.network(
                       //   this.allApps[Index][""],
                       //   width: 50,
                       // ),
-                      title: Text(this.allApps[Index].appName[languageCode]),
+                      title: Text(this.allApps[index].appName[languageCode]),
                       subtitle: InkWell(
-                        child: Text(this.allApps[Index].appLaunchDate),
+                        child: Text(this.allApps[index].appLaunchDate),
                       ),
                       trailing: installedAppIds != null &&
                               installedAppIds
-                                  .contains(this.allApps[Index].appId)
+                                  .contains(this.allApps[index].appId)
                           ? FlatButton.icon(
                               onPressed: () {
                                 operations
-                                    .removeApp(userApps, this.allApps[Index],
+                                    .removeApp(userApps, this.allApps[index],
                                         documentId, context)
                                     .then((r) {
                                   setState(() {
@@ -126,7 +125,7 @@ class AllAppsState extends State<AllApps> {
                           : FlatButton.icon(
                               onPressed: () {
                                 operations
-                                    .installApp(userApps, this.allApps[Index],
+                                    .installApp(userApps, this.allApps[index],
                                         userId, documentId, context)
                                     .then((result) {
                                   setState(() {
@@ -149,19 +148,81 @@ class AllAppsState extends State<AllApps> {
                     Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: ListTile(
-                        subtitle: Text(this.allApps[Index].appDesc[languageCode]),
+                        subtitle:
+                            Text(this.allApps[index].appDesc[languageCode]),
                       ),
                     )
                   ],
-                );
-              })
-          : Center(
-              child: CircularProgressIndicator(),
-            ),
+                )
+              : new Container();
+        });
+    setState(() {
+      isLoading = false;
+      this.searchResultWidgetList = filteredListView;
+    });
+  }
 
-      // Column(
-      //   children: listW,
-      // )
+  Widget searchCard() => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          elevation: 2.0,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Icon(Icons.search),
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        this.searchTerm = value;
+                      });
+                      buildSearchResultWidget();
+                    },
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: allTranslations.text('translation_19')),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        elevation: 0,
+        centerTitle: false,
+        title: Text(allTranslations.text('translation_16')),
+      ),
+      body: Column(children: <Widget>[
+        Stack(children: <Widget>[
+          Container(
+            height: 80,
+            color: Colors.blue,
+          ),
+          searchCard()
+        ]),
+        Flexible(
+          child: !isLoading
+              ? this.searchResultWidgetList
+              : Center(
+                  child: CircularProgressIndicator(),
+                ),
+        )
+      ]),
     );
   }
 }

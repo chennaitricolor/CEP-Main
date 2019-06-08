@@ -1,7 +1,7 @@
 {
   "language": "English",
   "developed_by": "Tech for Cities",
-  "app_title": "Citizen Engagement Platform",
+  "app_title": "Makkal Nilayam",
   "tag_line": "Ithu Namma Chennai",
   "translation_0": "Powered by Government of Tamilnadu",
   "translation_1": "Enter your phone number",
@@ -31,8 +31,8 @@
   "translation_25": "Organization Name",
   "translation_26": "Select Organization Type (Government, NGO, Private, Other)",
   "translation_27": "Document Upload",
-  "translation_28": "Save",
-  "translation_29": "Save to database",
+  "translation_28": "Submit",
+  "translation_29": "Send for approval",
   "translation_30": "Name",
   "translation_31": "Email (optional)",
   "translation_32": "Male",
@@ -46,5 +46,6 @@
   "translation_40": "Loading",
   "translation_41": "Install",
   "translation_42": "Search Result",
-  "translation_43": "(Trust deed / Incorporation / Authorization Letter)"
+  "translation_43": "(Trust deed / Incorporation / Authorization Letter)",
+  "translation_44": "Chat"
 }

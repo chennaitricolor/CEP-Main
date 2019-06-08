@@ -19,18 +19,18 @@ class HomeState extends State<Home> {
   //Chat was removed as it was promoted to a seperate route
   final List<Widget> children = [
     MyApps(),
-    Search(),
     AllApps(),
+    null,
     Profile(),
   ];
 
   void onTabTapped(int index) {
     // Chat Window Redirect
-    if(index == 4){
-        Navigator.push(
+    if (index == 2) {
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ChatSelection()),
-        );
+      );
     } else {
       setState(() {
         currentIndex = index;
@@ -53,20 +53,16 @@ class HomeState extends State<Home> {
             title: Text(allTranslations.text('translation_14')),
           ),
           new BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text(allTranslations.text('translation_15')),
-          ),
-          new BottomNavigationBarItem(
             icon: Icon(Icons.apps),
             title: Text(allTranslations.text('translation_16')),
           ),
           new BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text(allTranslations.text('translation_17')),
+            icon: Icon(Icons.message),
+            title: Text(allTranslations.text('translation_44')),
           ),
           new BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            title: Text('Chat'),
+            icon: Icon(Icons.person),
+            title: Text(allTranslations.text('translation_17')),
           ),
         ],
       ),
