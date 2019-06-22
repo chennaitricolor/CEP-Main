@@ -7,11 +7,6 @@ class ChatMessage extends StatelessWidget {
   final String text;
   final String sentBy;
   final DateTime sentAt;
-//  final Color selfMessageColor =  const Color(0xffDAF7A6)
-  final Color selfMessageColor =  Colors.green[100];
-  final Color otherMessageColor =  Colors.white;
-  final selfMessageMargin =  new EdgeInsets.only(left:50,right: 5.0,bottom: 10);
-  final otherMessageMargin =  new EdgeInsets.only(left: 5.0, right: 50,bottom: 10);
 
   final f =  new DateFormat.yMd().add_jm();
 // constructor to get text from textfield
@@ -22,56 +17,67 @@ class ChatMessage extends StatelessWidget {
     this.loggedInUser
   });
 
-  EdgeInsets getMarginForTheMessage(sentby){
-    return sentby == this.loggedInUser? selfMessageMargin : otherMessageMargin;
+  MainAxisAlignment getAlignmentForMessageByUser(){
+    if(this.sentBy == this.loggedInUser)
+      return MainAxisAlignment.end;
+    return MainAxisAlignment.start;
+
   }
 
-  Color getColorForTheMessage(sentby){
-    return sentby == this.loggedInUser ? otherMessageColor : selfMessageColor;
+  Decoration getBoxDecorationByUser(){
+    return  BoxDecoration(
+      color: (this.sentBy == this.loggedInUser) ? Colors.grey[300] : Colors.blue[100],
+      borderRadius: BorderRadius.all(
+        Radius.circular(6.0),
+      ),
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {
     return new Container(
-
-        margin: getMarginForTheMessage(this.sentBy),
-        decoration: new BoxDecoration(
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Colors.black,
-//                offset: Offset(1.0, 6.0),
-                blurRadius: 0.1,
-              ),
-            ],
-            color: getColorForTheMessage(sentBy),
-            borderRadius: BorderRadius.all(new Radius.circular(5))
-        ),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      margin: EdgeInsets.only(left:15.0,right: 15.0,bottom: 10),
+        child: Flex(
+          direction: Axis.horizontal,
+          mainAxisAlignment: getAlignmentForMessageByUser(),
           children: <Widget>[
-            new Container(
-              padding: const EdgeInsets.fromLTRB(10,5,10,5),
-              child : new Text(
-                sentBy,
-                style: TextStyle(color: Colors.redAccent, fontSize: 14 ),
+            Container(
+              padding: const EdgeInsets.all(2.0),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.8,
               ),
+              decoration: getBoxDecorationByUser(),
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+
+                children: <Widget>[
+                  new Container(
+                    padding: const EdgeInsets.fromLTRB(10,5,10,5),
+                    child : new Text(
+                      sentBy,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.redAccent, fontSize: 14),
+                    ),
+                  ),
+                  new Container(
+                    padding: const EdgeInsets.fromLTRB(10,0,10,5),
+                    child: new Text(
+                      text,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                  ),
+                  new Container(
+                    padding: const EdgeInsets.fromLTRB(10,0,10,5),
+                    child: new Text(
+                      f.format(sentAt),
+                      textAlign: TextAlign.right,
+                      style: TextStyle(color: Colors.grey,fontSize: 12),
+                    ),
+                  )
+                ],
+              )
             ),
-            new Container(
-              padding: const EdgeInsets.fromLTRB(10,0,10,5),
-              child: new Text(
-                text,
-                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-              ),
-            ),
-            new Container(
-              padding: const EdgeInsets.fromLTRB(10,0,10,5),
-              child: new Text(
-                f.format(sentAt),
-                textAlign: TextAlign.right,
-                style: TextStyle(color: Colors.grey,fontSize: 12),
-              ),
-            )
           ],
         )
     );

@@ -40,7 +40,6 @@ class ChatState extends State<Chat> {
       reverse:true,
       shrinkWrap: true,
       controller: _listVIewController,
-      padding: const EdgeInsets.only(top: 20.0),
       children: snapshot.map((data) => _buildListItem(context, data)).toList(),
     );
   }
@@ -80,12 +79,12 @@ class ChatState extends State<Chat> {
                     child: ChatEnvironment(widget.currentUser,widget.isCityChat),)
                 ],
               ),
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("assets/images/apps/chat-background-image.jpg"),
-                fit: BoxFit.fill,
-              ),
-            ),
+//             decoration: new BoxDecoration(
+//              image: new DecorationImage(
+//                image: new AssetImage("assets/images/apps/telegram-background.jpg"),
+//                fit: BoxFit.fill,
+//              ),
+//            ),
         )
     );
   }
