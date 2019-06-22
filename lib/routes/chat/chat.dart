@@ -79,12 +79,12 @@ class ChatState extends State<Chat> {
                     child: ChatEnvironment(widget.currentUser,widget.isCityChat),)
                 ],
               ),
-//             decoration: new BoxDecoration(
-//              image: new DecorationImage(
-//                image: new AssetImage("assets/images/apps/telegram-background.jpg"),
-//                fit: BoxFit.fill,
-//              ),
-//            ),
+             decoration: new BoxDecoration(
+              image: new DecorationImage(
+                image: new AssetImage("assets/images/apps/telegram01.jpg"),
+                fit: BoxFit.fill,
+              ),
+            ),
         )
     );
   }

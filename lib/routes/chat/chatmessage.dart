@@ -26,7 +26,7 @@ class ChatMessage extends StatelessWidget {
 
   Decoration getBoxDecorationByUser(){
     return  BoxDecoration(
-      color: (this.sentBy == this.loggedInUser) ? Colors.grey[300] : Colors.blue[100],
+      color: (this.sentBy == this.loggedInUser) ? Colors.white : Colors.lightGreen[100],
       borderRadius: BorderRadius.all(
         Radius.circular(6.0),
       ),
