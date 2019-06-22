@@ -1,16 +1,18 @@
 import 'dart:async';
-
+import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:intl/intl.dart';
+import 'package:namma_chennai/utils/api.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 import 'package:location/location.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
 CollectionReference collectionRef = db.collection('users');
+API api = new API();
 
 class UserForm extends StatefulWidget {
   final String phonenumber;
@@ -84,7 +86,7 @@ class UserFormState extends State<UserForm> {
           emailController.text = currentUser.userEmail;
           aadharController.text = currentUser.userAadharId;
           panController.text = currentUser.userPanId;
-          locationController.text = currentUser.userGeo;
+          locationController.text = currentUser.userZone;
           var formatter = new DateFormat('yyyy-MM-dd');
           dobController.text = currentUser.userDob == null
               ? ""
@@ -187,9 +189,8 @@ class UserFormState extends State<UserForm> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(width: 1, color: Colors.black54)
-                ),
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(width: 1, color: Colors.black54)),
                 margin: EdgeInsets.only(bottom: 10),
                 padding: EdgeInsets.all(5),
                 child: new Row(
@@ -270,6 +271,24 @@ class UserFormState extends State<UserForm> {
                               val.longitude.toString();
 
                           currentUser.userGeo = locationController.text;
+                          print(currentUser.userGeo);
+                          api.getZone(val.latitude.toString(), val.longitude.toString()).then((response) {
+                            var json = convert.jsonDecode(response.body);
+                            print(json);
+                            setState(() {
+                              if (json['data'] != null ) {
+                                currentUser.userZone =
+                                    "${json['data']['wardNo']} - ${json['data']['zoneInfo']} (${locationController.text})";
+                                locationController.text =
+                                    "${json['data']['wardNo']} - ${json['data']['zoneInfo']} (${locationController.text})";
+                              } else {
+                                currentUser.userZone =
+                                    "Other (${locationController.text})";
+                                locationController.text =
+                                    "Other (${locationController.text})";
+                              }
+                            });
+                          });
                         });
                       } catch (e) {
                         if (e.code == 'PERMISSION_DENIED') {

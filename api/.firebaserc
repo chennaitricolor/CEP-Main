@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "tech-for-cities",
+    "dev": "tech-for-cities"
+  }
+}
