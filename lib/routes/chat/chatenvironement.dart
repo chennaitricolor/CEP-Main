@@ -5,13 +5,14 @@ import 'package:namma_chennai/model/user.dart';
 class ChatEnvironment extends StatelessWidget{
    User currentUser;
    bool isCityChat;
-
-   ChatEnvironment(User user,bool isCityChat){
+  String userZone;
+   ChatEnvironment(User user,bool isCityChat, String userZone){
     this.currentUser = user;
     this.isCityChat = isCityChat;
+    this.userZone = userZone;
   }
    String getMessageBucket(){
-     return (this.isCityChat) ? 'chennai-city' : this.currentUser.userWard;
+     return (this.isCityChat) ? 'chennai-city' : userZone;
    }
 
   final TextEditingController _chatController = new TextEditingController();

@@ -8,8 +8,8 @@ import 'package:namma_chennai/model/user.dart';
 class Chat extends StatefulWidget {
   final User currentUser;
   final bool isCityChat;
-
-  const Chat({Key key, this.currentUser, this.isCityChat}): super(key: key);
+  final String userZone;
+  const Chat({Key key, this.currentUser, this.isCityChat, this.userZone}): super(key: key);
   @override
   State createState() => new ChatState();
 }
@@ -17,7 +17,8 @@ class Chat extends StatefulWidget {
 class ChatState extends State<Chat> {
   ScrollController _listVIewController = ScrollController();
   String getMessageBucket(){
-   return (widget.isCityChat) ? 'chennai-city' : widget.currentUser.userWard;
+
+   return (widget.isCityChat) ? 'chennai-city' : widget.userZone;
  }
   Widget _buildBody(BuildContext context) {
 
@@ -59,13 +60,14 @@ class ChatState extends State<Chat> {
     WidgetsBinding.instance.addPostFrameCallback((_) =>{
      _listVIewController.animateTo(0.0, duration: Duration(milliseconds: 300), curve: Curves.easeOut)
   });
-    String chatTitle  = (widget.isCityChat) ? "Chennai Chat Room" : "Area Chat Room";
-
+    String chatTitle  = (widget.isCityChat) ? "Chennai Chat Room" : widget.userZone;
     return new Scaffold(
         appBar: new AppBar(title: new Text(chatTitle)),
 
         body: new Container(
               child : new Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+
                 children: <Widget>[
                   new Flexible(
                       child: _buildBody(context)
@@ -76,7 +78,8 @@ class ChatState extends State<Chat> {
                   new Container(decoration: new BoxDecoration(
                     color: Theme.of(context).cardColor,
                   ),
-                    child: ChatEnvironment(widget.currentUser,widget.isCityChat),)
+                    child: ChatEnvironment(widget.currentUser,widget.isCityChat, widget.userZone),
+                  )
                 ],
               ),
              decoration: new BoxDecoration(

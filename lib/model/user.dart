@@ -32,6 +32,11 @@ class User {
 
   User(this.userPhoneNumber, this.userId, this.userPersona);
 
+  @override
+  String toString() {
+    return 'User{userId: $userId, userName: $userName, userPhoneNumber: $userPhoneNumber, userEmail: $userEmail, userWard: $userWard, userZone: $userZone, userGeo: $userGeo, userLangPref: $userLangPref, userDob: $userDob, userGender: $userGender, userPersona: $userPersona, userCreatedOn: $userCreatedOn, userUpdatedOn: $userUpdatedOn, userAadharId: $userAadharId, userPanId: $userPanId, messageToken: $messageToken}';
+  }
+
   User.fromSnapShot(DocumentSnapshot snapshot){
     this.userId = snapshot['user_id'] ?? "";
     this.userName = snapshot['user_name'] ?? "";

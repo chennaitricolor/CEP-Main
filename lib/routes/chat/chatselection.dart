@@ -29,7 +29,6 @@ class _ChatSelectionState extends State<ChatSelection> {
           currentUser = user;
         }
         //should be removed when user ward details are added.
-        currentUser.userWard = 'ward-2';
         setState(() {
           _isLoading = false;
         });
@@ -44,7 +43,8 @@ class _ChatSelectionState extends State<ChatSelection> {
   }
 
   Widget getButtonForChat(bool isCityChat) {
-    String chatTitle = (isCityChat) ? "Chennai Chat Room" : "Area Chat Room";
+    String userZone =  currentUser.userZone+'-Zone';
+    String chatTitle = (isCityChat) ? "Chennai Chat Room" : userZone+" Room";
     return new Container(
       width: MediaQuery.of(context).size.width - 30,
       margin: const EdgeInsets.only(left: 15, bottom: 15),
@@ -57,7 +57,7 @@ class _ChatSelectionState extends State<ChatSelection> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      Chat(isCityChat: isCityChat, currentUser: currentUser)),
+                      Chat(isCityChat: isCityChat, currentUser: currentUser, userZone: userZone,)),
             );
           },
           child: new Padding(
@@ -85,17 +85,8 @@ class _ChatSelectionState extends State<ChatSelection> {
         getButtonForChat(true),
         getButtonForChat(false)
       ],
-    ));
-
-    // Container(
-    //     child: new Column(
-    //   mainAxisSize: MainAxisSize.min,
-    //   children: <Widget>[
-
-    //     getButtonForChat(true),
-    //     getButtonForChat(false)
-    //   ],
-    // ));
+     )
+   );
   }
 
   @override
