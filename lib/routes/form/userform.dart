@@ -86,7 +86,7 @@ class UserFormState extends State<UserForm> {
           emailController.text = currentUser.userEmail;
           aadharController.text = currentUser.userAadharId;
           panController.text = currentUser.userPanId;
-          locationController.text = currentUser.userZone;
+          locationController.text = "${currentUser.userZone} (${currentUser.userGeo})";
           var formatter = new DateFormat('yyyy-MM-dd');
           dobController.text = currentUser.userDob == null
               ? ""
@@ -266,27 +266,27 @@ class UserFormState extends State<UserForm> {
                       var location = new Location();
                       try {
                         location.getLocation().then((val) {
-                          locationController.text = val.latitude.toString() +
+                          locationController.text = "Identifying...";
+                          currentUser.userGeo = val.latitude.toString() +
                               ", " +
                               val.longitude.toString();
-
-                          currentUser.userGeo = locationController.text;
                           print(currentUser.userGeo);
-                          api.getZone(val.latitude.toString(), val.longitude.toString()).then((response) {
+                          api
+                              .getZone(val.latitude.toString(),
+                                  val.longitude.toString())
+                              .then((response) {
                             var json = convert.jsonDecode(response.body);
                             print(json);
                             setState(() {
-                              if (json['data'] != null ) {
+                              if (json['data'] != null &&
+                                  json['data']['wardNo'] != null) {
                                 currentUser.userZone =
-                                    "${json['data']['wardNo']} - ${json['data']['zoneInfo']} (${locationController.text})";
-                                locationController.text =
-                                    "${json['data']['wardNo']} - ${json['data']['zoneInfo']} (${locationController.text})";
+                                    "${json['data']['wardNo']} - ${json['data']['zoneInfo']}";
                               } else {
-                                currentUser.userZone =
-                                    "Other (${locationController.text})";
-                                locationController.text =
-                                    "Other (${locationController.text})";
+                                currentUser.userZone = "Other";
                               }
+                              locationController.text =
+                                  "${currentUser.userZone} (${currentUser.userGeo})";
                             });
                           });
                         });
