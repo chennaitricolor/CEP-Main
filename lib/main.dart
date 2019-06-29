@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/routes/walkthrough/walkthrough.dart';
 import 'package:namma_chennai/routes/splash/splash.dart';
 import 'package:namma_chennai/routes/auth/auth.dart';
 import 'package:namma_chennai/routes/form/userform.dart';
@@ -12,7 +11,6 @@ import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/routes/form/ngoform.dart';
 
-import 'package:namma_chennai/routes/form/location.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
 
 final SharedPrefs _sharedPrefs = new SharedPrefs();

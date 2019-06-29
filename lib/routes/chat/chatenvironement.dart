@@ -12,6 +12,7 @@ class ChatEnvironment extends StatelessWidget{
     this.userZone = userZone;
   }
    String getMessageBucket(){
+     debugPrint("#####${userZone}");
      return (this.isCityChat) ? 'chennai-city' : userZone;
    }
 

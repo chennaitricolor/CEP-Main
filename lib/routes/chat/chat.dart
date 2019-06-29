@@ -56,11 +56,10 @@ class ChatState extends State<Chat> {
 
   @override
   Widget build(BuildContext context) {
-
     WidgetsBinding.instance.addPostFrameCallback((_) =>{
      _listVIewController.animateTo(0.0, duration: Duration(milliseconds: 300), curve: Curves.easeOut)
   });
-    String chatTitle  = (widget.isCityChat) ? "Chennai Chat Room" : widget.userZone;
+    String chatTitle  = (widget.isCityChat) ? "Chennai City Room" : widget.userZone;
     return new Scaffold(
         appBar: new AppBar(title: new Text(chatTitle)),
 

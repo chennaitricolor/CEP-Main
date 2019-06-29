@@ -13,6 +13,7 @@ class ChatSelection extends StatefulWidget {
 class _ChatSelectionState extends State<ChatSelection> {
   User currentUser;
   String userId;
+  String userZone;
   bool _isLoading = true;
 
   void initState() {
@@ -27,6 +28,7 @@ class _ChatSelectionState extends State<ChatSelection> {
         for (DocumentSnapshot doc in docs) {
           User user = new User.fromSnapShot(doc);
           currentUser = user;
+
         }
         //should be removed when user ward details are added.
         setState(() {
@@ -42,12 +44,22 @@ class _ChatSelectionState extends State<ChatSelection> {
     );
   }
 
+  String getUSerZone(String zoneRawString){
+    String match;
+    RegExp exp = new RegExp(r"(^\d* - Zone \d* (\w*))");
+    Iterable<Match> matches = exp.allMatches(zoneRawString);
+    for (Match m in matches) {
+      match = m.group(2);
+    }
+    return match;
+  }
+
   Widget getButtonForChat(bool isCityChat) {
-    String userZone =  currentUser.userZone+'-Zone';
-    String chatTitle = (isCityChat) ? "Chennai Chat Room" : userZone+" Room";
+    userZone = getUSerZone(currentUser.userZone);
+    String chatTitle = (isCityChat) ? "Chennai Chat Room" : userZone+" Zone Room";
     return new Container(
       width: MediaQuery.of(context).size.width - 30,
-      margin: const EdgeInsets.only(left: 15, bottom: 15),
+      margin: const EdgeInsets.only(bottom: 15),
       child: new FlatButton(
           color: Colors.blue,
           shape:
@@ -77,7 +89,7 @@ class _ChatSelectionState extends State<ChatSelection> {
         Icon(
           Icons.chat,
           color: Colors.grey,
-          size: 200.0,
+          size: 180.0,
         ),
         SizedBox(
           height: 20,
@@ -97,3 +109,6 @@ class _ChatSelectionState extends State<ChatSelection> {
     );
   }
 }
+
+
+
