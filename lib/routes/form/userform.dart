@@ -86,7 +86,7 @@ class UserFormState extends State<UserForm> {
           emailController.text = currentUser.userEmail;
           aadharController.text = currentUser.userAadharId;
           panController.text = currentUser.userPanId;
-          locationController.text = "${currentUser.userZone} (${currentUser.userGeo})";
+          locationController.text = "${currentUser.userWard} - ${currentUser.userZone} (${currentUser.userGeo})";
           var formatter = new DateFormat('yyyy-MM-dd');
           dobController.text = currentUser.userDob == null
               ? ""
@@ -280,13 +280,14 @@ class UserFormState extends State<UserForm> {
                             setState(() {
                               if (json['data'] != null &&
                                   json['data']['wardNo'] != null) {
-                                currentUser.userZone =
-                                    "${json['data']['wardNo']} - ${json['data']['zoneInfo']}";
+                                currentUser.userWard = "${json['data']['wardNo']}";
+                                currentUser.userZone = "${json['data']['zoneInfo']}";
                               } else {
+                                currentUser.userWard = "0";
                                 currentUser.userZone = "Other";
                               }
                               locationController.text =
-                                  "${currentUser.userZone} (${currentUser.userGeo})";
+                                  "${currentUser.userWard} - ${currentUser.userZone} (${currentUser.userGeo})";
                             });
                           });
                         });
