@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
+import 'package:namma_chennai/utils/api.dart';
+
+API api = new API();
 
 class ChatEnvironment extends StatelessWidget{
    User currentUser;
@@ -12,7 +15,6 @@ class ChatEnvironment extends StatelessWidget{
     this.userZone = userZone;
   }
    String getMessageBucket(){
-     debugPrint("#####${userZone}");
      return (this.isCityChat) ? 'chennai-city' : userZone;
    }
 
@@ -32,6 +34,7 @@ class ChatEnvironment extends StatelessWidget{
         'sentAt': DateTime.now(),
         'sentId': currentUser.userId
       });
+      api.messageAdded(currentUser.userName, text, getMessageBucket());
     }else {
       debugPrint('########### something wrong $text $data');
     }

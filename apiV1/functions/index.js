@@ -5,6 +5,9 @@ const cors = require('cors');
 const inside = require('point-in-geopolygon');
 const app = express();
 
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
+
 // Automatically allow cross-origin requests
 app.use(cors({ origin: true }));
 
@@ -39,7 +42,20 @@ app.post('/position', (req, res) => {
     res.json(Object.assign({}, { data: result }))
 });
 
+
+ app.post('/chat-message',(req,res) => {
+     var {sender, message, group} = req.body;
+     const topicPayload = {
+            notification: {
+                 title: group,
+                 body: `${sender} : ${message}`
+                 }
+         };
+     admin.messaging().sendToTopic("chat-chennai",topicPayload)
+         .catch((error) => {
+                 console.log('Notification sent failed:',error);
+         });
+     res.json(`${sender} sent :  ${message} in ${group}`)
+ });
 // Expose Express API as a single Cloud Function:
-exports.findZone = functions.https.onRequest(app);
-
-
+exports.api = functions.https.onRequest(app);

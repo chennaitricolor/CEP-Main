@@ -60,6 +60,7 @@ class ChatState extends State<Chat> {
      _listVIewController.animateTo(0.0, duration: Duration(milliseconds: 300), curve: Curves.easeOut)
   });
     String chatTitle  = (widget.isCityChat) ? "Chennai City Room" : widget.userZone;
+
     return new Scaffold(
         appBar: new AppBar(title: new Text(chatTitle)),
 

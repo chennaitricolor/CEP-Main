@@ -46,7 +46,7 @@ class _ChatSelectionState extends State<ChatSelection> {
 
   String getUSerZone(String zoneRawString){
     String match;
-    RegExp exp = new RegExp(r"(^\d* - Zone \d* (\w*))");
+    RegExp exp = new RegExp(r"(Zone \d* (\w*))");
     Iterable<Match> matches = exp.allMatches(zoneRawString);
     for (Match m in matches) {
       match = m.group(2);
@@ -69,7 +69,7 @@ class _ChatSelectionState extends State<ChatSelection> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      Chat(isCityChat: isCityChat, currentUser: currentUser, userZone: userZone,)),
+                      Chat(isCityChat: isCityChat, currentUser: currentUser, userZone : userZone,)),
             );
           },
           child: new Padding(
