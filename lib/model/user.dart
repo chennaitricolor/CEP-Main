@@ -19,6 +19,7 @@ class User {
   String userEmail;
   String userWard;
   String userZone;
+  String oldUserZone;
   String userGeo;
   String userLangPref;
   Timestamp userDob;

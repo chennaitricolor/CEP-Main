@@ -7,6 +7,7 @@ import 'package:namma_chennai/model/user.dart';
 import 'package:intl/intl.dart';
 import 'package:namma_chennai/utils/api.dart';
 import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:namma_chennai/utils/TopicManager.dart';
 import 'package:location/location.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
@@ -17,7 +18,6 @@ API api = new API();
 class UserForm extends StatefulWidget {
   final String phonenumber;
   final String userid;
-
   UserForm({this.phonenumber, this.userid});
 
   @override
@@ -98,14 +98,15 @@ class UserFormState extends State<UserForm> {
   }
 
   saveOrUpdateUser() {
+    TopicManager topicManager = new TopicManager();
+    topicManager.unSubscribeToZoneChatNotification(currentUser.oldUserZone);
+    topicManager.subscribeToZoneChatNotification(currentUser.userZone);
     collectionRef
         .document(documentId)
         .updateData(currentUser.toJson())
         .catchError((e) {
       print(e);
     });
-    // _sharedPrefs.setApplicationSavedInformation(
-    //     'loggedinuser', currentUser.userId);
     Navigator.of(context).pop();
   }
 
@@ -278,10 +279,12 @@ class UserFormState extends State<UserForm> {
                             var json = convert.jsonDecode(response.body);
                             print(json);
                             setState(() {
+                              currentUser.oldUserZone = new TopicManager().getUSerZone(currentUser.userZone);
                               if (json['data'] != null &&
                                   json['data']['wardNo'] != null) {
                                 currentUser.userWard = "${json['data']['wardNo']}";
                                 currentUser.userZone = "${json['data']['zoneInfo']}";
+
                               } else {
                                 currentUser.userWard = "0";
                                 currentUser.userZone = "Other";

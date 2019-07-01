@@ -12,6 +12,7 @@ import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/routes/form/ngoform.dart';
 
 import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:namma_chennai/utils/TopicManager.dart';
 
 final SharedPrefs _sharedPrefs = new SharedPrefs();
 
@@ -58,7 +59,7 @@ class _NammaAppState extends State<NammaApp> {
     });
 
     _firebaseMessaging.setAutoInitEnabled(true);
-    _firebaseMessaging.subscribeToTopic("chat-chennai");
+    new TopicManager().subscribeToCityChatNotification();
   }
 
   ///

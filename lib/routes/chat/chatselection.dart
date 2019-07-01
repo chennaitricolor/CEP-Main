@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/utils/globals.dart';
+import 'package:namma_chennai/utils/TopicManager.dart';
 
 import 'chat.dart';
 
@@ -44,18 +45,8 @@ class _ChatSelectionState extends State<ChatSelection> {
     );
   }
 
-  String getUSerZone(String zoneRawString){
-    String match;
-    RegExp exp = new RegExp(r"(Zone \d* (\w*))");
-    Iterable<Match> matches = exp.allMatches(zoneRawString);
-    for (Match m in matches) {
-      match = m.group(2);
-    }
-    return match;
-  }
-
   Widget getButtonForChat(bool isCityChat) {
-    userZone = getUSerZone(currentUser.userZone);
+    userZone = new TopicManager().getUSerZone(currentUser.userZone);
     String chatTitle = (isCityChat) ? "Chennai Chat Room" : userZone+" Zone Room";
     return new Container(
       width: MediaQuery.of(context).size.width - 30,
