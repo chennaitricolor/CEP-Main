@@ -15,6 +15,7 @@ Firestore db = Firestore.instance;
 CollectionReference collectionRef = db.collection('users');
 API api = new API();
 
+
 class UserForm extends StatefulWidget {
   final String phonenumber;
   final String userid;
@@ -277,9 +278,8 @@ class UserFormState extends State<UserForm> {
                                   val.longitude.toString())
                               .then((response) {
                             var json = convert.jsonDecode(response.body);
-                            print(json);
                             setState(() {
-                              currentUser.oldUserZone = new TopicManager().getUSerZone(currentUser.userZone);
+                              currentUser.oldUserZone = currentUser.userZone;
                               if (json['data'] != null &&
                                   json['data']['wardNo'] != null) {
                                 currentUser.userWard = "${json['data']['wardNo']}";
@@ -287,7 +287,7 @@ class UserFormState extends State<UserForm> {
 
                               } else {
                                 currentUser.userWard = "0";
-                                currentUser.userZone = "Other";
+                                currentUser.userZone = "Zone 0 Other"; //Do not change the format - using regular expression matching - Surya
                               }
                               locationController.text =
                                   "${currentUser.userWard} - ${currentUser.userZone} (${currentUser.userGeo})";

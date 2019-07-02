@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'chatenvironement.dart';
 import 'Record.dart';
 import 'package:namma_chennai/model/user.dart';
+import 'package:namma_chennai/utils/constants.dart';
 
 class Chat extends StatefulWidget {
   final User currentUser;
@@ -18,10 +19,9 @@ class ChatState extends State<Chat> {
   ScrollController _listVIewController = ScrollController();
   String getMessageBucket(){
 
-   return (widget.isCityChat) ? 'chennai-city' : widget.userZone;
+   return (widget.isCityChat) ? StringConstants.CHENNAI_CITY_TOPIC : widget.userZone;
  }
   Widget _buildBody(BuildContext context) {
-
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('chat-messages')

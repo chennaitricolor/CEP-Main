@@ -48,10 +48,11 @@ app.post('/position', (req, res) => {
      const topicPayload = {
             notification: {
                  title: group,
+                 tag: group,
                  body: `${sender} : ${message}`
                  }
          };
-     admin.messaging().sendToTopic("chat-chennai",topicPayload)
+     admin.messaging().sendToTopic(group,topicPayload)
          .catch((error) => {
                  console.log('Notification sent failed:',error);
          });

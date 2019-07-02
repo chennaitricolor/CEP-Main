@@ -1,19 +1,22 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:namma_chennai/utils/constants.dart';
+import 'package:flutter/material.dart';
 class TopicManager{
   FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
 
   void subscribeToCityChatNotification(){
-    firebaseMessaging.subscribeToTopic("chat-chennai");
+    firebaseMessaging.subscribeToTopic(StringConstants.CHENNAI_CITY_TOPIC);
   }
   void unSubscribeToCityChatNotification(){
-    firebaseMessaging.unsubscribeFromTopic("chat-chennai");
+
+    firebaseMessaging.unsubscribeFromTopic(StringConstants.CHENNAI_CITY_TOPIC);
   }
   void subscribeToZoneChatNotification(String userZone){
-    firebaseMessaging.subscribeToTopic(userZone);
+    firebaseMessaging.subscribeToTopic(getUSerZone(userZone));
   }
   void unSubscribeToZoneChatNotification(String userZone){
-    firebaseMessaging.unsubscribeFromTopic(userZone);
+    if(userZone != null)
+      firebaseMessaging.unsubscribeFromTopic(getUSerZone(userZone));
   }
   String getUSerZone(String zoneRawString){
     String match;

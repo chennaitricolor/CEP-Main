@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/utils/api.dart';
+import 'package:namma_chennai/utils/TopicManager.dart';
+import 'package:namma_chennai/utils/constants.dart';
 
 API api = new API();
 
@@ -15,7 +17,7 @@ class ChatEnvironment extends StatelessWidget{
     this.userZone = userZone;
   }
    String getMessageBucket(){
-     return (this.isCityChat) ? 'chennai-city' : userZone;
+     return (this.isCityChat) ? StringConstants.CHENNAI_CITY_TOPIC: userZone;
    }
 
   final TextEditingController _chatController = new TextEditingController();
@@ -29,11 +31,11 @@ class ChatEnvironment extends StatelessWidget{
           .collection('messages')
           .document()
           .setData({
-        'message': text,
-        'sentBy': currentUser.userName,
-        'sentAt': DateTime.now(),
-        'sentId': currentUser.userId
-      });
+          'message': text,
+          'sentBy': currentUser.userName,
+          'sentAt': DateTime.now(),
+          'sentId': currentUser.userId
+        });
       api.messageAdded(currentUser.userName, text, getMessageBucket());
     }else {
       debugPrint('########### something wrong $text $data');
