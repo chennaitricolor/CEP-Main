@@ -371,7 +371,7 @@ class MyAppsState extends State<MyApps> {
                                         final BottomNavigationBar
                                             navigationBar =
                                             globalKey.currentWidget;
-                                        navigationBar.onTap(2);
+                                        navigationBar.onTap(1);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(

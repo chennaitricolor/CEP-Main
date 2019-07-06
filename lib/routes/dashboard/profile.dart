@@ -116,7 +116,21 @@ class ProfileState extends State<Profile> {
         centerTitle: false,
         title: Text(allTranslations.text('translation_21')),
       ),
-      body: isLoaded
+      body: Column(
+        children: <Widget>[
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   padding: EdgeInsets.all(10),
+          //   color: Colors.orange,
+          //   child: Row(
+          //     children: <Widget>[
+          //       Icon(Icons.warning, color: Colors.white,),
+          //       Text("Your profile in incomplete. Complete now.", style: TextStyle(color: Colors.white),),
+          //       Icon(Icons.play_circle_filled, color: Colors.white,),
+          //     ],
+          //   )
+          // ),
+          isLoaded
           ? SingleChildScrollView(
               child: Stack(
               children: <Widget>[
@@ -235,7 +249,9 @@ class ProfileState extends State<Profile> {
             ))
           : Center(
               child: CircularProgressIndicator(),
-            ),
+            )
+        ],
+      )
     );
   }
 }
