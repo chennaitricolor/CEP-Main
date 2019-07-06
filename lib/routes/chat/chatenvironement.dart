@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/utils/api.dart';
-import 'package:namma_chennai/utils/TopicManager.dart';
 import 'package:namma_chennai/utils/constants.dart';
 
 API api = new API();
@@ -52,6 +51,8 @@ class ChatEnvironment extends StatelessWidget{
               child: new TextField(
                 decoration: new InputDecoration.collapsed(hintText: "Start typing ..."),
                 controller: _chatController,
+                keyboardType: TextInputType.text,
+                maxLines: null,
                 onSubmitted: _handleSubmit,
               ),
             ),

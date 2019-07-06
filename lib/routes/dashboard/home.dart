@@ -3,7 +3,6 @@ import 'package:namma_chennai/locale/all_translations.dart';
 import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
-import 'package:namma_chennai/routes/dashboard/search.dart';
 import 'package:namma_chennai/routes/chat/chatselection.dart';
 
 import 'package:namma_chennai/utils/globals.dart';

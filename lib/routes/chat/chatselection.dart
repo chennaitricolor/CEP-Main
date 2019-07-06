@@ -16,6 +16,7 @@ class _ChatSelectionState extends State<ChatSelection> {
   String userId;
   String userZone;
   bool _isLoading = true;
+  bool _hasUserFilledDetails = false;
 
   void initState() {
     super.initState();
@@ -34,6 +35,7 @@ class _ChatSelectionState extends State<ChatSelection> {
         //should be removed when user ward details are added.
         setState(() {
           _isLoading = false;
+          _hasUserFilledDetails = (currentUser.userZone != null && currentUser.userName != null && currentUser.userZone != '' && currentUser.userName != '');
         });
       });
     });
@@ -73,6 +75,12 @@ class _ChatSelectionState extends State<ChatSelection> {
   }
 
   Widget displayScreen() {
+    if(!_hasUserFilledDetails){
+      return Container(
+        padding: const EdgeInsets.fromLTRB(20,50,10,5 ),
+        child: new Text("Please add name and location details in profile section to continue using Chat")
+      );
+    }
     return Center(
         child: Column(
       mainAxisSize: MainAxisSize.min,
