@@ -5,21 +5,27 @@ import 'chatenvironement.dart';
 import 'Record.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/utils/constants.dart';
+import 'package:namma_chennai/utils/TopicManager.dart';
 
 class Chat extends StatefulWidget {
   final User currentUser;
   final bool isCityChat;
   final String userZone;
-  const Chat({Key key, this.currentUser, this.isCityChat, this.userZone}): super(key: key);
+  final bool isSubscribedToNotifications;
+  const Chat({Key key, this.currentUser, this.isCityChat, this.userZone, this.isSubscribedToNotifications}): super(key: key);
   @override
   State createState() => new ChatState();
 }
 
 class ChatState extends State<Chat> {
   ScrollController _listVIewController = ScrollController();
+  TopicManager topicManager = new TopicManager();
+  bool isSubscribedToNotifications;
+  void initState(){
+    isSubscribedToNotifications= widget.isSubscribedToNotifications;
+  }
   String getMessageBucket(){
-
-   return (widget.isCityChat) ? StringConstants.CHENNAI_CITY_TOPIC : widget.userZone;
+  return (widget.isCityChat) ? Constants.CHENNAI_CITY_TOPIC : widget.userZone;
  }
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -53,7 +59,45 @@ class ChatState extends State<Chat> {
       sentAt: new DateTime.fromMicrosecondsSinceEpoch(record.sentTime.microsecondsSinceEpoch));
   }
 
+  void subscribeToChat(){
+    if(widget.isCityChat){
+      topicManager.subscribeToCityChatNotification();
+      setState((){
+        isSubscribedToNotifications = true;
+      });
+    } else {
+      topicManager.subscribeToZoneChatNotification(widget.userZone);
+      setState((){
+        isSubscribedToNotifications = true;
+      });
+    }
+  }
 
+  void unSubscribeToChat(){
+    if(widget.isCityChat){
+      topicManager.unSubscribeToCityChatNotification();
+      setState((){
+        isSubscribedToNotifications = false;
+      });
+    } else {
+      topicManager.unSubscribeToZoneChatNotification(widget.userZone);
+      setState((){
+        isSubscribedToNotifications = false;
+      });
+    }
+  }
+
+  void notificationIconButtonClicked(){
+    if(isSubscribedToNotifications){
+     return unSubscribeToChat();
+    }
+    subscribeToChat();
+  }
+
+
+  IconData getIconType(){
+    return isSubscribedToNotifications ? Icons.volume_up : Icons.volume_off;
+  }
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) =>{
@@ -62,7 +106,17 @@ class ChatState extends State<Chat> {
     String chatTitle  = (widget.isCityChat) ? "Chennai City Room" : widget.userZone;
 
     return new Scaffold(
-        appBar: new AppBar(title: new Text(chatTitle)),
+        appBar: new AppBar(
+            title: new Text(chatTitle),
+            actions: <Widget>[
+                  IconButton(
+                  icon: Icon(getIconType()),
+                onPressed: () {
+                  notificationIconButtonClicked();
+                },
+              )
+            ],
+        ),
 
         body: new Container(
               child : new Column(

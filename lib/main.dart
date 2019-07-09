@@ -10,6 +10,7 @@ import 'package:namma_chennai/routes/appdetail/appdetail.dart';
 import 'package:namma_chennai/routes/language/language.dart';
 import 'package:namma_chennai/routes/webview/webview.dart';
 import 'package:namma_chennai/routes/form/ngoform.dart';
+import 'package:namma_chennai/utils/constants.dart';
 
 import 'package:namma_chennai/utils/shared_prefs.dart';
 import 'package:namma_chennai/utils/TopicManager.dart';
@@ -53,13 +54,20 @@ class _NammaAppState extends State<NammaApp> {
     _firebaseMessaging.getToken().then((token) {
       print("====================");
       print(token);
-      // _share
+      // _shareC
     _sharedPrefs.setApplicationSavedInformation("messageToken", token);
       print("====================");
     });
 
     _firebaseMessaging.setAutoInitEnabled(true);
-    new TopicManager().subscribeToCityChatNotification();
+
+    //Subscribe to City Chat notification by default
+    _sharedPrefs.getApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_CITY_CHAT).then((isSubscribed)  {
+      if(isSubscribed == ''){
+        new TopicManager().subscribeToCityChatNotification();
+      }
+    });
+
   }
 
   ///

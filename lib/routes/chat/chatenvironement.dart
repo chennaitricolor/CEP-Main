@@ -16,7 +16,7 @@ class ChatEnvironment extends StatelessWidget{
     this.userZone = userZone;
   }
    String getMessageBucket(){
-     return (this.isCityChat) ? StringConstants.CHENNAI_CITY_TOPIC: userZone;
+     return (this.isCityChat) ? Constants.CHENNAI_CITY_TOPIC: userZone;
    }
 
   final TextEditingController _chatController = new TextEditingController();

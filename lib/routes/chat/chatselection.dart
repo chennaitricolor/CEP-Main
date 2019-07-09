@@ -3,8 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:namma_chennai/model/user.dart';
 import 'package:namma_chennai/utils/globals.dart';
 import 'package:namma_chennai/utils/TopicManager.dart';
-
 import 'chat.dart';
+import 'package:namma_chennai/utils/constants.dart';
+import 'package:namma_chennai/utils/shared_prefs.dart';
+final SharedPrefs _sharedPrefs = new SharedPrefs();
 
 class ChatSelection extends StatefulWidget {
   @override
@@ -17,9 +19,20 @@ class _ChatSelectionState extends State<ChatSelection> {
   String userZone;
   bool _isLoading = true;
   bool _hasUserFilledDetails = false;
+  bool isSubscribedToCityChat;
+  bool isSubscribedToZoneChat;
 
+  TopicManager topicManager = TopicManager();
   void initState() {
     super.initState();
+    _sharedPrefs.getApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_CITY_CHAT).then((val){
+      isSubscribedToCityChat = (val == Constants.SUBSCRIBED);
+    });
+
+    _sharedPrefs.getApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_ZONE_CHAT).then((val){
+      isSubscribedToZoneChat = (val == Constants.SUBSCRIBED);
+    });
+
     fireCollections.getLoggedInUserId().then((val) {
       userId = val;
     }).then((r) {
@@ -30,7 +43,6 @@ class _ChatSelectionState extends State<ChatSelection> {
         for (DocumentSnapshot doc in docs) {
           User user = new User.fromSnapShot(doc);
           currentUser = user;
-
         }
         //should be removed when user ward details are added.
         setState(() {
@@ -40,6 +52,17 @@ class _ChatSelectionState extends State<ChatSelection> {
       });
     });
   }
+//
+//  topicManager.isSubscribedToCityChatNotifications().then((val){
+//  debugPrint("##@@@@###");
+//  isSubscribedToCityChat = val;
+//  });
+//
+//  topicManager.isSubscribedToZoneChatNotifications().then((val){
+//  debugPrint("##@@@@###");
+//  isSubscribedToZoneChat = val;
+//  });
+
 
   Widget _loadingView() {
     return new Center(
@@ -48,8 +71,10 @@ class _ChatSelectionState extends State<ChatSelection> {
   }
 
   Widget getButtonForChat(bool isCityChat) {
-    userZone = new TopicManager().getUSerZone(currentUser.userZone);
+    userZone = topicManager.getUSerZone(currentUser.userZone);
     String chatTitle = (isCityChat) ? "Chennai Chat Room" : userZone+" Zone Room";
+    bool isNotificationSubscribed = (isCityChat) ? isSubscribedToCityChat : isSubscribedToZoneChat;
+
     return new Container(
       width: MediaQuery.of(context).size.width - 30,
       margin: const EdgeInsets.only(bottom: 15),
@@ -62,7 +87,7 @@ class _ChatSelectionState extends State<ChatSelection> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      Chat(isCityChat: isCityChat, currentUser: currentUser, userZone : userZone,)),
+                      Chat(isCityChat: isCityChat, currentUser: currentUser, userZone : userZone,isSubscribedToNotifications: isNotificationSubscribed,)),
             );
           },
           child: new Padding(

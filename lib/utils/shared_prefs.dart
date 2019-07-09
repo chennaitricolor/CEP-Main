@@ -14,7 +14,6 @@ class SharedPrefs {
 
     return prefs.getString(_storageKey + name) ?? '';
   }
-
   /// ----------------------------------------------------------
   /// Generic routine to saves an application preference
   /// ----------------------------------------------------------
