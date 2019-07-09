@@ -26,6 +26,13 @@ class _WebViewScreenState extends State<WebViewScreen> {
       ),
       withZoom: false,
       clearCache: false,
+      initialChild: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Center(
+          child: new CircularProgressIndicator(),
+        ),
+      ),
       withJavascript: true,
       withLocalStorage: true,
       appCacheEnabled: true,
