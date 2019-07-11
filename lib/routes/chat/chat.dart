@@ -12,7 +12,8 @@ class Chat extends StatefulWidget {
   final bool isCityChat;
   final String userZone;
   final bool isSubscribedToNotifications;
-  const Chat({Key key, this.currentUser, this.isCityChat, this.userZone, this.isSubscribedToNotifications}): super(key: key);
+  final Function(bool isCityChat) chatNotificationToggled;
+  const Chat({Key key, this.currentUser, this.isCityChat, this.userZone, this.isSubscribedToNotifications, this.chatNotificationToggled}): super(key: key);
   @override
   State createState() => new ChatState();
 }
@@ -88,6 +89,7 @@ class ChatState extends State<Chat> {
   }
 
   void notificationIconButtonClicked(){
+    widget.chatNotificationToggled(widget.isCityChat);
     if(isSubscribedToNotifications){
      return unSubscribeToChat();
     }

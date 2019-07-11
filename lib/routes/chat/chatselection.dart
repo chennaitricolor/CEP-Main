@@ -19,8 +19,8 @@ class _ChatSelectionState extends State<ChatSelection> {
   String userZone;
   bool _isLoading = true;
   bool _hasUserFilledDetails = false;
-  bool isSubscribedToCityChat;
-  bool isSubscribedToZoneChat;
+  bool isSubscribedToCityChat = false;
+  bool isSubscribedToZoneChat = false;
 
   TopicManager topicManager = TopicManager();
   void initState() {
@@ -52,18 +52,14 @@ class _ChatSelectionState extends State<ChatSelection> {
       });
     });
   }
-//
-//  topicManager.isSubscribedToCityChatNotifications().then((val){
-//  debugPrint("##@@@@###");
-//  isSubscribedToCityChat = val;
-//  });
-//
-//  topicManager.isSubscribedToZoneChatNotifications().then((val){
-//  debugPrint("##@@@@###");
-//  isSubscribedToZoneChat = val;
-//  });
 
-
+  void chatNotificationToggled(bool isCityChat) {
+    if(isCityChat){
+      isSubscribedToCityChat = !isSubscribedToCityChat;
+    } else {
+      isSubscribedToZoneChat = !isSubscribedToZoneChat;
+    }
+  }
   Widget _loadingView() {
     return new Center(
       child: new CircularProgressIndicator(),
@@ -87,7 +83,13 @@ class _ChatSelectionState extends State<ChatSelection> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      Chat(isCityChat: isCityChat, currentUser: currentUser, userZone : userZone,isSubscribedToNotifications: isNotificationSubscribed,)),
+                      Chat(isCityChat: isCityChat,
+                        currentUser: currentUser,
+                        userZone : userZone,
+                        isSubscribedToNotifications: isNotificationSubscribed,
+                        chatNotificationToggled: chatNotificationToggled,
+                      )
+              ),
             );
           },
           child: new Padding(
