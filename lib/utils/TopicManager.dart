@@ -30,12 +30,12 @@ class TopicManager{
   }
   void subscribeToZoneChatNotification(String userZone){
     _sharedPrefs.setApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_ZONE_CHAT, Constants.SUBSCRIBED);
-    firebaseMessaging.subscribeToTopic(getUSerZone(userZone));
+    firebaseMessaging.subscribeToTopic(userZone);
   }
   void unSubscribeToZoneChatNotification(String userZone){
     if(userZone != null){
       _sharedPrefs.setApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_ZONE_CHAT, Constants.UNSUBSCRIBED);
-      firebaseMessaging.unsubscribeFromTopic(getUSerZone(userZone));
+      firebaseMessaging.unsubscribeFromTopic(userZone);
     }
   }
 
