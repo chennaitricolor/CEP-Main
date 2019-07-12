@@ -39,8 +39,15 @@ class ProfileState extends State<Profile> {
 
   renderObjects() {
     listW = [];
-    listW.add(ListTile(
-      title: Text(allTranslations.text('translation_23')),
+    listW.add(Container(
+      width: MediaQuery.of(context).size.width,
+      child: Padding(
+        padding: EdgeInsets.only(top: 20, bottom: 5, left: 10),
+        child: Text(
+          allTranslations.text('translation_23'),
+          style: TextStyle(fontSize: 12),
+        ),
+      ),
     ));
 
     for (Orgs org in currentOrgs) {
@@ -59,6 +66,95 @@ class ProfileState extends State<Profile> {
       ));
     }
 
+    listW.addAll([
+      Column(
+        children: <Widget>[
+          Card(
+            child: ListTile(
+                onTap: () {},
+                title: Text(
+                  "Chennai Trekkers Club",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  "Approval Pending",
+                  style: TextStyle(
+                      color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+                ),
+                trailing: RichText(
+                  text: TextSpan(
+                    text: 'View ',
+                    style: DefaultTextStyle.of(context).style,
+                    children: [
+                      WidgetSpan(
+                        child: Icon(Icons.play_circle_filled, size: 16),
+                      ),
+                    ],
+                  ),
+                )),
+          ),
+          Card(
+            child: ListTile(
+                onTap: () {},
+                title: Text(
+                  "Chennai Trekkers Club",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: RichText(
+                  text: TextSpan(
+                    text: 'Approved ',
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                    children: [
+                      WidgetSpan(
+                        child: Icon(
+                          Icons.check_circle,
+                          size: 14,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                trailing: RichText(
+                  text: TextSpan(
+                    text: 'View ',
+                    style: DefaultTextStyle.of(context).style,
+                    children: [
+                      WidgetSpan(
+                        child: Icon(Icons.play_circle_filled, size: 16),
+                      ),
+                    ],
+                  ),
+                )),
+          ),
+        ],
+      ),
+      Card(
+        child: ListTile(
+            onTap: () {},
+            title: Text(
+              "Chennai Trekkers Club",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              "Rejected",
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+            trailing: RichText(
+              text: TextSpan(
+                text: 'View ',
+                style: DefaultTextStyle.of(context).style,
+                children: [
+                  WidgetSpan(
+                    child: Icon(Icons.play_circle_filled, size: 16),
+                  ),
+                ],
+              ),
+            )),
+      ),
+    ]);
+
     listW.add(Card(
       margin: EdgeInsets.all(2),
       child: InkWell(
@@ -66,8 +162,28 @@ class ProfileState extends State<Profile> {
           onTap: () {
             showNGOForm();
           },
-          title: Text(allTranslations.text('translation_24')),
-          trailing: Icon(Icons.add_box),
+          title: Text(
+            allTranslations.text('translation_24'),
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          trailing: RichText(
+            text: TextSpan(
+              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+              children: [
+                WidgetSpan(
+                  child: Icon(
+                    Icons.add_box,
+                    size: 18,
+                    color: Colors.blue,
+                  ),
+                ),
+                TextSpan(
+                  text: " Add",
+                  style: TextStyle(color: Colors.blue, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     ));
@@ -108,150 +224,281 @@ class ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      backgroundColor: Color.fromARGB(150, 224, 224, 224),
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        elevation: 0,
-        centerTitle: false,
-        title: Text(allTranslations.text('translation_21')),
-      ),
-      body: Column(
-        children: <Widget>[
-          // Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   padding: EdgeInsets.all(10),
-          //   color: Colors.orange,
-          //   child: Row(
-          //     children: <Widget>[
-          //       Icon(Icons.warning, color: Colors.white,),
-          //       Text("Your profile in incomplete. Complete now.", style: TextStyle(color: Colors.white),),
-          //       Icon(Icons.play_circle_filled, color: Colors.white,),
-          //     ],
-          //   )
-          // ),
-          isLoaded
-          ? SingleChildScrollView(
-              child: Stack(
-              children: <Widget>[
-                Container(
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: <Widget>[
-                          Card(
-                            margin: EdgeInsets.only(
-                                top: 5, right: 5, left: 5, bottom: 0),
+        resizeToAvoidBottomPadding: false,
+        backgroundColor: Color.fromARGB(150, 224, 224, 224),
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          elevation: 0,
+          centerTitle: false,
+          title: Text(allTranslations.text('translation_21')),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+          children: <Widget>[
+            Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.all(10),
+                color: Colors.orange,
+                child: Center(
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                          color: Colors.blue, fontWeight: FontWeight.bold),
+                      children: [
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.warning,
+                            size: 14,
                             color: Colors.white,
-                            child: ListTile(
-                              title: Text(
-                                currentUser.userName,
-                                style: TextStyle(fontSize: 22),
-                              ),
-                              trailing: InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(context, "/form")
-                                      .then((r) {
-                                    refresh();
-                                  });
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.all(0),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.grey,
-                                    size: 25,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "  Your profile in incomplete. Complete now.  ",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        WidgetSpan(
+                          child: Icon(
+                            Icons.play_circle_filled,
+                            size: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+
+                // Row(
+                //   children: <Widget>[
+                //     Icon(Icons.warning, color: Colors.white,),
+                //     Text("Your profile in incomplete. Complete now.", style: TextStyle(color: Colors.white),),
+                //     Icon(Icons.play_circle_filled, color: Colors.white,),
+                //   ],
+                // )
+                ),
+            isLoaded
+                ? SingleChildScrollView(
+                    child: Stack(
+                    children: <Widget>[
+                      Container(
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 20, bottom: 5, left: 10),
+                                    child: Text(
+                                      "APPLICATION LANGUAGE",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              subtitle:
-                                  Text("+91-" + currentUser.userPhoneNumber),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              print("Change Language");
-                              operations
-                                  .showLanguageSelection(context)
-                                  .then((language) {
-                                setState(() {});
-                                languageCode = allTranslations.currentLanguage;
-                                Navigator.of(context).pop();
-                                refresh();
-                              });
-                              // streamController.add("English"+DateTime.now().toString());
-                            },
-                            child: Card(
-                              color: Colors.white,
-                              child: ListTile(
-                                title: Text(
-                                  "Change Language",
-                                ),
-                                subtitle:
-                                    Text("${allTranslations.text('language')}"),
-                              ),
-                            ),
-                          ),
-                          Column(
-                            children: listW,
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(
-                                  top: 10.0, left: 10, right: 10),
-                              child: SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: FlatButton(
-                                    color: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0)),
-                                    onPressed: () {
-                                      fireCollections.removeLoggedInUserId();
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context, '/auth', (_) => false);
+                                Card(
+                                  color: Colors.white,
+                                  child: ListTile(
+                                    title: Text(
+                                      "Change Language",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    onTap: () {
+                                      print("Change Language");
+                                      operations
+                                          .showLanguageSelection(context)
+                                          .then((language) {
+                                        setState(() {});
+                                        languageCode =
+                                            allTranslations.currentLanguage;
+                                        Navigator.of(context).pop();
+                                        refresh();
+                                      });
+                                      // streamController.add("English"+DateTime.now().toString());
                                     },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12.0, horizontal: 12.0),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text(
-                                            allTranslations.text('translation_5'),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold),
+                                    trailing: RichText(
+                                      text: TextSpan(
+                                        text:
+                                            "${allTranslations.text('language')}   ",
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          WidgetSpan(
+                                            child: Icon(
+                                                Icons.play_circle_filled,
+                                                size: 16),
                                           ),
-                                          Text(
-                                            allTranslations.text('translation_6'),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12.0,
-                                            ),
-                                          )
                                         ],
                                       ),
                                     ),
-                                  ))),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            child: Center(
-                              child: Text(
-                                "v1.0",
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            ),
-                          )
-                        ],
-                      )),
-                )
-              ],
-            ))
-          : Center(
-              child: CircularProgressIndicator(),
-            )
-        ],
-      )
-    );
+                                    // subtitle: Text(
+                                    //     "${allTranslations.text('language')}"),
+                                  ),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 20, bottom: 5, left: 10),
+                                    child: Text(
+                                      "PERSONAL INFORMATION",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ),
+                                Card(
+                                  color: Colors.white,
+                                  child: ListTile(
+                                    title: Text(
+                                      "My profile",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    onTap: () {
+                                      Navigator.pushNamed(context, "/form")
+                                          .then((r) {
+                                        refresh();
+                                      });
+                                    },
+                                    trailing: RichText(
+                                      text: TextSpan(
+                                        text: currentUser.userName + "  ",
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: [
+                                          WidgetSpan(
+                                            child: Icon(
+                                                Icons.play_circle_filled,
+                                                size: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // subtitle: Text(
+                                    //     "${allTranslations.text('language')}"),
+                                  ),
+                                ),
+                                // Card(
+                                //   margin: EdgeInsets.only(
+                                //       top: 5, right: 5, left: 5, bottom: 0),
+                                //   color: Colors.white,
+                                //   child: ListTile(
+                                //     title: Text(
+                                //       currentUser.userName,
+                                //       style: TextStyle(fontSize: 22),
+                                //     ),
+                                //     trailing: InkWell(
+                                //       onTap: () {
+                                //         Navigator.pushNamed(context, "/form")
+                                //             .then((r) {
+                                //           refresh();
+                                //         });
+                                //       },
+                                //       child: Padding(
+                                //         padding: EdgeInsets.all(0),
+                                //         child: Icon(
+                                //           Icons.edit,
+                                //           color: Colors.grey,
+                                //           size: 25,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //     subtitle: Text(
+                                //         "+91-" + currentUser.userPhoneNumber),
+                                //   ),
+                                // ),
+                                Column(
+                                  children: listW,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.all(10),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        "Logged in as",
+                                        style: TextStyle(color: Colors.black54),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(3),
+                                      ),
+                                      Text(
+                                        "${currentUser.userPhoneNumber}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 22),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(3),
+                                      ),
+                                      Text(
+                                        "v1.0",
+                                        style: TextStyle(color: Colors.black87),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(5),
+                                      ),
+                                      FlatButton(
+                                        color: Colors.red,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        onPressed: () {
+                                          fireCollections
+                                              .removeLoggedInUserId();
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context, '/auth', (_) => false);
+                                        },
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              allTranslations
+                                                  .text('translation_5'),
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            // Text(
+                                            //   allTranslations
+                                            //       .text('translation_6'),
+                                            //   style: TextStyle(
+                                            //     color: Colors.white,
+                                            //     fontSize: 12.0,
+                                            //   ),
+                                            // )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                // Container(
+                                //     margin: EdgeInsets.only(
+                                //         top: 10.0, left: 10, right: 10),
+                                //     child: ),
+                                // Padding(
+                                //   padding: EdgeInsets.only(top: 10, bottom: 10),
+                                //   child: Center(
+                                //     child: Text(
+                                //       "v1.0",
+                                //       style: TextStyle(color: Colors.black54),
+                                //     ),
+                                //   ),
+                                // )
+                              ],
+                            )),
+                      )
+                    ],
+                  ))
+                : Center(
+                    child: CircularProgressIndicator(),
+                  )
+          ],
+        ),
+        ));
   }
 }

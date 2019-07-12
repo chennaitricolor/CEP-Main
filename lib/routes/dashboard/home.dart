@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:namma_chennai/locale/all_translations.dart';
+import 'package:namma_chennai/routes/dashboard/admin.dart';
 import 'package:namma_chennai/routes/dashboard/allapps.dart';
 import 'package:namma_chennai/routes/dashboard/myapps.dart';
 import 'package:namma_chennai/routes/dashboard/profile.dart';
@@ -21,6 +22,7 @@ class HomeState extends State<Home> {
     AllApps(),
     null,
     Profile(),
+    Admin()
   ];
 
   void onTabTapped(int index) {
@@ -62,6 +64,10 @@ class HomeState extends State<Home> {
           new BottomNavigationBarItem(
             icon: Icon(Icons.person),
             title: Text(allTranslations.text('translation_17')),
+          ),
+          new BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            title: Text("Admin"),
           ),
         ],
       ),
