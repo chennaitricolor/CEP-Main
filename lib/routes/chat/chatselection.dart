@@ -135,6 +135,3 @@ class _ChatSelectionState extends State<ChatSelection> {
     );
   }
 }
-
-
-

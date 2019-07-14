@@ -56,7 +56,8 @@ class ChatState extends State<Chat> {
     final record = Record.fromSnapshot(data);
     return ChatMessage(text:record.message,
       sentBy: record.sentBy,
-      loggedInUser: widget.currentUser.userName,
+      sentId: record.sentId,
+      loggedInUser: widget.currentUser.userId,
       sentAt: new DateTime.fromMicrosecondsSinceEpoch(record.sentTime.microsecondsSinceEpoch));
   }
 

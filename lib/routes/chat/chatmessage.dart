@@ -6,6 +6,7 @@ class ChatMessage extends StatelessWidget {
   final String loggedInUser;
   final String text;
   final String sentBy;
+  final String sentId;
   final DateTime sentAt;
 
   final f =  new DateFormat.yMd().add_jm();
@@ -13,20 +14,30 @@ class ChatMessage extends StatelessWidget {
   ChatMessage({
     this.text,
     this.sentBy,
+    this.sentId,
     this.sentAt,
     this.loggedInUser
   });
 
   MainAxisAlignment getAlignmentForMessageByUser(){
-    if(this.sentBy == this.loggedInUser)
+    if(this.sentId == this.loggedInUser)
       return MainAxisAlignment.end;
     return MainAxisAlignment.start;
-
   }
-
+  Widget getName(){
+    if(this.sentId == this.loggedInUser) return new Container(width: 0, height: 0);
+    return new Container(
+      padding: const EdgeInsets.fromLTRB(10,5,10,5),
+      child : new Text(
+        sentBy,
+        textAlign: TextAlign.left,
+        style: TextStyle(color: Colors.redAccent, fontSize: 14),
+      ),
+    );
+  }
   Decoration getBoxDecorationByUser(){
     return  BoxDecoration(
-      color: (this.sentBy == this.loggedInUser) ? Colors.white : Colors.lightGreen[100],
+      color: (this.sentId == this.loggedInUser) ? Colors.white : Colors.lightGreen[100],
       borderRadius: BorderRadius.all(
         Radius.circular(6.0),
       ),
@@ -51,14 +62,7 @@ class ChatMessage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: <Widget>[
-                  new Container(
-                    padding: const EdgeInsets.fromLTRB(10,5,10,5),
-                    child : new Text(
-                      sentBy,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.redAccent, fontSize: 14),
-                    ),
-                  ),
+                 getName(),
                   new Container(
                     padding: const EdgeInsets.fromLTRB(10,0,10,5),
                     child: new Text(
