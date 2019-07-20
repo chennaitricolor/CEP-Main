@@ -21,6 +21,9 @@ class ChatEnvironment extends StatelessWidget{
 
   final TextEditingController _chatController = new TextEditingController();
 
+   String getUserSentBy(){
+     return "${currentUser.userName} (#${currentUser.userAutoId})";
+   }
   void _handleSubmit(String text) {
     _chatController.clear();
     String data = currentUser.userName;
@@ -31,7 +34,7 @@ class ChatEnvironment extends StatelessWidget{
           .document()
           .setData({
           'message': text,
-          'sentBy': currentUser.userName,
+          'sentBy': getUserSentBy(),
           'sentAt': DateTime.now(),
           'sentId': currentUser.userId
         });

@@ -30,12 +30,14 @@ class User {
   String userAadharId;
   String userPanId;
   String messageToken;
+  int userAutoId;
 
   User(this.userPhoneNumber, this.userId, this.userPersona);
 
+
   @override
   String toString() {
-    return 'User{userId: $userId, userName: $userName, userPhoneNumber: $userPhoneNumber, userEmail: $userEmail, userWard: $userWard, userZone: $userZone, userGeo: $userGeo, userLangPref: $userLangPref, userDob: $userDob, userGender: $userGender, userPersona: $userPersona, userCreatedOn: $userCreatedOn, userUpdatedOn: $userUpdatedOn, userAadharId: $userAadharId, userPanId: $userPanId, messageToken: $messageToken}';
+    return 'User{userId: $userId, userName: $userName, userPhoneNumber: $userPhoneNumber, userEmail: $userEmail, userWard: $userWard, userZone: $userZone, oldUserZone: $oldUserZone, userGeo: $userGeo, userLangPref: $userLangPref, userDob: $userDob, userGender: $userGender, userPersona: $userPersona, userCreatedOn: $userCreatedOn, userUpdatedOn: $userUpdatedOn, userAadharId: $userAadharId, userPanId: $userPanId, messageToken: $messageToken, userAutoId: $userAutoId}';
   }
 
   User.fromSnapShot(DocumentSnapshot snapshot){
@@ -55,6 +57,7 @@ class User {
     this.userAadharId = snapshot['user_aadhar_id'] ?? "";
     this.userPanId = snapshot['user_pan_id'] ?? "";
     this.messageToken = snapshot['message_token'] ?? "";
+    this.userAutoId = snapshot['user_auto_id'] ?? "";
   }
 
   User.fromJson(Map<String, dynamic> json){
@@ -74,6 +77,7 @@ class User {
     this.userAadharId = json['user_aadhar_id'];
     this.userPanId = json['user_pan_id'];
     this.messageToken = json['message_token'];
+    this.userAutoId = json['user_auto_id'];
   }
 
   Map<String, dynamic> toJson() =>
@@ -94,6 +98,7 @@ class User {
     'user_aadhar_id': this.userAadharId,
     'user_pan_id': this.userPanId,
     'message_token': this.messageToken,
+    'user_auto_id':this.userAutoId
   };
 
 //  User(this.userId, this.userName, this.userWard);

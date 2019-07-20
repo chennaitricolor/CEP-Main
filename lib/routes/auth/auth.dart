@@ -30,6 +30,7 @@ class AuthState extends State<Auth> {
   String prefLang = "Language";
   bool isLoading = false;
   FirebaseUser currentUser;
+
   var otpController = new TextEditingController();
 
   Future<void> verifyPhoneNumber() async {
@@ -163,7 +164,7 @@ class AuthState extends State<Auth> {
           });
         } else {
           user = new User(phonenumber, userId, "USER");
-          user.messageToken = token;
+          user.userAutoId = getLastAddedUserId() +1 ;
           collectionRef1.document().setData(user.toJson()).catchError((e) {
             print(e);
           });
@@ -171,6 +172,14 @@ class AuthState extends State<Auth> {
       });
     });
   }
+
+  getLastAddedUserId() async{
+    Query q = collectionRef1.orderBy("user_created_on",descending: true).limit(1);
+    QuerySnapshot querySnapshot = await q.getDocuments();
+    int oldUserId = querySnapshot.documents[0].data["userAutoId"];
+    return oldUserId == null ? querySnapshot.documents[0].data["userAutoId"] : 0;
+  }
+
 
   @override
   Widget build(BuildContext context) {

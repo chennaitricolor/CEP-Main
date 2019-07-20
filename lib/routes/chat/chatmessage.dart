@@ -9,7 +9,8 @@ class ChatMessage extends StatelessWidget {
   final String sentId;
   final DateTime sentAt;
 
-  final f =  new DateFormat.yMd().add_jm();
+//  final f =  new DateFormat.yMd().add_jm();
+  final f =  new DateFormat.yMMMd().add_jm();
 // constructor to get text from textfield
   ChatMessage({
     this.text,
@@ -25,9 +26,9 @@ class ChatMessage extends StatelessWidget {
     return MainAxisAlignment.start;
   }
   Widget getName(){
-    if(this.sentId == this.loggedInUser) return new Container(width: 0, height: 0);
+//    if(this.sentId == this.loggedInUser) return new Container(width: 0, height: 0);
     return new Container(
-      padding: const EdgeInsets.fromLTRB(10,5,10,5),
+      padding: const EdgeInsets.fromLTRB(10,5,10,0),
       child : new Text(
         sentBy,
         textAlign: TextAlign.left,
@@ -37,9 +38,14 @@ class ChatMessage extends StatelessWidget {
   }
   Decoration getBoxDecorationByUser(){
     return  BoxDecoration(
-      color: (this.sentId == this.loggedInUser) ? Colors.white : Colors.lightGreen[100],
+      color: (this.sentId != this.loggedInUser) ? Colors.white : Colors.lightBlue[100],
       borderRadius: BorderRadius.all(
         Radius.circular(6.0),
+      ),
+      border: new Border.all(
+          color: Colors.grey,
+          width: 0.5,
+          style: BorderStyle.solid
       ),
     );
   }
@@ -64,7 +70,7 @@ class ChatMessage extends StatelessWidget {
                 children: <Widget>[
                  getName(),
                   new Container(
-                    padding: const EdgeInsets.fromLTRB(10,0,10,5),
+                    padding: const EdgeInsets.fromLTRB(10,5,10,5),
                     child: new Text(
                       text,
                       textAlign: TextAlign.left,
