@@ -1,38 +1,64 @@
+# Hello Chennai
 
-## API Reference
+For the people, By the people
 
-- Endpoint - /platform
-- Method - GET
-- Request- none
-- Response - Welcome to Citizen Engagement platform API v1 $request device
-- Auth - no
+## REST API Documentation
 
-### auth.service
+```https://us-central1-tech-for-cities.cloudfunctions.net/api```
 
-- Endpoint  - /token/userid
-- Method - POST
-- Request - userId
-- Response - user details (most importantly token to authenticate)
-- Auth - will authenticate if login goes well. <br/> <br/>
+> ### Publish Micro Apps
+
+#### To publish micro app [Click Here](https://tech-for-cities.web.app/publish)
+
+### Prequisites
  
-- Endpoint  - /verify
-- Method - POST
-- Request - userId
-- Response - verified message
-- Auth - yes
+- Must be a registered user of ```Hello Chennai``` 
+- Should support **Tamil, English and Tanglish**
+- Should provide **Micro-app icon url, app url, title and description**
+- Download [signin.html](https://raw.githubusercontent.com/chennaitricolor/SmartCityCEP/dev/apiV1/public/signin.html) (should be placed along with index.html) from the repository and add to app root, it is required  if you would like to access data from platform.
 
-### location.service
+### Access data from Platform
 
-- Endpoint  - /findward
-- Method - POST
-- Request - latitude longitude
-- Response - ward details
-- Auth - no
+Within your micro-app, you can access the user information anywhere using the below code snippet.
+ 
+``` let userInformation = localStorage.getItem("user"); ```
 
-### user.service
+##### How it works (with Example)
 
-- Endpoint  - /user
-- Method - GET
-- Request - userid from logged state
-- Response- user details
-- Auth - Yes
+Sample Micro App : **[Demo Micro-App](https://tech-for-cities.web.app)**
+
+- While opening the micro app, initial hit will goes here :
+
+```https://tech-for-cities.web.app/signin.html?token=lzc1FLB9GoWA28E2jcUf5agiJj12```
+
+- Once the token is validated, it will be redirected here :
+
+```https://tech-for-cities.web.app``` 
+
+> ### Ward API
+
+
+| URL           | Method        |
+| ------------- | ------------- |
+| /position  | POST  |
+
+Get ward and zone information by providing latitude and longitude.
+
+### Request Body
+
+```json
+{
+	"lat" : "13.1133903",
+	"long" : "80.2871213"
+}
+```
+### Response
+
+```json
+{
+    "data": {
+        "wardNo": "51",
+        "zoneInfo": "Zone 5 Royapuram"
+    }
+}
+```
