@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Shade&display=swap" rel="stylesheet">
+    <title>Hello Chennai</title>
+    <style>
+      html {
+        height: 100%;
+      }
+
+      body {
+        width: 100%;
+        margin: 0px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Bungee Shade", cursive;
+        color: #ffed94;
+      }
+
+      h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-content: center;
+        text-align: center;
+        font-weight: normal;
+        width: 100%;
+        text-align: center;
+        font-size: 16vw;
+        background: linear-gradient(-45deg, #ffffff 25%, #ffdd40 25%, #ffdd40 50%, #ffffff 50%, #ffffff 75%, #ffdd40 75%, #ffdd40);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 20px 20px;
+        background-position: 0 0;
+        -webkit-animation: stripes 1s linear infinite;
+        animation: stripes 1s linear infinite;
+      }
+
+      @-webkit-keyframes stripes {
+        100% {
+          background-position: 20px 0, 20px 0, 20px 0;
+        }
+      }
+
+      @keyframes stripes {
+        100% {
+          background-position: 20px 0, 20px 0, 20px 0;
+        }
+      }
+      main {
+        align-content: center;
+        align-items: baseline;
+        -webkit-animation: gradientShuffle 35s ease infinite;
+        animation: gradientShuffle 35s ease infinite;
+        background: linear-gradient(45deg, #06b07d, #55bbeb, #8668ad);
+        background-size: 100vw 700vh;
+        color: #fff;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        min-height: 100vh;
+        overflow-x: hidden;
+        padding: 0 2vw;
+        text-align: center;
+        width: 100vw;
+        transition: 0.3s ease background-position;
+      }
+
+      main > * {
+        flex: 0 0 100%;
+        flex-grow: 1;
+      }
+
+      main h1 {
+        font-size: 4em;
+        color: yellow;
+      }
+
+      @-webkit-keyframes gradientShuffle {
+        0%,
+        5% {
+          background-position: 0% 90%;
+        }
+        45%,
+        55% {
+          background-position: 0% 10%;
+        }
+        95%,
+        100% {
+          background-position: 0% 90%;
+        }
+      }
+
+      @keyframes gradientShuffle {
+        0%,
+        5% {
+          background-position: 0% 90%;
+        }
+        45%,
+        55% {
+          background-position: 0% 10%;
+        }
+        95%,
+        100% {
+          background-position: 0% 90%;
+        }
+      }
+      #user {
+        font-family: cursive;
+        font-size: 2em;
+        text-shadow: -1px 5px 5px #000;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="user"></div>
+      <h1 data-heading="Slide">Hello Chennai</h1>
+    </main>
+    <script>
+      var div = document.getElementById('user');
+      div.innerHTML = `Hi, <br/> ${JSON.parse(localStorage.getItem("user")).user_name} <br/> Welcome <br/> to`;
+    </script>
+  </body>
+</html>
