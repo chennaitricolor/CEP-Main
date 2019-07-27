@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/model/apps.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/model/userapps.dart';
-import 'package:namma_chennai/routes/webview/webview.dart';
-import 'package:namma_chennai/utils/globals.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/model/apps.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/model/userapps.dart';
+import 'package:hello_chennai/routes/webview/webview.dart';
+import 'package:hello_chennai/utils/globals.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
 
 class MyApps extends StatefulWidget {
@@ -72,6 +72,18 @@ class MyAppsState extends State<MyApps> {
                     ? Image.network(
                         this.featuredApps[index].appIconUrl,
                         width: 50,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          );
+                        },
                       )
                     : Image(
                         image: AssetImage(this.featuredApps[index].appIconUrl),
@@ -105,8 +117,9 @@ class MyAppsState extends State<MyApps> {
               MaterialPageRoute(
                   builder: (context) => WebViewScreen(
                       url: installedApps[index].appUrl +
-                          (installedApps[index].appIconUrl.indexOf("http") >= 0 ? "/signin.html?token="+
-                          userId : ""),
+                          (installedApps[index].appIconUrl.indexOf("http") >= 0
+                              ? "/signin.html?token=" + userId
+                              : ""),
                       name: installedApps[index].appName[languageCode])));
         },
         onLongPress: () {
@@ -126,6 +139,19 @@ class MyAppsState extends State<MyApps> {
                     ? Image.network(
                         installedApps[index].appIconUrl,
                         width: 50,
+                        loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes
+                                      : null,
+                                ),
+                              );
+                            },
                       )
                     : Image(
                         image: AssetImage(installedApps[index].appIconUrl),
@@ -357,7 +383,7 @@ class MyAppsState extends State<MyApps> {
                                 ? Container(
                                     padding: EdgeInsets.only(left: 10),
                                     child: Text(
-                                      "You have not downloaded any apps on Namma Chennai yet.",
+                                      "You have not downloaded any apps on Hello Chennai yet.",
                                       style: TextStyle(fontSize: 12.0),
                                     ),
                                   )

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/routes/dashboard/admin.dart';
-import 'package:namma_chennai/routes/dashboard/allapps.dart';
-import 'package:namma_chennai/routes/dashboard/myapps.dart';
-import 'package:namma_chennai/routes/dashboard/profile.dart';
-import 'package:namma_chennai/routes/chat/chatselection.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/routes/dashboard/admin.dart';
+import 'package:hello_chennai/routes/dashboard/allapps.dart';
+import 'package:hello_chennai/routes/dashboard/myapps.dart';
+import 'package:hello_chennai/routes/dashboard/profile.dart';
+import 'package:hello_chennai/routes/chat/chatselection.dart';
 
-import 'package:namma_chennai/utils/globals.dart';
+import 'package:hello_chennai/utils/globals.dart';
 
 class Home extends StatefulWidget {
   @override

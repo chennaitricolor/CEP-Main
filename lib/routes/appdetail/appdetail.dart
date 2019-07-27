@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:namma_chennai/model/apps.dart';
-import 'package:namma_chennai/model/userapps.dart';
-import 'package:namma_chennai/model/user.dart';
+import 'package:hello_chennai/model/apps.dart';
+import 'package:hello_chennai/model/userapps.dart';
+import 'package:hello_chennai/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
@@ -48,18 +48,21 @@ class AppDetailState extends State<AppDetailScreen> {
     });
   }
 
-  fetchExistingUserApps(bool isAddApp){
-    collectionRef.where("user_id", isEqualTo: userId).snapshots().listen((QuerySnapshot snapshot) {
+  fetchExistingUserApps(bool isAddApp) {
+    collectionRef
+        .where("user_id", isEqualTo: userId)
+        .snapshots()
+        .listen((QuerySnapshot snapshot) {
       List<DocumentSnapshot> docs = snapshot.documents;
       for (DocumentSnapshot doc in docs) {
         documentId = doc.documentID;
         userApps = UserApps.fromSnapShot(doc);
       }
-      if(isAddApp){
+      if (isAddApp) {
         addApp();
       } else {
-        if(userApps != null && userApps.apps != null){
-          if(userApps.apps.contains(app.appId)){
+        if (userApps != null && userApps.apps != null) {
+          if (userApps.apps.contains(app.appId)) {
             setState(() {
               installed = true;
             });
@@ -70,15 +73,15 @@ class AppDetailState extends State<AppDetailScreen> {
   }
 
   addApp() {
-    if(installed == false){
-      if(userApps == null){
+    if (installed == false) {
+      if (userApps == null) {
         userApps = new UserApps(userId);
         userApps.apps = new List();
         userApps.layout = new List();
       }
       userApps.apps.add(app.appId);
       userApps.layout.add(app.appId);
-      if(documentId != null){
+      if (documentId != null) {
         collectionRef
             .document(documentId)
             .updateData(userApps.toJson())
@@ -131,6 +134,19 @@ class AppDetailState extends State<AppDetailScreen> {
                           leading: Image.network(
                             app.appIconUrl,
                             width: 50,
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes
+                                      : null,
+                                ),
+                              );
+                            },
                           ),
                           title: Text(app.appName["en"].toString(),
                               style: TextStyle(
@@ -151,8 +167,7 @@ class AppDetailState extends State<AppDetailScreen> {
                                   ListTile(
                                     title: Text("Launch Date:",
                                         style: TextStyle(fontSize: 14.0)),
-                                    subtitle: Text(
-                                        app.appLaunchDate,
+                                    subtitle: Text(app.appLaunchDate,
                                         style: TextStyle(fontSize: 12.0)),
                                   ),
                                 ],
@@ -170,43 +185,43 @@ class AppDetailState extends State<AppDetailScreen> {
                                 ],
                               ))),
                       Expanded(child: Container()),
-                      (installed == false) ?
-                      FlatButton(
-                        color: Colors.greenAccent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                          installApp();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 18.0, horizontal: 98.0),
-                          child: Text(
-                            'Install',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ) : FlatButton(
-                        color: Colors.redAccent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 18.0, horizontal: 98.0),
-                          child: Text(
-                            'Installed',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                      (installed == false)
+                          ? FlatButton(
+                              color: Colors.greenAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0)),
+                              onPressed: () {
+                                installApp();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 18.0, horizontal: 98.0),
+                                child: Text(
+                                  'Install',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )
+                          : FlatButton(
+                              color: Colors.redAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0)),
+                              onPressed: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 18.0, horizontal: 98.0),
+                                child: Text(
+                                  'Installed',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
                     ],
                   )),
             ),

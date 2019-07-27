@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/utils/default_data.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/utils/default_data.dart';
 
 class LanguagePreferences extends StatefulWidget {
   @override
@@ -91,7 +91,7 @@ class _LangPrefState extends State<LanguagePreferences> {
                               radius: 100.0,
                               child: Image(
                                 image: AssetImage(
-                                    'assets/images/logo/techforcities.png'),
+                                    'assets/images/logo/tricolor.png'),
                                 width: 150.0,
                               ),
                             ),

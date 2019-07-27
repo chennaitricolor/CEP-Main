@@ -5,9 +5,9 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/model/orgs.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/model/orgs.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 

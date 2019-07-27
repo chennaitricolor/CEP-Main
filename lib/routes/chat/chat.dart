@@ -3,9 +3,9 @@ import 'chatmessage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'chatenvironement.dart';
 import 'Record.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/utils/constants.dart';
-import 'package:namma_chennai/utils/TopicManager.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/utils/constants.dart';
+import 'package:hello_chennai/utils/TopicManager.dart';
 
 class Chat extends StatefulWidget {
   final User currentUser;

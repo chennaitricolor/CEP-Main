@@ -1,5 +1,5 @@
-import 'package:namma_chennai/model/apps.dart';
-import 'package:namma_chennai/utils/globals.dart';
+import 'package:hello_chennai/model/apps.dart';
+import 'package:hello_chennai/utils/globals.dart';
 
 class DefaultData {
   static String platformTitle = "Citizen Engagement Platform";

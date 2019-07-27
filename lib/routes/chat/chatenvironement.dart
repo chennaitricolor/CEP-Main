@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/utils/api.dart';
-import 'package:namma_chennai/utils/constants.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/utils/api.dart';
+import 'package:hello_chennai/utils/constants.dart';
 
 API api = new API();
 

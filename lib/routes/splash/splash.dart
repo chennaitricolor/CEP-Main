@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
 import 'dart:async';
-import 'package:namma_chennai/routes/auth/auth.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/routes/auth/auth.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 
@@ -58,7 +58,7 @@ class SplashState extends State<Splash> {
                         radius: 100.0,
                         child: Image(
                           image: AssetImage(
-                              'assets/images/logo/techforcities.png'),
+                              'assets/images/logo/tricolor.png'),
                           width: 150.0,
                         ),
                       ),

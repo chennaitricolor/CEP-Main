@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:namma_chennai/routes/walkthrough/page_view_indicator.dart';
-import 'package:namma_chennai/routes/walkthrough/page_model.dart';
+import 'package:hello_chennai/routes/walkthrough/page_view_indicator.dart';
+import 'package:hello_chennai/routes/walkthrough/page_model.dart';
 
 class WalkThrough extends StatelessWidget {
   @override

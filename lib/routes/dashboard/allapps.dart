@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/model/apps.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/model/userapps.dart';
-import 'package:namma_chennai/routes/dashboard/myapps.dart';
-import 'package:namma_chennai/utils/globals.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/model/apps.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/model/userapps.dart';
+import 'package:hello_chennai/routes/dashboard/myapps.dart';
+import 'package:hello_chennai/utils/globals.dart';
 
 class AllApps extends StatefulWidget {
   @override

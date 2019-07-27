@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/routes/language/language.dart';
-import 'package:namma_chennai/utils/default_data.dart';
-import 'package:namma_chennai/routes/form/userform.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/routes/language/language.dart';
+import 'package:hello_chennai/utils/default_data.dart';
+import 'package:hello_chennai/routes/form/userform.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
 import 'package:flutter/services.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -64,7 +64,7 @@ class AuthState extends State<Auth> {
     final PhoneVerificationFailed verificationFailed =
         (AuthException exception) {
       print("Exception");
-      // _showDialog(exception.message + " " + exception.code);
+      _showDialog(exception.message + " " + exception.code);
       setState(() {
         status = AuthStage.PHONE_FAILED;
       });
@@ -213,7 +213,7 @@ class AuthState extends State<Auth> {
                               radius: 100.0,
                               child: Image(
                                 image: AssetImage(
-                                    'assets/images/logo/techforcities.png'),
+                                    'assets/images/logo/tricolor.png'),
                                 width: 150.0,
                               ),
                             ),

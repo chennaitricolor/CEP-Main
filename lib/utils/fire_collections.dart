@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/model/apps.dart';
-import 'package:namma_chennai/model/orgs.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/model/userapps.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
-import 'package:namma_chennai/utils/default_data.dart';
+import 'package:hello_chennai/model/apps.dart';
+import 'package:hello_chennai/model/orgs.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/model/userapps.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/utils/default_data.dart';
 
 Firestore db = Firestore.instance;
 CollectionReference userAppsCollection = db.collection('userapps');

@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/model/orgs.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
-import 'package:namma_chennai/utils/globals.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/model/orgs.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/utils/globals.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;

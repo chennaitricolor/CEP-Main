@@ -18,7 +18,7 @@ List<PageModel> pages = [
     text: 'In Collaboration with Smart Cities',
   ),
   PageModel(
-      assetImagePath: 'assets/images/logo/techforcities.png',
+      assetImagePath: 'assets/images/logo/tricolor.png',
       text: 'Powered by Tech for Cities'
   ),
 ];

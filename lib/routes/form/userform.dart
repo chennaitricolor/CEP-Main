@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/locale/all_translations.dart';
-import 'package:namma_chennai/model/user.dart';
+import 'package:hello_chennai/locale/all_translations.dart';
+import 'package:hello_chennai/model/user.dart';
 import 'package:intl/intl.dart';
-import 'package:namma_chennai/utils/api.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
-import 'package:namma_chennai/utils/TopicManager.dart';
+import 'package:hello_chennai/utils/api.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/utils/TopicManager.dart';
 import 'package:location/location.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();

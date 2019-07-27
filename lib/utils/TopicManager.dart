@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:namma_chennai/utils/constants.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/utils/constants.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
 import 'package:flutter/material.dart';
 
 final SharedPrefs _sharedPrefs = new SharedPrefs();

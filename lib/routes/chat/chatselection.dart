@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namma_chennai/model/user.dart';
-import 'package:namma_chennai/utils/globals.dart';
-import 'package:namma_chennai/utils/TopicManager.dart';
+import 'package:hello_chennai/model/user.dart';
+import 'package:hello_chennai/utils/globals.dart';
+import 'package:hello_chennai/utils/TopicManager.dart';
 import 'chat.dart';
-import 'package:namma_chennai/utils/constants.dart';
-import 'package:namma_chennai/utils/shared_prefs.dart';
+import 'package:hello_chennai/utils/constants.dart';
+import 'package:hello_chennai/utils/shared_prefs.dart';
 final SharedPrefs _sharedPrefs = new SharedPrefs();
 
 class ChatSelection extends StatefulWidget {
