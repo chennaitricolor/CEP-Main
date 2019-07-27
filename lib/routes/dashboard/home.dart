@@ -22,7 +22,7 @@ class HomeState extends State<Home> {
     AllApps(),
     null,
     Profile(),
-    Admin()
+    // Admin()
   ];
 
   void onTabTapped(int index) {
@@ -65,10 +65,10 @@ class HomeState extends State<Home> {
             icon: Icon(Icons.person),
             title: Text(allTranslations.text('translation_17')),
           ),
-          new BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            title: Text("Admin"),
-          ),
+          // new BottomNavigationBarItem(
+          //   icon: Icon(Icons.people),
+          //   title: Text("Admin"),
+          // ),
         ],
       ),
     );

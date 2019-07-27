@@ -85,14 +85,17 @@ class AllAppsState extends State<AllApps> {
               ? Column(
                   children: <Widget>[
                     ListTile(
-                      leading: Image(
+                      leading: 
+                      this.allApps[index].appIconUrl.indexOf("http") >= 0 ?
+                      Image.network(
+                        this.allApps[index].appIconUrl,
+                        width: 50,
+                      ) : 
+                      Image(
                         image: AssetImage(this.allApps[index].appIconUrl),
                         width: 50.0,
-                      ),
-                      // Image.network(
-                      //   this.allApps[Index][""],
-                      //   width: 50,
-                      // ),
+                      )
+                      ,
                       title: Text(this.allApps[index].appName[languageCode]),
                       subtitle: InkWell(
                         child: Text(this.allApps[index].appLaunchDate),

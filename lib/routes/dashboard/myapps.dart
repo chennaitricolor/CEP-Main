@@ -68,10 +68,15 @@ class MyAppsState extends State<MyApps> {
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
-                Image(
-                  image: AssetImage(this.featuredApps[index].appIconUrl),
-                  width: 60.0,
-                ),
+                this.featuredApps[index].appIconUrl.indexOf("http") >= 0
+                    ? Image.network(
+                        this.featuredApps[index].appIconUrl,
+                        width: 50,
+                      )
+                    : Image(
+                        image: AssetImage(this.featuredApps[index].appIconUrl),
+                        width: 50.0,
+                      ),
                 Padding(
                   padding: EdgeInsets.all(2),
                 ),
@@ -99,7 +104,9 @@ class MyAppsState extends State<MyApps> {
               context,
               MaterialPageRoute(
                   builder: (context) => WebViewScreen(
-                      url: installedApps[index].appUrl,
+                      url: installedApps[index].appUrl +
+                          (installedApps[index].appIconUrl.indexOf("http") >= 0 ? "/signin.html?token="+
+                          userId : ""),
                       name: installedApps[index].appName[languageCode])));
         },
         onLongPress: () {
@@ -115,10 +122,15 @@ class MyAppsState extends State<MyApps> {
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
-                Image(
-                  image: AssetImage(installedApps[index].appIconUrl),
-                  width: 60.0,
-                ),
+                installedApps[index].appIconUrl.indexOf("http") >= 0
+                    ? Image.network(
+                        installedApps[index].appIconUrl,
+                        width: 50,
+                      )
+                    : Image(
+                        image: AssetImage(installedApps[index].appIconUrl),
+                        width: 50.0,
+                      ),
                 Padding(
                   padding: EdgeInsets.all(2),
                 ),

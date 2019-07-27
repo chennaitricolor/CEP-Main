@@ -81,6 +81,12 @@ app.post("/user/:token", (req, res) => {
   });
 });
 
+app.post("/validate/:mobileNo", (req, res) => {
+  user.getUserByNumber(req.params.mobileNo).then(response => {
+      res.status(200).json({ data : response });
+  });
+});
+
 app.post("/chat-message", (req, res) => {
   var { sender, message, group } = req.body;
   const topicPayload = {
