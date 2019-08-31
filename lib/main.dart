@@ -10,7 +10,7 @@ import 'package:hello_chennai/routes/appdetail/appdetail.dart';
 import 'package:hello_chennai/routes/language/language.dart';
 import 'package:hello_chennai/routes/webview/webview.dart';
 import 'package:hello_chennai/routes/form/ngoform.dart';
-import 'package:hello_chennai/utils/constants.dart';
+import 'package:hello_chennai/utils/Strings.dart';
 
 import 'package:hello_chennai/utils/shared_prefs.dart';
 import 'package:hello_chennai/utils/TopicManager.dart';
@@ -62,7 +62,7 @@ class _NammaAppState extends State<NammaApp> {
     _firebaseMessaging.setAutoInitEnabled(true);
 
     //Subscribe to City Chat notification by default
-    _sharedPrefs.getApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_CITY_CHAT).then((isSubscribed)  {
+    _sharedPrefs.getApplicationSavedInformation(Strings.IS_SUBSCRIBED_TO_CITY_CHAT).then((isSubscribed)  {
       if(isSubscribed == ''){
         new TopicManager().subscribeToCityChatNotification();
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hello_chennai/model/user.dart';
 import 'package:hello_chennai/utils/api.dart';
-import 'package:hello_chennai/utils/constants.dart';
+import 'package:hello_chennai/utils/Strings.dart';
 
 API api = new API();
 
@@ -16,7 +16,7 @@ class ChatEnvironment extends StatelessWidget{
     this.userZone = userZone;
   }
    String getMessageBucket(){
-     return (this.isCityChat) ? Constants.CHENNAI_CITY_TOPIC: userZone;
+     return (this.isCityChat) ? Strings.CHENNAI_CITY_TOPIC: userZone;
    }
 
   final TextEditingController _chatController = new TextEditingController();

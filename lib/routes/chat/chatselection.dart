@@ -4,7 +4,7 @@ import 'package:hello_chennai/model/user.dart';
 import 'package:hello_chennai/utils/globals.dart';
 import 'package:hello_chennai/utils/TopicManager.dart';
 import 'chat.dart';
-import 'package:hello_chennai/utils/constants.dart';
+import 'package:hello_chennai/utils/Strings.dart';
 import 'package:hello_chennai/utils/shared_prefs.dart';
 final SharedPrefs _sharedPrefs = new SharedPrefs();
 
@@ -25,12 +25,12 @@ class _ChatSelectionState extends State<ChatSelection> {
   TopicManager topicManager = TopicManager();
   void initState() {
     super.initState();
-    _sharedPrefs.getApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_CITY_CHAT).then((val){
-      isSubscribedToCityChat = (val == Constants.SUBSCRIBED);
+    _sharedPrefs.getApplicationSavedInformation(Strings.IS_SUBSCRIBED_TO_CITY_CHAT).then((val){
+      isSubscribedToCityChat = (val == Strings.SUBSCRIBED);
     });
 
-    _sharedPrefs.getApplicationSavedInformation(Constants.IS_SUBSCRIBED_TO_ZONE_CHAT).then((val){
-      isSubscribedToZoneChat = (val == Constants.SUBSCRIBED);
+    _sharedPrefs.getApplicationSavedInformation(Strings.IS_SUBSCRIBED_TO_ZONE_CHAT).then((val){
+      isSubscribedToZoneChat = (val == Strings.SUBSCRIBED);
     });
 
     fireCollections.getLoggedInUserId().then((val) {

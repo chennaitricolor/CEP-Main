@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'chatenvironement.dart';
 import 'Record.dart';
 import 'package:hello_chennai/model/user.dart';
-import 'package:hello_chennai/utils/constants.dart';
+import 'package:hello_chennai/utils/Strings.dart';
 import 'package:hello_chennai/utils/TopicManager.dart';
 
 class Chat extends StatefulWidget {
@@ -26,7 +26,7 @@ class ChatState extends State<Chat> {
     isSubscribedToNotifications= widget.isSubscribedToNotifications;
   }
   String getMessageBucket(){
-  return (widget.isCityChat) ? Constants.CHENNAI_CITY_TOPIC : widget.userZone;
+  return (widget.isCityChat) ? Strings.CHENNAI_CITY_TOPIC : widget.userZone;
  }
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(

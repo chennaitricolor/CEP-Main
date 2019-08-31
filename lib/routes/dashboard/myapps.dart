@@ -131,7 +131,7 @@ class MyAppsState extends State<MyApps> {
             Navigator.of(context).pop();
           });
         },
-        child: Container(
+        child: Container( 
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
@@ -338,9 +338,7 @@ class MyAppsState extends State<MyApps> {
                                     BorderSide(width: 3.0, color: Colors.blue),
                               ),
                             ),
-                            child: InkWell(
-                              onTap: () {},
-                              child: ListTile(
+                            child:ListTile(
                                 title: Text(
                                   allTranslations.text('translation_10'),
                                   style: TextStyle(
@@ -349,9 +347,8 @@ class MyAppsState extends State<MyApps> {
                                 ),
                                 subtitle: Text(
                                     allTranslations.text('translation_11')),
-                                trailing: Icon(Icons.keyboard_arrow_right),
                               ),
-                            )),
+                            ),
                       ],
                     ),
                   ),

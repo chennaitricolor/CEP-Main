@@ -7,6 +7,7 @@ import 'package:hello_chennai/model/user.dart';
 import 'package:hello_chennai/model/orgs.dart';
 import 'package:hello_chennai/utils/shared_prefs.dart';
 import 'package:hello_chennai/utils/globals.dart';
+import 'package:hello_chennai/utils/Strings.dart';
 
 SharedPrefs _sharedPrefs = new SharedPrefs();
 Firestore db = Firestore.instance;
@@ -65,96 +66,6 @@ class ProfileState extends State<Profile> {
         ),
       ));
     }
-
-    listW.addAll([
-      Column(
-        children: <Widget>[
-          Card(
-            child: ListTile(
-                onTap: () {},
-                title: Text(
-                  "Chennai Trekkers Club",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  "Approval Pending",
-                  style: TextStyle(
-                      color: Colors.orangeAccent, fontWeight: FontWeight.bold),
-                ),
-                trailing: RichText(
-                  text: TextSpan(
-                    text: 'View ',
-                    style: DefaultTextStyle.of(context).style,
-                    children: [
-                      WidgetSpan(
-                        child: Icon(Icons.play_circle_filled, size: 16),
-                      ),
-                    ],
-                  ),
-                )),
-          ),
-          // Card(
-          //   child: ListTile(
-          //       onTap: () {},
-          //       title: Text(
-          //         "Chennai Trekkers Club",
-          //         style: TextStyle(fontWeight: FontWeight.bold),
-          //       ),
-          //       subtitle: RichText(
-          //         text: TextSpan(
-          //           text: 'Approved ',
-          //           style: TextStyle(
-          //               color: Colors.blue, fontWeight: FontWeight.bold),
-          //           children: [
-          //             WidgetSpan(
-          //               child: Icon(
-          //                 Icons.check_circle,
-          //                 size: 14,
-          //                 color: Colors.blue,
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       trailing: RichText(
-          //         text: TextSpan(
-          //           text: 'View ',
-          //           style: DefaultTextStyle.of(context).style,
-          //           children: [
-          //             WidgetSpan(
-          //               child: Icon(Icons.play_circle_filled, size: 16),
-          //             ),
-          //           ],
-          //         ),
-          //       )),
-          // ),
-          // Card(
-          //   child: ListTile(
-          //       onTap: () {},
-          //       title: Text(
-          //         "Chennai Trekkers Club",
-          //         style: TextStyle(fontWeight: FontWeight.bold),
-          //       ),
-          //       subtitle: Text(
-          //         "Rejected",
-          //         style:
-          //             TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-          //       ),
-          //       trailing: RichText(
-          //         text: TextSpan(
-          //           text: 'View ',
-          //           style: DefaultTextStyle.of(context).style,
-          //           children: [
-          //             WidgetSpan(
-          //               child: Icon(Icons.play_circle_filled, size: 16),
-          //             ),
-          //           ],
-          //         ),
-          //       )),
-          // ),
-        ],
-      ),
-    ]);
 
     listW.add(Card(
       margin: EdgeInsets.all(2),
@@ -254,8 +165,7 @@ class ProfileState extends State<Profile> {
                             ),
                           ),
                           TextSpan(
-                            text:
-                                "  Your profile in incomplete. Complete now.  ",
+                            text: Strings.INCOMPLETE_PROFILE,
                             style: TextStyle(color: Colors.white),
                           ),
                           WidgetSpan(
@@ -268,16 +178,7 @@ class ProfileState extends State<Profile> {
                         ],
                       ),
                     ),
-                  )
-
-                  // Row(
-                  //   children: <Widget>[
-                  //     Icon(Icons.warning, color: Colors.white,),
-                  //     Text("Your profile in incomplete. Complete now.", style: TextStyle(color: Colors.white),),
-                  //     Icon(Icons.play_circle_filled, color: Colors.white,),
-                  //   ],
-                  // )
-                  ),
+                  )),
               isLoaded
                   ? SingleChildScrollView(
                       child: Stack(
@@ -293,7 +194,7 @@ class ProfileState extends State<Profile> {
                                       padding: EdgeInsets.only(
                                           top: 20, bottom: 5, left: 10),
                                       child: Text(
-                                        "APPLICATION LANGUAGE",
+                                        Strings.APPLICATION_LANGUAGE,
                                         style: TextStyle(fontSize: 12),
                                       ),
                                     ),
@@ -302,12 +203,12 @@ class ProfileState extends State<Profile> {
                                     color: Colors.white,
                                     child: ListTile(
                                       title: Text(
-                                        "Change Language",
+                                        Strings.CHANGE_LANGUAGE,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       onTap: () {
-                                        print("Change Language");
+                                        print(Strings.CHANGE_LANGUAGE);
                                         operations
                                             .showLanguageSelection(context)
                                             .then((language) {
@@ -344,7 +245,7 @@ class ProfileState extends State<Profile> {
                                       padding: EdgeInsets.only(
                                           top: 20, bottom: 5, left: 10),
                                       child: Text(
-                                        "PERSONAL INFORMATION",
+                                        Strings.PERSONAL_INFORMATION,
                                         style: TextStyle(fontSize: 12),
                                       ),
                                     ),
@@ -353,7 +254,7 @@ class ProfileState extends State<Profile> {
                                     color: Colors.white,
                                     child: ListTile(
                                       title: Text(
-                                        "My profile",
+                                        Strings.MY_PROFILE,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
