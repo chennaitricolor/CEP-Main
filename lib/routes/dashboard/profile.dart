@@ -38,6 +38,12 @@ class ProfileState extends State<Profile> {
     return fireCollections.getUserOrgsByUserId(userId);
   }
 
+  bool isProfileComplete() {
+    var val =  !(currentUser.userName == null || currentUser.userGender == null ||
+     currentUser.userDob == null || currentUser.userWard == null);
+     return val;
+  }
+
   renderObjects() {
     listW = [];
     listW.add(Container(
@@ -135,6 +141,7 @@ class ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    bool isProfileCompleted = isProfileComplete();
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         backgroundColor: Color.fromARGB(150, 224, 224, 224),
@@ -147,7 +154,8 @@ class ProfileState extends State<Profile> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
+              isProfileCompleted ? Container() :
+               Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.all(10),
                   color: Colors.orange,

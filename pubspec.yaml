@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_auth: ^0.8.1
+  # cached_network_image: ^1.1.1
   flutter_localizations:
     sdk: flutter
   flutter_launcher_icons: ^0.7.0
