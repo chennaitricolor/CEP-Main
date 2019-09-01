@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_chennai/locale/all_translations.dart';
-import 'package:hello_chennai/routes/dashboard/admin.dart';
+import 'package:hello_chennai/model/user.dart';
 import 'package:hello_chennai/routes/dashboard/allapps.dart';
 import 'package:hello_chennai/routes/dashboard/myapps.dart';
 import 'package:hello_chennai/routes/dashboard/profile.dart';
@@ -15,6 +16,25 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   int currentIndex = 0;
+  var userId;
+  static User currentUser;
+
+void initState() {
+    super.initState();
+    fireCollections.getLoggedInUserId().then((val) {
+      userId = val;
+    }).then((r) {
+      fireCollections
+          .getUserInfoByUserId(userId)
+          .then((QuerySnapshot snapshot) {
+        List<DocumentSnapshot> docs = snapshot.documents;
+        for (DocumentSnapshot doc in docs) {
+          User user = new User.fromSnapShot(doc);
+          currentUser = user;
+        }
+      });
+    });
+  }
 
   //Chat was removed as it was promoted to a seperate route
   final List<Widget> children = [
@@ -26,16 +46,16 @@ class HomeState extends State<Home> {
   ];
 
   void onTabTapped(int index) {
-    // Chat Window Redirect
-    if (index == 2) {
-      Navigator.push(
+    switch(index){
+      case 2:  Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ChatSelection()),
+        MaterialPageRoute(builder: (context) => ChatSelection(currentUser: currentUser,)),
       );
-    } else {
-      setState(() {
+      break;
+      default: setState(() {
         currentIndex = index;
-      });
+      }); 
+
     }
   }
 

@@ -39,7 +39,7 @@ class ProfileState extends State<Profile> {
   }
 
   bool isProfileComplete() {
-    var val =  !(currentUser.userName == null || currentUser.userGender == null ||
+    var val =  !(currentUser == null || currentUser.userName == null || currentUser.userGender == null ||
      currentUser.userDob == null || currentUser.userWard == null);
      return val;
   }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hello_chennai/model/user.dart';
-import 'package:hello_chennai/utils/globals.dart';
 import 'package:hello_chennai/utils/TopicManager.dart';
 import 'chat.dart';
 import 'package:hello_chennai/utils/Strings.dart';
@@ -9,16 +7,17 @@ import 'package:hello_chennai/utils/shared_prefs.dart';
 final SharedPrefs _sharedPrefs = new SharedPrefs();
 
 class ChatSelection extends StatefulWidget {
+  final User currentUser;
+  const ChatSelection({Key key, this.currentUser}) : super(key: key);
+
   @override
   _ChatSelectionState createState() => _ChatSelectionState();
 }
 
 class _ChatSelectionState extends State<ChatSelection> {
-  User currentUser;
   String userId;
   String userZone;
-  bool _isLoading = true;
-  bool _hasUserFilledDetails = false;
+  bool _hasUserFilledDetails = true;
   bool isSubscribedToCityChat = false;
   bool isSubscribedToZoneChat = false;
 
@@ -32,25 +31,7 @@ class _ChatSelectionState extends State<ChatSelection> {
     _sharedPrefs.getApplicationSavedInformation(Strings.IS_SUBSCRIBED_TO_ZONE_CHAT).then((val){
       isSubscribedToZoneChat = (val == Strings.SUBSCRIBED);
     });
-
-    fireCollections.getLoggedInUserId().then((val) {
-      userId = val;
-    }).then((r) {
-      fireCollections
-          .getUserInfoByUserId(userId)
-          .then((QuerySnapshot snapshot) {
-        List<DocumentSnapshot> docs = snapshot.documents;
-        for (DocumentSnapshot doc in docs) {
-          User user = new User.fromSnapShot(doc);
-          currentUser = user;
-        }
-        //should be removed when user ward details are added.
-        setState(() {
-          _isLoading = false;
-          _hasUserFilledDetails = (currentUser.userZone != null && currentUser.userName != null && currentUser.userZone != '' && currentUser.userName != '');
-        });
-      });
-    });
+    _hasUserFilledDetails = (widget.currentUser.userZone != null && widget.currentUser.userName != null && widget.currentUser.userZone != '' && widget.currentUser.userName != '');
   }
 
   void chatNotificationToggled(bool isCityChat) {
@@ -60,14 +41,9 @@ class _ChatSelectionState extends State<ChatSelection> {
       isSubscribedToZoneChat = !isSubscribedToZoneChat;
     }
   }
-  Widget _loadingView() {
-    return new Center(
-      child: new CircularProgressIndicator(),
-    );
-  }
 
   Widget getButtonForChat(bool isCityChat) {
-    userZone = topicManager.getUSerZone(currentUser.userZone);
+    userZone = topicManager.getUSerZone(widget.currentUser.userZone);
     String chatTitle = (isCityChat) ? "Chennai Chat Room" : userZone+" Zone Room";
     bool isNotificationSubscribed = (isCityChat) ? isSubscribedToCityChat : isSubscribedToZoneChat;
 
@@ -84,7 +60,7 @@ class _ChatSelectionState extends State<ChatSelection> {
               MaterialPageRoute(
                   builder: (context) =>
                       Chat(isCityChat: isCityChat,
-                        currentUser: currentUser,
+                        currentUser: widget.currentUser,
                         userZone : userZone,
                         isSubscribedToNotifications: isNotificationSubscribed,
                         chatNotificationToggled: chatNotificationToggled,
@@ -131,7 +107,7 @@ class _ChatSelectionState extends State<ChatSelection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(title: new Text('Select Chat Room')),
-      body: (_isLoading) ? _loadingView() : displayScreen(),
+      body: displayScreen(),
     );
   }
 }
