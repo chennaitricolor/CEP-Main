@@ -13,6 +13,7 @@ class Apps {
   String appFeaturePref;
   String appLaunchDate;
   String appCategory;
+  bool isAppPWI;
 
   Apps(this.appId, this.appName, this.appDesc, this.appIconUrl, this.appUrl, this.appLaunchDate);
   Apps.fromSnapShot(DocumentSnapshot snapshot) {
@@ -26,6 +27,7 @@ class Apps {
     this.appFeaturePref = snapshot['app_feature_pref'];
     this.appLaunchDate = snapshot['app_launch_date'];
     this.appCategory = snapshot['app_category'];
+    this.isAppPWI =  snapshot['isPWI']; // If the app requires the signin token
   }
 
   Apps.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,7 @@ class Apps {
     this.appFeaturePref = json['app_feature_pref'];
     this.appLaunchDate = json['app_launch_date'];
     this.appCategory = json['app_category'];
+    this.isAppPWI =  json['isPWI'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -51,6 +54,7 @@ class Apps {
         'app_feature_score': this.appFeatureScore,
         'app_feature_pref': this.appFeaturePref,
         'app_launch_date': this.appLaunchDate,
-        'app_category': this.appCategory
+        'app_category': this.appCategory,
+        'isPWI': this.isAppPWI
       };
 }

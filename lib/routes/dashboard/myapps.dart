@@ -118,7 +118,7 @@ class MyAppsState extends State<MyApps> {
               MaterialPageRoute(
                   builder: (context) => WebViewScreen(
                       url: installedApps[index].appUrl +
-                          (installedApps[index].appIconUrl.indexOf("http") >= 0
+                          (installedApps[index].isAppPWI
                               ? "/signin.html?token=" + userId
                               : ""),
                       name: installedApps[index].appName[languageCode])));
