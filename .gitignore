@@ -79,3 +79,7 @@ api/functions/node_modules
 
 # Others
 PendingItems.txt
+
+#admin_server
+.env
+admin_server/node_modules
