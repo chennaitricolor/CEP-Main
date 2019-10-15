@@ -119,7 +119,7 @@ router.post('/verifyotp', async (req, res) => {
           "https://hasura.io/jwt/claims": {
             "x-hasura-allowed-roles": ["user"],
             "x-hasura-default-role": "user",
-            'X-Hasura-Mobile-No': req.body.mobile_no.toString()
+            'x-Hasura-mobile-no': req.body.mobile_no.toString()
           },
         },
           process.env.JWT_SECRET,
