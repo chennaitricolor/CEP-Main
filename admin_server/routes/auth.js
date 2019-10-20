@@ -13,6 +13,7 @@ router.post('/sendotp', async (req, res) => {
       country: req.body.country_code,
       mobile: req.body.mobile_no,
       authkey: process.env.MSG91_API_KEY,
+      otp_expiry: "10",
       sender: "HLOCHN",
       message: "Your Hello Chennai app OTP is ##OTP##"
     };
