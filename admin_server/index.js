@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const http = require('http');
 // import routes
 const authRoutes = require('./routes/auth');
 
@@ -13,5 +14,5 @@ app.use(express.json());
 // route middleware
 app.use('/api/auth/', authRoutes);
 
-
-app.listen(3000, () => console.log("server is running on port 3000"));
+const port = process.env.PORT || 3000;
+http.createServer(app).listen(port, () => console.log(`server is running on port :${port}`));
