@@ -144,4 +144,42 @@ router.post('/verifyotp', async (req, res) => {
 });
 
 
+router.post('/getmicroapptoken', (req, res) => {
+  try {
+    console.log("getmicroapptoken");
+    const platform_token = req.header('CEP-Token');
+    
+    try {
+      decoded = jwt.verify(platform_token, process.env.JWT_SECRET, { algorithm: 'HS256' });  
+    } catch (error) {
+      res.status(400).send({
+        message: "invalid token",
+        status: "failed"
+      });
+      return;
+    }
+    
+    res.status(200).send({
+      message: "otp verified",
+      status: "success",
+      microapptoken: jwt.sign({
+        "https://hasura.io/jwt/claims": {
+          "x-hasura-allowed-roles": [req.body.app_id],
+          "x-hasura-default-role": req.body.app_id,
+          'x-Hasura-mobile-no': decoded.mobile_no
+        },
+      },
+        process.env.JWT_SECRET,
+        { algorithm: 'HS256' })
+    });
+
+  } catch (error) {
+    res.status(500).send({
+      message: "internal error",
+      status: "failed"
+    });
+  }
+})
+
+
 module.exports = router;
