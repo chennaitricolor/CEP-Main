@@ -160,7 +160,6 @@ router.post('/getmicroapptoken', (req, res) => {
     }
     
     res.status(200).send({
-      message: "otp verified",
       status: "success",
       microapptoken: jwt.sign({
         "https://hasura.io/jwt/claims": {
