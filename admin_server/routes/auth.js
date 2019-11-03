@@ -41,8 +41,7 @@ router.post('/sendotp', async (req, res) => {
     console.log(error);
     res.status(500).send({
       message: "internal error",
-      status: "failed",
-      error: ""+error
+      status: "failed"
     });
 
   }
@@ -83,8 +82,7 @@ router.post('/resendotp', async (req, res) => {
     console.log(error);
     res.status(500).send({
       message: "internal error",
-      status: "failed",
-      error: "" + error
+      status: "failed"
     });
 
   }
@@ -136,8 +134,7 @@ router.post('/verifyotp', async (req, res) => {
     console.log(error);
     res.status(500).send({
       message: "internal error",
-      status: "failed",
-      error: "" + error
+      status: "failed"
     });
 
   }
